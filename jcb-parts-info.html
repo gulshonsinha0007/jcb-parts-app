@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JCB PARTS INFO BY GULSHON</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark-yellow: #c48f00;
+    --mid-yellow: #e0a800;
+    --light-yellow: #fff4b8;
+    --pale-yellow: #fffbe0;
+    --ink: #1f1700;
+    --ink-soft: #5a4700;
+    --line: #e6d27a;
+    --error: #8f1d12;
+    --display: "Oswald", Impact, "Arial Narrow Bold", "Arial Narrow", sans-serif;
+    --body: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: var(--dark-yellow); color: var(--ink);
+    font: 16px/1.5 var(--body);
+  }
+  h1, h2 {
+    font-family: var(--display); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.05; margin: 0;
+  }
+  .stripe {
+    height: 10px;
+    background: repeating-linear-gradient(-45deg, var(--ink) 0 14px, var(--mid-yellow) 14px 28px);
+  }
+  button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--ink); color: var(--light-yellow);
+    border: 2px solid var(--ink); border-radius: 6px; padding: 10px 18px;
+  }
+  button:hover { background: #000; }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--ink); }
+  button.ghost:hover:not(:disabled) { background: rgba(31, 23, 0, 0.1); }
+  button.small { padding: 3px 10px; font-size: 0.85rem; }
+  button.danger { background: var(--error); border-color: var(--error); color: #fff; }
+  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 3px solid var(--ink); outline-offset: 2px;
+  }
+  .msg { min-height: 1.4em; margin: 12px 0 0; font-size: 0.92rem; color: var(--ink-soft); }
+  .msg.error { color: var(--error); font-weight: 600; }
+  label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 14px; }
+  label small { display: block; font-weight: 400; color: var(--ink-soft); margin-top: 3px; }
+  input[type=email], input[type=password], input[type=text], input[type=search], select {
+    display: block; width: 100%; margin-top: 5px;
+    padding: 10px 12px; font: inherit; color: var(--ink);
+    background: var(--pale-yellow); border: 2px solid var(--ink); border-radius: 6px;
+  }
+  input:disabled { opacity: 0.7; }
+
+  /* ---------- Login ---------- */
+  #login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+  .login-card {
+    width: 100%; max-width: 420px; background: var(--light-yellow);
+    border: 3px solid var(--ink); border-radius: 10px; overflow: hidden;
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .login-body { padding: 28px 28px 30px; }
+  .login-body h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 6px; }
+  .login-body p { margin: 0 0 22px; color: var(--ink-soft); }
+  .pw-row { position: relative; display: block; }
+  .pw-row input { padding-right: 76px; }
+  .pw-toggle { position: absolute; right: 6px; bottom: 6px; padding: 5px 10px; font-size: 0.85rem; border-radius: 4px; }
+  #login-btn { width: 100%; margin-top: 6px; padding: 12px; font-size: 1.05rem; }
+
+  /* ---------- App ---------- */
+  header.top { background: var(--light-yellow); border-bottom: 3px solid var(--ink); }
+  .top-inner {
+    max-width: 1280px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .top h1 { font-size: clamp(1.4rem, 4vw, 2.1rem); }
+  .who { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .who button { padding: 7px 14px; }
+  .badge {
+    font-weight: 700; font-size: 0.8rem; padding: 2px 10px; border-radius: 99px;
+    border: 2px solid var(--ink); background: var(--pale-yellow); color: var(--ink);
+  }
+  .badge.admin { background: var(--ink); color: var(--light-yellow); }
+  main { max-width: 1280px; margin: 0 auto; padding: 22px 20px 56px; }
+  .controls { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tabs button { background: var(--mid-yellow); color: var(--ink); border-radius: 6px 6px 0 0; }
+  .tabs button[aria-selected=true] { background: var(--ink); color: var(--light-yellow); }
+  .search { flex: 1 1 280px; }
+  .search label { margin: 0; }
+  .panel {
+    background: var(--light-yellow); border: 3px solid var(--ink);
+    border-radius: 0 8px 8px 8px; padding: 14px;
+  }
+  .count { margin: 0 0 10px; font-size: 0.92rem; color: var(--ink-soft); }
+  .table-wrap { overflow: auto; max-height: 68vh; border: 2px solid var(--ink); border-radius: 6px; background: var(--pale-yellow); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+  th {
+    position: sticky; top: 0; z-index: 1; background: var(--mid-yellow);
+    text-align: left; font-weight: 700; padding: 10px 12px;
+    border-bottom: 2px solid var(--ink); white-space: nowrap;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; max-width: 360px; overflow-wrap: anywhere; }
+  td.nowrap { white-space: nowrap; font-weight: 600; }
+  td.actions { white-space: nowrap; }
+  td.actions button + button { margin-left: 6px; }
+  tbody tr:nth-child(even) { background: #fff0a0; }
+  tbody tr:hover { background: #ffe56b; }
+  td a { color: var(--ink); font-weight: 600; margin-right: 10px; }
+  .empty { padding: 28px 12px; text-align: center; color: var(--ink-soft); }
+
+  /* ---------- Dialog ---------- */
+  dialog {
+    width: min(560px, 94vw); max-height: 92vh; overflow: auto; padding: 0;
+    background: var(--light-yellow); color: var(--ink);
+    border: 3px solid var(--ink); border-radius: 10px; box-shadow: 8px 8px 0 var(--ink);
+  }
+  dialog::backdrop { background: rgba(31, 23, 0, 0.55); }
+  .dlg-body { padding: 22px; }
+  .dlg-body h2 { font-size: 1.5rem; margin-bottom: 16px; }
+  #dlg-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); column-gap: 14px; }
+  #dlg-fields label.wide { grid-column: 1 / -1; }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+  input[readonly] { background: #f1e49a; }
+  .ac-wrap { display: block; position: relative; }
+  .ac-list {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 5;
+    margin: 2px 0 0; padding: 0; list-style: none; max-height: 250px; overflow: auto;
+    background: var(--pale-yellow); border: 2px solid var(--ink); border-radius: 6px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .ac-list li { padding: 8px 12px; cursor: pointer; font-weight: 400; border-bottom: 1px solid var(--line); }
+  .ac-list li:last-child { border-bottom: 0; }
+  .ac-list li strong { display: block; }
+  .ac-list li small { margin: 0; }
+  .ac-list li:hover, .ac-list li.active { background: var(--mid-yellow); }
+</style>
+</head>
+<body>
+
+<!-- ======== LOGIN ======== -->
+<div id="login">
+  <div class="login-card">
+    <div class="stripe"></div>
+    <div class="login-body">
+      <h1>JCB Parts Info by Gulshon</h1>
+      <p>Sign in to look up parts and prices.</p>
+      <form id="login-form" novalidate>
+        <label>Email
+          <input id="email" type="email" autocomplete="username" required placeholder="you@gmail.com">
+        </label>
+        <label>Password
+          <span class="pw-row">
+            <input id="password" type="password" autocomplete="current-password" required>
+            <button id="pw-toggle" class="ghost pw-toggle" type="button" aria-pressed="false">Show</button>
+          </span>
+        </label>
+        <button id="login-btn" type="submit">Sign in</button>
+        <p id="login-msg" class="msg" role="alert"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ======== APP ======== -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="stripe"></div>
+    <div class="top-inner">
+      <h1>JCB Parts Info by Gulshon</h1>
+      <div class="who">
+        <span id="who"></span>
+        <span id="badge" class="badge">User</span>
+        <button id="logout" class="ghost" type="button">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="controls">
+      <div class="tabs" role="tablist" aria-label="Sheets">
+        <button type="button" role="tab" data-key="pricelist" aria-selected="true">Price List</button>
+        <button type="button" role="tab" data-key="priceinfo" aria-selected="false">Price Info</button>
+        <button type="button" role="tab" data-key="users" id="tab-users" aria-selected="false" hidden>Users</button>
+      </div>
+      <div class="search" id="search-wrap">
+        <label for="q">Search part number, description, model or anything else
+          <input id="q" type="search" placeholder="e.g. 332/ filter 3DX" autocomplete="off">
+        </label>
+      </div>
+      <button id="add-btn" type="button" hidden>Add part</button>
+    </div>
+
+    <div class="panel">
+      <p id="count" class="count" role="status"></p>
+      <div class="table-wrap"><table id="table"></table></div>
+      <p id="data-msg" class="msg" role="status"></p>
+    </div>
+  </main>
+</div>
+
+<!-- ======== ADD / EDIT DIALOG ======== -->
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <div class="stripe"></div>
+  <form id="dlg-form" class="dlg-body" novalidate>
+    <h2 id="dlg-title"></h2>
+    <div id="dlg-fields"></div>
+    <p id="dlg-msg" class="msg" role="alert"></p>
+    <div class="dlg-actions">
+      <button id="dlg-cancel" class="ghost" type="button">Cancel</button>
+      <button id="dlg-save" type="submit">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  // Paste your Apps Script Web App URL here (ends in /exec).
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4Tmvo-J3f0V_q4ntqGEH3HkjJAtPp4xiUrEuLejM9nDmPxc9_rwVvLlEHrluh73fn/exec";
+
+  const ROW_LIMIT = 300;
+  const NOWRAP_COLS = ["PART NO", "RP", "MRP", "HSN", "GST", "CAT1", "CAT2", "GROUP"];
+
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+  };
+
+  let token = store.get("jcb_token");
+  let email = store.get("jcb_email");
+  let role = store.get("jcb_role") || "user";
+  let canAdd = store.get("jcb_canadd") === "1";   // may add rows to Price Info
+  let currentKey = "pricelist";
+  let loadSeq = 0;
+  const cache = {};   // key -> { headers, rows: [{cells, hay, num}] }
+  let searchTimer = null;
+
+  /* ---------- Server calls ---------- */
+  async function api(body) {
+    if (SCRIPT_URL.startsWith("PASTE")) {
+      return { ok: false, error: "Set SCRIPT_URL at the top of this file's script first." };
+    }
+    try {
+      // text/plain avoids a CORS preflight, which Apps Script doesn't answer.
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(body)
+      });
+      const out = await res.json();
+      if (out && out.ok && out.role && (out.role !== role || !!out.canAdd !== canAdd)) updateRole(out.role, out.canAdd);
+      return out;
+    } catch (err) {
+      return { ok: false, error: "Can't reach the server. Check your internet and the web app URL." };
+    }
+  }
+
+  function setMsg(el, text, isError) {
+    el.textContent = text || "";
+    el.classList.toggle("error", !!isError);
+  }
+
+  /* ---------- Role ---------- */
+  function updateRole(r, c) {
+    role = r === "admin" ? "admin" : "user";
+    canAdd = role === "admin" || !!c;
+    store.set("jcb_role", role);
+    store.set("jcb_canadd", canAdd ? "1" : "0");
+    applyRole();
+  }
+
+  function applyRole() {
+    const admin = role === "admin";
+    $("tab-users").hidden = !admin;
+    $("badge").textContent = admin ? "Admin" : canAdd ? "User (can add Price Info)" : "User";
+    $("badge").classList.toggle("admin", admin);
+    if (!admin && currentKey === "users") currentKey = "pricelist";
+    updateAddButton();
+  }
+
+  // Admins see the button everywhere. Users with the add permission see it on Price Info only.
+  function updateAddButton() {
+    const btn = $("add-btn");
+    btn.hidden = !(role === "admin" || (canAdd && currentKey === "priceinfo"));
+    btn.textContent = currentKey === "users" ? "Add user"
+      : currentKey === "priceinfo" ? "Add part info" : "Add part";
+  }
+
+  /* ---------- Login / logout ---------- */
+  function showLogin(message) {
+    $("app").hidden = true;
+    $("login").hidden = false;
+    setMsg($("login-msg"), message || "", !!message);
+    $("password").value = "";
+  }
+
+  function showApp() {
+    $("login").hidden = true;
+    $("app").hidden = false;
+    $("who").textContent = email || "";
+    applyRole();
+    loadSheet(currentKey);
+  }
+
+  function logout(message) {
+    token = null; email = null; role = "user"; canAdd = false; currentKey = "pricelist";
+    ["jcb_token", "jcb_email", "jcb_role", "jcb_canadd"].forEach((k) => store.del(k));
+    Object.keys(cache).forEach((k) => delete cache[k]);
+    if ($("dlg").open) $("dlg").close();
+    showLogin(message);
+  }
+
+  $("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = $("login-btn");
+    btn.disabled = true;
+    setMsg($("login-msg"), "Signing in…");
+    const out = await api({ action: "login", email: $("email").value, password: $("password").value });
+    btn.disabled = false;
+    if (!out.ok) { setMsg($("login-msg"), out.error, true); return; }
+    token = out.token; email = out.email;
+    store.set("jcb_token", token); store.set("jcb_email", email);
+    updateRole(out.role, out.canAdd);
+    setMsg($("login-msg"), "");
+    showApp();
+  });
+
+  $("pw-toggle").addEventListener("click", () => {
+    const pw = $("password");
+    const show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    $("pw-toggle").textContent = show ? "Hide" : "Show";
+    $("pw-toggle").setAttribute("aria-pressed", String(show));
+  });
+
+  $("logout").addEventListener("click", () => logout(""));
+
+  /* ---------- Loading a tab ---------- */
+  function storeSheet(key, out) {
+    cache[key] = {
+      headers: out.headers,
+      rows: out.rows.map((cells, i) => ({
+        cells: cells,
+        hay: cells.join(" ").toLowerCase(),
+        num: out.nums[i]
+      }))
+    };
+  }
+
+  async function loadSheet(key) {
+    currentKey = key;
+    const mySeq = ++loadSeq;
+    document.querySelectorAll(".tabs button").forEach((b) => {
+      b.setAttribute("aria-selected", String(b.dataset.key === key));
+    });
+    $("search-wrap").hidden = key === "users";
+    updateAddButton();
+
+    if (key === "users") { await loadUsers(mySeq); return; }
+    if (cache[key]) { render(); return; }
+
+    $("table").innerHTML = "";
+    setMsg($("count"), "");
+    setMsg($("data-msg"), "Loading…");
+    const out = await api({ action: "data", token: token, sheet: key });
+    if (mySeq !== loadSeq) return;
+
+    if (!out.ok) {
+      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+      setMsg($("data-msg"), out.error, true);
+      return;
+    }
+    storeSheet(key, out);
+    setMsg($("data-msg"), "");
+    render();
+  }
+
+  /* ---------- Parts table ---------- */
+  function isUrl(s) { return /^https?:\/\/\S+$/i.test(s); }
+
+  function fillCell(td, value) {
+    const text = String(value ?? "");
+    const parts = text.split(/[\s,]+/).filter(Boolean);
+    if (parts.length && parts.every(isUrl)) {
+      parts.forEach((u, i) => {
+        const a = document.createElement("a");
+        a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer";
+        a.textContent = parts.length > 1 ? "Link " + (i + 1) : "Open link";
+        td.appendChild(a);
+      });
+    } else {
+      td.textContent = text;
+    }
+  }
+
+  function addHeader(row, text) {
+    const th = document.createElement("th");
+    th.textContent = text;
+    row.appendChild(th);
+  }
+
+  function smallButton(label, cls, handler) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "small " + (cls || "");
+    b.textContent = label;
+    b.addEventListener("click", handler);
+    return b;
+  }
+
+  function render() {
+    const data = cache[currentKey];
+    if (!data) return;
+    const admin = role === "admin";
+    const words = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
+    const matches = words.length ? data.rows.filter((r) => words.every((w) => r.hay.includes(w))) : data.rows;
+    const shown = matches.slice(0, ROW_LIMIT);
+
+    const table = $("table");
+    table.innerHTML = "";
+    const headRow = table.createTHead().insertRow();
+    data.headers.forEach((h) => addHeader(headRow, h));
+    if (admin) addHeader(headRow, "Actions");
+
+    const body = table.createTBody();
+    shown.forEach((r) => {
+      const tr = body.insertRow();
+      data.headers.forEach((h, i) => {
+        const td = tr.insertCell();
+        if (NOWRAP_COLS.indexOf(String(h).trim().toUpperCase()) !== -1) td.className = "nowrap";
+        fillCell(td, r.cells[i]);
+      });
+      if (admin) {
+        const td = tr.insertCell();
+        td.className = "actions";
+        td.appendChild(smallButton("Edit", "ghost", () => openPartForm(r)));
+        td.appendChild(smallButton("Delete", "danger", () => deletePart(r)));
+      }
+    });
+
+    if (!shown.length) {
+      const td = body.insertRow().insertCell();
+      td.colSpan = data.headers.length + (admin ? 1 : 0);
+      td.className = "empty";
+      td.textContent = words.length
+        ? "No parts match that search. Try fewer or shorter words."
+        : "This sheet has no rows yet.";
+    }
+
+    let note = "Showing " + shown.length.toLocaleString() + " of " + matches.length.toLocaleString() + " rows";
+    if (matches.length > ROW_LIMIT) note += ". Type more of the part number or description to narrow the list.";
+    setMsg($("count"), note);
+  }
+
+  document.querySelectorAll(".tabs button").forEach((b) => {
+    b.addEventListener("click", () => loadSheet(b.dataset.key));
+  });
+
+  $("q").addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(render, 150);
+  });
+
+  /* ---------- Admin: parts ---------- */
+  const normH = (s) => String(s).toLowerCase().replace(/\s+/g, "");
+
+  // Search index over the Price List (part number + description), built once per load.
+  function partIndex() {
+    const d = cache.pricelist;
+    if (!d) return null;
+    if (!d.index) {
+      let pi = d.headers.findIndex((h) => normH(h) === "partno");
+      if (pi < 0) pi = 0;
+      const di = d.headers.findIndex((h) => normH(h) === "description");
+      const list = d.rows
+        .map((r) => ({ pn: String(r.cells[pi] ?? "").trim(), desc: di >= 0 ? String(r.cells[di] ?? "").trim() : "" }))
+        .filter((x) => x.pn);
+      list.forEach((x) => { x.low = x.pn.toLowerCase(); x.dlow = x.desc.toLowerCase(); });
+      d.index = { list: list, map: new Map(list.map((x) => [x.low, x])) };
+    }
+    return d.index;
+  }
+
+  function findPart(v) {
+    const idx = partIndex();
+    return idx ? idx.map.get(String(v).trim().toLowerCase()) || null : null;
+  }
+
+  function suggestParts(q) {
+    const idx = partIndex();
+    const s = String(q).trim().toLowerCase();
+    if (!idx || !s) return [];
+    const starts = [], has = [], inDesc = [];
+    for (const x of idx.list) {
+      if (x.low.startsWith(s)) starts.push(x);
+      else if (x.low.includes(s)) has.push(x);
+      else if (x.dlow.includes(s)) inDesc.push(x);
+      if (starts.length >= 8) break;
+    }
+    return starts.concat(has, inDesc).slice(0, 8).map((x) => ({ value: x.pn, detail: x.desc, data: x }));
+  }
+
+  async function openPartForm(r) {
+    const key = currentKey;
+    const editing = !!r;
+    const lookup = !editing && key === "priceinfo";   // part no suggestions + automatic description
+
+    if (lookup && !cache.pricelist) {
+      setMsg($("data-msg"), "Loading part numbers…");
+      const out = await api({ action: "data", token: token, sheet: "pricelist" });
+      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+      if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+      storeSheet("pricelist", out);
+      setMsg($("data-msg"), "");
+    }
+
+    const data = cache[key];
+    if (!data) return;
+    const partH = data.headers.find((h) => normH(h) === "partno") || data.headers[0];
+    const descH = data.headers.find((h) => normH(h) === "description");
+    const isAdmin = role === "admin";
+    const addTitle = key === "priceinfo" ? "Add part info" : "Add part";
+
+    openForm({
+      title: editing ? "Edit part" : addTitle,
+      saveLabel: editing ? "Save changes" : addTitle,
+      fields: data.headers.map((h, i) => {
+        const f = { name: h, label: h, value: editing ? String(r.cells[i] ?? "") : "", wide: /desc|link/i.test(h) || (lookup && h === partH) };
+        if (lookup && h === partH) { f.suggest = true; f.placeholder = "Start typing a part number"; }
+        if (lookup && h === descH) {
+          f.readonly = true;
+          f.placeholder = "Filled in from the Price List";
+          f.hint = "Filled in automatically from the Price List.";
+        }
+        return f;
+      }),
+      getSuggestions: lookup ? suggestParts : null,
+      onPick: (item, set) => { if (descH) set(descH, item.data.desc); },
+      onType: (value, set) => {
+        const hit = findPart(value);
+        if (descH) set(descH, hit ? hit.desc : "");
+      },
+      onSubmit: async (values) => {
+        const body = { action: editing ? "row_update" : "row_add", token: token, sheet: key };
+        if (editing) {
+          const changed = {};
+          let any = false;
+          data.headers.forEach((h, i) => {
+            if (values[h] !== String(r.cells[i] ?? "").trim()) { changed[h] = values[h]; any = true; }
+          });
+          if (!any) return { ok: true };
+          body.row = r.num; body.check = r.cells[0]; body.values = changed;
+        } else {
+          if (lookup) {
+            const hit = findPart(values[partH]);
+            if (!hit && !isAdmin) return { ok: false, error: "Pick a part number from the Price List suggestions." };
+            if (hit) { values[partH] = hit.pn; if (descH) values[descH] = hit.desc; }
+          }
+          body.values = values;
+        }
+        const out = await api(body);
+        if (out.ok) { delete cache[key]; loadSheet(key); }
+        return out;
+      }
+    });
+  }
+
+  async function deletePart(r) {
+    if (!confirm("Delete part " + r.cells[0] + "?\nThis removes its row from the Google Sheet.")) return;
+    setMsg($("data-msg"), "Deleting…");
+    const out = await api({ action: "row_delete", token: token, sheet: currentKey, row: r.num, check: r.cells[0] });
+    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+    delete cache[currentKey];
+    loadSheet(currentKey);
+  }
+
+  /* ---------- Admin: users ---------- */
+  let usersList = [];
+
+  async function loadUsers(mySeq) {
+    $("table").innerHTML = "";
+    setMsg($("count"), "");
+    setMsg($("data-msg"), "Loading…");
+    const out = await api({ action: "users_list", token: token });
+    if (mySeq !== loadSeq) return;
+    if (!out.ok) {
+      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+      setMsg($("data-msg"), out.error, true);
+      return;
+    }
+    usersList = out.users;
+    setMsg($("data-msg"), "");
+    renderUsers();
+  }
+
+  function renderUsers() {
+    const table = $("table");
+    table.innerHTML = "";
+    const headRow = table.createTHead().insertRow();
+    ["Email", "Role", "Can add Price Info", "Actions"].forEach((h) => addHeader(headRow, h));
+    const body = table.createTBody();
+    usersList.forEach((u) => {
+      const tr = body.insertRow();
+      const isMe = u.email === email;
+      const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (you)" : "");
+      tr.insertCell().textContent = u.role === "admin" ? "Admin" : "User";
+      tr.insertCell().textContent = u.role === "admin" ? "Yes (admin)" : (u.canAdd ? "Yes" : "No");
+      const td = tr.insertCell(); td.className = "actions";
+      td.appendChild(smallButton("Edit", "ghost", () => openUserForm(u)));
+      const del = smallButton("Remove", "danger", () => removeUser(u));
+      del.disabled = isMe;
+      td.appendChild(del);
+    });
+    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user" : " users") +
+      ". Users can search and view. Admins can also edit parts and manage users.");
+  }
+
+  function openUserForm(u) {
+    const editing = !!u;
+    openForm({
+      title: editing ? "Edit user" : "Add user",
+      saveLabel: editing ? "Save changes" : "Add user",
+      fields: [
+        { name: "email", label: "Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
+        { name: "password", label: editing ? "New password" : "Password", type: "password",
+          autocomplete: "new-password", wide: true,
+          hint: editing ? "Leave blank to keep the current password." : "At least 6 characters." },
+        { name: "role", label: "Role", wide: true, value: editing ? u.role : "user",
+          options: [
+            { value: "user", label: "User (search and view)" },
+            { value: "admin", label: "Admin (edit parts and manage users)" }
+          ] },
+        { name: "canAdd", label: "Can add Price Info", wide: true, value: editing && u.canAdd ? "yes" : "no",
+          hint: "Lets a user add new rows to Price Info (not edit or delete). Admins can always do this.",
+          options: [
+            { value: "no", label: "No" },
+            { value: "yes", label: "Yes" }
+          ] }
+      ],
+      onSubmit: async (values) => {
+        const out = await api({
+          action: "user_save", token: token,
+          email: editing ? u.email : values.email,
+          password: values.password, role: values.role,
+          canAdd: values.canAdd === "yes"
+        });
+        if (out.ok) loadSheet("users");
+        return out;
+      }
+    });
+  }
+
+  async function removeUser(u) {
+    if (!confirm("Remove " + u.email + "?\nThey will no longer be able to sign in.")) return;
+    const out = await api({ action: "user_delete", token: token, email: u.email });
+    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+    loadSheet("users");
+  }
+
+  $("add-btn").addEventListener("click", () => {
+    if (currentKey === "users") openUserForm(null); else openPartForm(null);
+  });
+
+  /* ---------- Generic dialog ---------- */
+  let dlgInputs = [];
+  let dlgSubmit = null;
+
+  // Suggestion list under a text input (used for PART NO when adding Price Info).
+  function attachSuggest(input, list, cfg, setField) {
+    let items = [];
+    let active = -1;
+    input.setAttribute("role", "combobox");
+    input.setAttribute("aria-autocomplete", "list");
+    input.setAttribute("aria-expanded", "false");
+
+    const close = () => { list.hidden = true; active = -1; input.setAttribute("aria-expanded", "false"); };
+    const pick = (i) => {
+      const it = items[i];
+      if (!it) return;
+      input.value = it.value;
+      close();
+      cfg.onPick(it, setField);
+    };
+    const paint = () => {
+      list.innerHTML = "";
+      items.forEach((it, i) => {
+        const li = document.createElement("li");
+        li.setAttribute("role", "option");
+        if (i === active) li.className = "active";
+        const b = document.createElement("strong");
+        b.textContent = it.value;
+        li.appendChild(b);
+        if (it.detail) {
+          const sm = document.createElement("small");
+          sm.textContent = it.detail;
+          li.appendChild(sm);
+        }
+        li.addEventListener("mousedown", (e) => { e.preventDefault(); pick(i); });
+        list.appendChild(li);
+      });
+      list.hidden = !items.length;
+      input.setAttribute("aria-expanded", String(!!items.length));
+      const cur = list.querySelector(".active");
+      if (cur) cur.scrollIntoView({ block: "nearest" });
+    };
+
+    input.addEventListener("input", () => {
+      items = cfg.getSuggestions(input.value);
+      active = -1;
+      paint();
+      cfg.onType(input.value.trim(), setField);
+    });
+    input.addEventListener("focus", () => {
+      if (input.value.trim()) { items = cfg.getSuggestions(input.value); active = -1; paint(); }
+    });
+    input.addEventListener("blur", () => setTimeout(close, 120));
+    input.addEventListener("keydown", (e) => {
+      const open = !list.hidden && items.length;
+      if (e.key === "ArrowDown" && open) { e.preventDefault(); active = (active + 1) % items.length; paint(); }
+      else if (e.key === "ArrowUp" && open) { e.preventDefault(); active = (active - 1 + items.length) % items.length; paint(); }
+      else if (e.key === "Enter" && open && active >= 0) { e.preventDefault(); pick(active); }
+      else if (e.key === "Escape" && open) { e.preventDefault(); e.stopPropagation(); close(); }
+    });
+  }
+
+  function openForm(cfg) {
+    $("dlg-title").textContent = cfg.title;
+    $("dlg-save").textContent = cfg.saveLabel || "Save";
+    $("dlg-save").disabled = false;
+    setMsg($("dlg-msg"), "");
+    const box = $("dlg-fields");
+    box.innerHTML = "";
+    dlgInputs = [];
+    const setField = (name, value) => {
+      const t = dlgInputs.find((i) => i.name === name);
+      if (t) t.el.value = value;
+    };
+    cfg.fields.forEach((f) => {
+      const label = document.createElement("label");
+      if (f.wide) label.className = "wide";
+      label.appendChild(document.createTextNode(f.label));
+      let input;
+      if (f.options) {
+        input = document.createElement("select");
+        f.options.forEach((o) => {
+          const op = document.createElement("option");
+          op.value = o.value; op.textContent = o.label;
+          input.appendChild(op);
+        });
+      } else {
+        input = document.createElement("input");
+        input.type = f.type || "text";
+        if (f.autocomplete) input.autocomplete = f.autocomplete;
+      }
+      input.value = f.value || "";
+      input.disabled = !!f.disabled;
+      if (f.readonly) input.readOnly = true;
+      if (f.placeholder) input.placeholder = f.placeholder;
+
+      if (f.suggest && cfg.getSuggestions) {
+        input.autocomplete = "off";
+        const wrap = document.createElement("span");
+        wrap.className = "ac-wrap";
+        const list = document.createElement("ul");
+        list.className = "ac-list";
+        list.hidden = true;
+        list.setAttribute("role", "listbox");
+        wrap.appendChild(input);
+        wrap.appendChild(list);
+        label.appendChild(wrap);
+        attachSuggest(input, list, cfg, setField);
+      } else {
+        label.appendChild(input);
+      }
+      if (f.hint) {
+        const s = document.createElement("small");
+        s.textContent = f.hint;
+        label.appendChild(s);
+      }
+      box.appendChild(label);
+      dlgInputs.push({ name: f.name, el: input });
+    });
+    dlgSubmit = cfg.onSubmit;
+    $("dlg").showModal();
+    const first = dlgInputs.find((i) => !i.el.disabled && !i.el.readOnly);
+    if (first) first.el.focus();
+  }
+
+  $("dlg-cancel").addEventListener("click", () => $("dlg").close());
+
+  $("dlg-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!dlgSubmit) return;
+    const values = {};
+    dlgInputs.forEach((i) => { values[i.name] = i.el.value.trim(); });
+    $("dlg-save").disabled = true;
+    setMsg($("dlg-msg"), "Saving…");
+    const out = await dlgSubmit(values);
+    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+    if (out.ok) { $("dlg").close(); return; }
+    $("dlg-save").disabled = false;
+    setMsg($("dlg-msg"), out.error, true);
+  });
+
+  /* ---------- Start ---------- */
+  if (token) showApp(); else showLogin("");
+</script>
+</body>
+</html>

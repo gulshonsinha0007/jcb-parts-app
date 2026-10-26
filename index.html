@@ -157,6 +157,22 @@ body {
 </style>
 </head>
 <body>
+<div id="liveDateTime" style="
+  display:block;
+  width:fit-content;
+  max-width:90%;
+  margin:10px auto 15px auto;
+  padding:8px 14px;
+  background:#222;
+  color:#ffcc00;
+  text-align:center;
+  font-weight:bold;
+  font-size:14px;
+  border-radius:8px;
+  position:relative;
+  z-index:1;
+  pointer-events:none;
+"></div>
 
 <!-- ======== LOGIN ======== -->
 <div id="login">
@@ -828,5 +844,26 @@ body {
   /* ---------- Start ---------- */
   if (token) showApp(); else showLogin("");
 </script>
+function updateDateTime() {
+  const now = new Date();
+
+  const date = now.toLocaleDateString('en-IN', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Kolkata'
+  });
+
+  const time = now.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Kolkata'
+  });
+
+  document.getElementById('liveDateTime').textContent =
+    'Date: ' + date + ' | Time: ' + time;
+}
 </body>
 </html>

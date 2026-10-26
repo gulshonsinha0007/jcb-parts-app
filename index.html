@@ -8,6 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
+html, body {
+  background: url("./jcb-background.jpeg") center / cover no-repeat fixed !important;
+}
+body::before, body::after {
+  display: none !important;
+}
 body {
   background-image: url('./jcb-background.jpeg');
   background-size: cover;

@@ -865,5 +865,9 @@ function updateDateTime() {
   document.getElementById('liveDateTime').textContent =
     'Date: ' + date + ' | Time: ' + time;
 }
+
+updateDateTime();
+setInterval(updateDateTime, 1000);
+</script>
 </body>
 </html>

@@ -154,17 +154,18 @@ body {
   .ac-list li strong { display: block; }
   .ac-list li small { margin: 0; }
   .ac-list li:hover, .ac-list li.active { background: var(--mid-yellow); }
-.ad-box { position: fixed; left: 15px; top: 50%; transform: translateY(-50%); width: 220px; z-index: 10; text-align: center; }
-.ad-box video { display: block; width: 100%; max-height: 70vh; object-fit: contain; background: #000; border-radius: 8px; }
+.ad-box { position: fixed; left: 15px; top: 0; bottom: 0; margin: auto 0; height: fit-content; width: 380px; z-index: 10; text-align: center; }
+.ad-box video { display: block; width: 100%; max-height: 90vh; object-fit: contain; background: #000; border-radius: 8px; }
 .ad-box small { display: block; color: #888; font-size: 12px; margin-bottom: 4px; }
 
 @media (max-width: 900px) {
-  .ad-box { position: static; transform: none; width: 100%; max-width: 300px; margin: 10px auto; }
+  .ad-box { position: static; width: 100%; max-width: 300px; margin: 10px auto; height: auto; }
+  .ad-box video { max-height: 45vh; }
 }
 </style>
 </head>
 <body>
-<div class="ad-box">
+<div class="ad-box" id="adBox">
   <small>Advertisement</small>
   <video src="jcb-video.mp4" autoplay muted loop playsinline controls></video>
 </div>

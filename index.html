@@ -840,5 +840,32 @@ body {
   /* ---------- Start ---------- */
   if (token) showApp(); else showLogin("");
 </script>
+  </script>
+
+<script>
+  // Login box hide hote hi video hata do
+  (function () {
+    var login = document.getElementById('login');
+    var ad = document.getElementById('adBox');
+    if (!login || !ad) return;
+
+    function check() {
+      var hidden = login.hidden ||
+                   login.style.display === 'none' ||
+                   getComputedStyle(login).display === 'none' ||
+                   !document.body.contains(login);
+      if (hidden) {
+        ad.style.display = 'none';
+        observer.disconnect();
+      }
+    }
+
+    var observer = new MutationObserver(check);
+    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    check();
+  })();
+</script>
+</body>
+</html>
 </body>
 </html>

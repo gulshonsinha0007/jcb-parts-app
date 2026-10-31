@@ -9,16 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
 html, body {
-  margin: 0;
-  min-height: 100vh;
-  background-image: url('./jcb-background.jpeg');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-attachment: scroll;
+  background: url("./jcb-background.jpeg") center / cover no-repeat fixed !important;
 }
 body::before, body::after {
   display: none !important;
+}
+body {
+  background-image: url('./jcb-background.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
   :root {
     --dark-yellow: #c48f00;

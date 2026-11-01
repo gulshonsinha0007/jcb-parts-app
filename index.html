@@ -3,236 +3,641 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JCB PARTS INFO BY GULSHON</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Podder & Podder (E & P) Pvt. Ltd. - JCB Parts Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
-html, body {
-  background: url("./jcb-background.jpeg") center / cover no-repeat fixed !important;
-}
-body::before, body::after {
-  display: none !important;
-}
-body {
-  background-image: url('./jcb-background.jpeg');
-  background-size: contain;
-  background-position: center centre;
-  background-attachment: fixed;
-}
   :root {
-    --dark-yellow: #c48f00;
-    --mid-yellow: #e0a800;
-    --light-yellow: #fff4b8;
-    --pale-yellow: #fffbe0;
-    --ink: #1f1700;
-    --ink-soft: #5a4700;
-    --line: #e6d27a;
-    --error: #8f1d12;
-    --display: "Oswald", Impact, "Arial Narrow Bold", "Arial Narrow", sans-serif;
-    --body: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    --bg-main: #0c0e12;
+    --bg-card: #14171f;
+    --bg-card-hover: #1c202b;
+    --bg-input: #1a1e29;
+    --border-color: #2a2f3d;
+    --border-focus: #f59e0b;
+    
+    --jcb-amber: #f59e0b;
+    --jcb-amber-dark: #d97706;
+    --jcb-amber-glow: rgba(245, 158, 11, 0.15);
+    
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --text-dark: #111827;
+    
+    --error-bg: rgba(239, 68, 68, 0.1);
+    --error-color: #f87171;
+    
+    --display-font: "Oswald", sans-serif;
+    --body-font: "Inter", system-ui, -apple-system, sans-serif;
+    --mono-font: "JetBrains Mono", monospace;
   }
+
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
+
   body {
-    margin: 0; min-height: 100vh;
-    background: var(--dark-yellow); color: var(--ink);
-    font: 16px/1.5 var(--body);
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--body-font);
+    font-size: 14px;
+    line-height: 1.5;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.05) 0%, transparent 70%),
+      linear-gradient(to bottom, rgba(0,0,0,0.6), var(--bg-main)),
+      url('./jcb-background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
   }
-  h1, h2 {
-    font-family: var(--display); font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.05; margin: 0;
-  }
+
+  /* Hazard Stripe Accent Line */
   .stripe {
-    height: 10px;
-    background: repeating-linear-gradient(-45deg, var(--ink) 0 14px, var(--mid-yellow) 14px 28px);
+    height: 4px;
+    width: 100%;
+    background: repeating-linear-gradient(
+      -45deg,
+      #f59e0b,
+      #f59e0b 10px,
+      #111827 10px,
+      #111827 20px
+    );
   }
+
+  /* Core Buttons */
   button {
-    font: inherit; font-weight: 600; cursor: pointer;
-    background: var(--ink); color: var(--light-yellow);
-    border: 2px solid var(--ink); border-radius: 6px; padding: 10px 18px;
+    font-family: var(--body-font);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--jcb-amber);
+    color: var(--text-dark);
+    border: 1px solid var(--jcb-amber);
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
-  button:hover { background: #000; }
-  button:disabled { opacity: 0.55; cursor: not-allowed; }
-  button.ghost { background: transparent; color: var(--ink); }
-  button.ghost:hover:not(:disabled) { background: rgba(31, 23, 0, 0.1); }
-  button.small { padding: 3px 10px; font-size: 0.85rem; }
-  button.danger { background: var(--error); border-color: var(--error); color: #fff; }
+  button:hover:not(:disabled) {
+    background: var(--jcb-amber-dark);
+    border-color: var(--jcb-amber-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+  }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  
+  button.ghost {
+    background: transparent;
+    color: var(--text-main);
+    border-color: var(--border-color);
+    box-shadow: none;
+  }
+  button.ghost:hover:not(:disabled) {
+    background: var(--bg-card-hover);
+    border-color: var(--text-muted);
+    color: #fff;
+    box-shadow: none;
+  }
+
+  button.small { padding: 4px 10px; font-size: 0.775rem; border-radius: 6px; }
+  button.danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+  }
+  button.danger:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.9);
+    border-color: rgba(239, 68, 68, 0.9);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+
   input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
-    outline: 3px solid var(--ink); outline-offset: 2px;
+    outline: 2px solid var(--jcb-amber);
+    outline-offset: 1px;
   }
-  .msg { min-height: 1.4em; margin: 12px 0 0; font-size: 0.92rem; color: var(--ink-soft); }
-  .msg.error { color: var(--error); font-weight: 600; }
-  label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 14px; }
-  label small { display: block; font-weight: 400; color: var(--ink-soft); margin-top: 3px; }
+
+  /* Form Elements */
+  label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  label small {
+    display: block;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: none;
+    margin-top: 4px;
+    letter-spacing: normal;
+  }
   input[type=email], input[type=password], input[type=text], input[type=search], select {
-    display: block; width: 100%; margin-top: 5px;
-    padding: 10px 12px; font: inherit; color: var(--ink);
-    background: var(--pale-yellow); border: 2px solid var(--ink); border-radius: 6px;
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 14px;
+    font-family: var(--body-font);
+    font-size: 0.9rem;
+    color: var(--text-main);
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.2s ease;
   }
-  input:disabled { opacity: 0.7; }
+  input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, input[type=search]:focus, select:focus {
+    border-color: var(--jcb-amber);
+    box-shadow: 0 0 0 3px var(--jcb-amber-glow);
+    background: #1e2330;
+  }
 
-  /* ---------- Login ---------- */
-  #login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+  /* Feedback Messages */
+  .msg { min-height: 1.4em; margin: 12px 0 0; font-size: 0.85rem; color: var(--text-muted); font-family: var(--mono-font); }
+  .msg.error {
+    color: var(--error-color);
+    background: var(--error-bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid var(--error-color);
+  }
+
+  /* ---------- Login Section (Right Side) ---------- */
+  #login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 24px 60px;
+    position: relative;
+    z-index: 10;
+  }
   .login-card {
-    width: 100%; max-width: 420px; background: var(--light-yellow);
-    border: 3px solid var(--ink); border-radius: 10px; overflow: hidden;
-    box-shadow: 8px 8px 0 var(--ink);
+    width: 100%;
+    max-width: 420px;
+    background: rgba(26, 30, 41, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   }
-  .login-body { padding: 28px 28px 30px; }
-  .login-body h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 6px; }
-  .login-body p { margin: 0 0 22px; color: var(--ink-soft); }
+  .login-body { padding: 32px 28px; }
+  .login-brand-tag {
+    font-family: var(--mono-font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--jcb-amber);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .login-body h1 {
+    font-family: var(--display-font);
+    font-size: 2rem;
+    color: var(--jcb-amber);
+    margin: 0 0 6px 0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .login-body p { margin: 0 0 24px; color: var(--text-muted); font-size: 0.875rem; }
   .pw-row { position: relative; display: block; }
-  .pw-row input { padding-right: 76px; }
-  .pw-toggle { position: absolute; right: 6px; bottom: 6px; padding: 5px 10px; font-size: 0.85rem; border-radius: 4px; }
-  #login-btn { width: 100%; margin-top: 6px; padding: 12px; font-size: 1.05rem; }
+  .pw-row input { padding-right: 80px; }
+  .pw-toggle {
+    position: absolute; right: 6px; bottom: 5px;
+    padding: 4px 10px; font-size: 0.75rem;
+    border-radius: 6px; background: var(--bg-card);
+  }
+  #login-btn { width: 100%; margin-top: 10px; padding: 12px; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  /* ---------- App ---------- */
-  header.top { background: var(--light-yellow); border-bottom: 3px solid var(--ink); }
+  /* ---------- Application View ---------- */
+  header.top {
+    background: rgba(20, 23, 31, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
   .top-inner {
-    max-width: 1280px; margin: 0 auto; padding: 14px 20px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
   }
-  .top h1 { font-size: clamp(1.4rem, 4vw, 2.1rem); }
-  .who { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--ink-soft); flex-wrap: wrap; }
-  .who button { padding: 7px 14px; }
+  .top-brand-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--jcb-amber);
+    color: var(--text-dark);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+  }
+  .top h1 {
+    font-family: var(--display-font);
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 0.03em;
+  }
+  .top-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--mono-font);
+    display: block;
+    margin-top: -2px;
+  }
+  .who { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-muted); }
   .badge {
-    font-weight: 700; font-size: 0.8rem; padding: 2px 10px; border-radius: 99px;
-    border: 2px solid var(--ink); background: var(--pale-yellow); color: var(--ink);
+    font-family: var(--mono-font);
+    font-weight: 600;
+    font-size: 0.725rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-input);
+    color: var(--jcb-amber);
+    text-transform: uppercase;
   }
-  .badge.admin { background: var(--ink); color: var(--light-yellow); }
-  main { max-width: 1280px; margin: 0 auto; padding: 22px 20px 56px; }
-  .controls { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
-  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-  .tabs button { background: var(--mid-yellow); color: var(--ink); border-radius: 6px 6px 0 0; }
-  .tabs button[aria-selected=true] { background: var(--ink); color: var(--light-yellow); }
-  .search { flex: 1 1 280px; }
-  .search label { margin: 0; }
-  .panel {
-    background: var(--light-yellow); border: 3px solid var(--ink);
-    border-radius: 0 8px 8px 8px; padding: 14px;
+  .badge.admin {
+    background: var(--jcb-amber-glow);
+    border-color: var(--jcb-amber);
+    color: var(--jcb-amber);
   }
-  .count { margin: 0 0 10px; font-size: 0.92rem; color: var(--ink-soft); }
-  .table-wrap { overflow: auto; max-height: 68vh; border: 2px solid var(--ink); border-radius: 6px; background: var(--pale-yellow); }
-  table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
-  th {
-    position: sticky; top: 0; z-index: 1; background: var(--mid-yellow);
-    text-align: left; font-weight: 700; padding: 10px 12px;
-    border-bottom: 2px solid var(--ink); white-space: nowrap;
-  }
-  td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; max-width: 360px; overflow-wrap: anywhere; }
-  td.nowrap { white-space: nowrap; font-weight: 600; }
-  td.actions { white-space: nowrap; }
-  td.actions button + button { margin-left: 6px; }
-  tbody tr:nth-child(even) { background: #fff0a0; }
-  tbody tr:hover { background: #ffe56b; }
-  td a { color: var(--ink); font-weight: 600; margin-right: 10px; }
-  .empty { padding: 28px 12px; text-align: center; color: var(--ink-soft); }
 
-  /* ---------- Dialog ---------- */
-  dialog {
-    width: min(560px, 94vw); max-height: 92vh; overflow: auto; padding: 0;
-    background: var(--light-yellow); color: var(--ink);
-    border: 3px solid var(--ink); border-radius: 10px; box-shadow: 8px 8px 0 var(--ink);
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 80px; }
+  
+  .controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background: rgba(20, 23, 31, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 12px;
   }
-  dialog::backdrop { background: rgba(31, 23, 0, 0.55); }
-  .dlg-body { padding: 22px; }
-  .dlg-body h2 { font-size: 1.5rem; margin-bottom: 16px; }
-  #dlg-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); column-gap: 14px; }
+  
+  .tabs { display: flex; gap: 4px; background: var(--bg-main); padding: 4px; border-radius: 8px; border: 1px solid var(--border-color); }
+  .tabs button {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.825rem;
+    font-weight: 600;
+    box-shadow: none;
+  }
+  .tabs button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
+  .tabs button[aria-selected=true] {
+    background: var(--jcb-amber);
+    color: var(--text-dark);
+  }
+
+  .search { flex: 1; max-width: 500px; position: relative; }
+  .search label { margin: 0; text-transform: none; }
+  .search input {
+    margin: 0;
+    padding-left: 38px;
+    background: var(--bg-main);
+  }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .panel {
+    background: rgba(20, 23, 31, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  
+  .count {
+    margin: 0 0 12px;
+    font-size: 0.8rem;
+    font-family: var(--mono-font);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-wrap {
+    overflow: auto;
+    max-height: 65vh;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-main);
+  }
+  
+  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.85rem; }
+  th {
+    position: sticky; top: 0; z-index: 10;
+    background: #181c27;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.725rem;
+    font-family: var(--mono-font);
+    letter-spacing: 0.05em;
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    color: var(--text-main);
+    max-width: 380px;
+    overflow-wrap: anywhere;
+  }
+  td.nowrap {
+    white-space: nowrap;
+    font-family: var(--mono-font);
+    font-weight: 600;
+    color: var(--jcb-amber);
+  }
+  td.actions { white-space: nowrap; text-align: right; }
+  td.actions button + button { margin-left: 6px; }
+  tbody tr { transition: background 0.15s ease; }
+  tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
+  tbody tr:hover { background: rgba(245, 158, 11, 0.06); }
+  td a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  td a:hover { text-decoration: underline; }
+  .empty { padding: 36px 12px; text-align: center; color: var(--text-muted); font-family: var(--mono-font); }
+
+  /* ---------- Modal Dialog ---------- */
+  dialog {
+    width: min(580px, 92vw);
+    max-height: 90vh;
+    overflow: auto;
+    padding: 0;
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  }
+  dialog::backdrop { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px); }
+  .dlg-body { padding: 28px; }
+  .dlg-body h2 {
+    font-family: var(--display-font);
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  #dlg-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 18px; }
   #dlg-fields label.wide { grid-column: 1 / -1; }
-  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
-  input[readonly] { background: #f1e49a; }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+  input[readonly] { opacity: 0.7; background: rgba(255,255,255,0.03); cursor: not-allowed; }
+  
+  /* Autocomplete Suggestions dropdown */
   .ac-wrap { display: block; position: relative; }
   .ac-list {
-    position: absolute; left: 0; right: 0; top: 100%; z-index: 5;
-    margin: 2px 0 0; padding: 0; list-style: none; max-height: 250px; overflow: auto;
-    background: var(--pale-yellow); border: 2px solid var(--ink); border-radius: 6px;
-    box-shadow: 4px 4px 0 var(--ink);
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
+    margin: 4px 0 0; padding: 4px; list-style: none; max-height: 220px; overflow: auto;
+    background: #181c27; border: 1px solid var(--jcb-amber); border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
   }
-  .ac-list li { padding: 8px 12px; cursor: pointer; font-weight: 400; border-bottom: 1px solid var(--line); }
-  .ac-list li:last-child { border-bottom: 0; }
-  .ac-list li strong { display: block; }
-  .ac-list li small { margin: 0; }
-  .ac-list li:hover, .ac-list li.active { background: var(--mid-yellow); }
-.ad-box { position: fixed; left: 15px; top: 0; bottom: 0; margin: auto 0; height: fit-content; width: 380px; z-index: 10; text-align: center; }
-.ad-box video { display: block; width: 100%; max-height: 90vh; object-fit: contain; background: #000; border-radius: 8px; }
-.ad-box small { display: block; color: #fff; font-size: 20px; font-weight: bold; margin-bottom: 6px; }
+  .ac-list li {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 400;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+  }
+  .ac-list li strong { display: block; color: var(--jcb-amber); font-family: var(--mono-font); font-size: 0.85rem; }
+  .ac-list li small { margin: 0; color: var(--text-muted); font-size: 0.775rem; }
+  .ac-list li:hover, .ac-list li.active { background: var(--jcb-amber-glow); color: #fff; }
 
-@media (max-width: 900px) {
-  .ad-box { position: static; width: 100%; max-width: 300px; margin: 10px auto; height: auto; }
-  .ad-box video { max-height: 45vh; }
-}
+  /* ---------- Media Widget (Left Side: Video & Image) ---------- */
+  .ad-box {
+    position: fixed;
+    left: 20px;
+    right: auto;
+    bottom: 20px;
+    width: 300px;
+    z-index: 100;
+    background: rgba(20, 23, 31, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    transition: all 0.3s ease;
+  }
+  .ad-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .ad-header small {
+    color: var(--jcb-amber);
+    font-family: var(--mono-font);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .ad-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+  }
+  .ad-close-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .ad-box video {
+    display: block;
+    width: 100%;
+    height: 155px;
+    object-fit: cover;
+    background: #000;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .ad-box img {
+    display: block;
+    width: 100%;
+    height: 155px;
+    object-fit: cover;
+    background: #000;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 768px) {
+    #login { padding: 24px 16px; justify-content: center; }
+    .top-inner { flex-direction: column; align-items: flex-start; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search { max-width: 100%; }
+    .ad-box { width: 220px; left: 10px; bottom: 10px; }
+    .ad-box video, .ad-box img { height: 110px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- MEDIA WIDGET (VIDEO + IMAGE ON LEFT) -->
 <div class="ad-box" id="adBox">
-  <small>Advertisement</small>
+  <div class="ad-header">
+    <small><i data-lucide="play-circle" style="width: 12px; height: 12px;"></i> Official JCB Media</small>
+    <button class="ad-close-btn" onclick="document.getElementById('adBox').style.display='none'" title="Hide promo">✕</button>
+  </div>
   <video src="jcb-video.mp4" autoplay muted loop playsinline controls></video>
+  <img src="jcb-image.jpeg" alt="JCB Banner Image">
 </div>
 
-<!-- ======== LOGIN ======== -->
+<!-- ======== LOGIN VIEW (RIGHT SIDE) ======== -->
 <div id="login">
   <div class="login-card">
     <div class="stripe"></div>
     <div class="login-body">
-      <h1>JCB Parts Info by Podder</h1>
-      <p>Website Developed & Design by Gulshon</p>
-      <p>Sign in to look up parts and prices.</p>
+      <div class="login-brand-tag">
+        <i data-lucide="shield-check" style="width:14px; height:14px;"></i> Enterprise Access
+      </div>
+      <h1>Price & Parts-info By Podder Distributor</h1>
+      <p>Website Developed & Designed by Gulshon Sinha</p>
+            
       <form id="login-form" novalidate>
-        <label>Email
+        <label>Retailers Email
           <input id="email" type="email" autocomplete="username" required placeholder="you@gmail.com">
         </label>
+        
         <label>Password
           <span class="pw-row">
-            <input id="password" type="password" autocomplete="current-password" required>
+            <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••">
             <button id="pw-toggle" class="ghost pw-toggle" type="button" aria-pressed="false">Show</button>
           </span>
         </label>
-        <button id="login-btn" type="submit">Sign in</button>
+        
+        <button id="login-btn" type="submit">
+          Sign In To Portal
+        </button>
+        
         <p id="login-msg" class="msg" role="alert"></p>
       </form>
     </div>
   </div>
 </div>
 
-<!-- ======== APP ======== -->
+<!-- ======== MAIN APPLICATION VIEW ======== -->
 <div id="app" hidden>
   <header class="top">
     <div class="stripe"></div>
     <div class="top-inner">
-      <h1>JCB Parts Info by Gulshon</h1>
+      <div class="top-brand-group">
+        <div class="top-logo-icon">
+          <i data-lucide="wrench" style="width: 20px; height: 20px;"></i>
+        </div>
+        <div>
+          <h1>JCB Parts Portal  / Price List Oct 2026</h1>
+          <span class="top-subtitle">Price & Parts Info By Gulshon / All Hub</span>
+        </div>
+      </div>
+      
       <div class="who">
+        <i data-lucide="user" style="width: 14px; height: 14px;"></i>
         <span id="who"></span>
         <span id="badge" class="badge">User</span>
-        <button id="logout" class="ghost" type="button">Sign out</button>
+        <button id="logout" class="ghost small" type="button">
+          <i data-lucide="log-out" style="width: 12px; height: 12px;"></i> Sign Out
+        </button>
       </div>
     </div>
   </header>
 
   <main>
     <div class="controls">
+      <!-- Sheet Selector Tabs -->
       <div class="tabs" role="tablist" aria-label="Sheets">
         <button type="button" role="tab" data-key="pricelist" aria-selected="true">Price List</button>
         <button type="button" role="tab" data-key="partsinfo" aria-selected="false">PartsInfo</button>
         <button type="button" role="tab" data-key="users" id="tab-users" aria-selected="false" hidden>Users</button>
       </div>
+
+      <!-- Live Table Search Field -->
       <div class="search" id="search-wrap">
-        <label for="q">Search part number, description, model or anything else
-          <input id="q" type="search" placeholder="e.g. 332/ filter 3DX" autocomplete="off">
+        <label for="q">
+          <div style="position: relative;">
+            <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
+            <input id="q" type="search" placeholder="Search Part Number, Description, or Model (e.g. 332/ filter 3DX)..." autocomplete="off">
+          </div>
         </label>
       </div>
-      <button id="add-btn" type="button" hidden>Add part</button>
+
+      <!-- Contextual Action Button -->
+      <button id="add-btn" type="button" hidden>
+        <i data-lucide="plus" style="width: 16px; height: 16px;"></i> Add Part
+      </button>
     </div>
 
+    <!-- Main Data Table Container -->
     <div class="panel">
       <p id="count" class="count" role="status"></p>
-      <div class="table-wrap"><table id="table"></table></div>
+      <div class="table-wrap">
+        <table id="table"></table>
+      </div>
       <p id="data-msg" class="msg" role="status"></p>
     </div>
   </main>
 </div>
 
-<!-- ======== ADD / EDIT DIALOG ======== -->
+<!-- ======== ADD / EDIT DIALOG MODAL ======== -->
 <dialog id="dlg" aria-labelledby="dlg-title">
   <div class="stripe"></div>
   <form id="dlg-form" class="dlg-body" novalidate>
@@ -241,7 +646,7 @@ body {
     <p id="dlg-msg" class="msg" role="alert"></p>
     <div class="dlg-actions">
       <button id="dlg-cancel" class="ghost" type="button">Cancel</button>
-      <button id="dlg-save" type="submit">Save</button>
+      <button id="dlg-save" type="submit">Save Record</button>
     </div>
   </form>
 </dialog>
@@ -275,7 +680,6 @@ body {
       return { ok: false, error: "Set SCRIPT_URL at the top of this file's script first." };
     }
     try {
-      // text/plain avoids a CORS preflight, which Apps Script doesn't answer.
       const res = await fetch(SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -312,12 +716,11 @@ body {
     updateAddButton();
   }
 
-  // Admins see the button everywhere. Users with the add permission see it on PartsInfo only.
   function updateAddButton() {
     const btn = $("add-btn");
     btn.hidden = !(role === "admin" || (canAdd && currentKey === "partsinfo"));
-    btn.textContent = currentKey === "users" ? "Add user"
-      : currentKey === "partsinfo" ? "Add part info" : "Add part";
+    btn.textContent = currentKey === "users" ? "Add User"
+      : currentKey === "partsinfo" ? "Add Part Info" : "Add Part";
   }
 
   /* ---------- Login / logout ---------- */
@@ -334,6 +737,7 @@ body {
     $("who").textContent = email || "";
     applyRole();
     loadSheet(currentKey);
+    lucide.createIcons();
   }
 
   function logout(message) {
@@ -348,7 +752,7 @@ body {
     e.preventDefault();
     const btn = $("login-btn");
     btn.disabled = true;
-    setMsg($("login-msg"), "Signing in…");
+    setMsg($("login-msg"), "Authenticating in Retailers...");
     const out = await api({ action: "login", email: $("email").value, password: $("password").value });
     btn.disabled = false;
     if (!out.ok) { setMsg($("login-msg"), out.error, true); return; }
@@ -395,7 +799,7 @@ body {
 
     $("table").innerHTML = "";
     setMsg($("count"), "");
-    setMsg($("data-msg"), "Loading…");
+    setMsg($("data-msg"), "Fetching JCB Catalog Data...");
     const out = await api({ action: "data", token: token, sheet: key });
     if (mySeq !== loadSeq) return;
 
@@ -419,7 +823,7 @@ body {
       parts.forEach((u, i) => {
         const a = document.createElement("a");
         a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer";
-        a.textContent = parts.length > 1 ? "Link " + (i + 1) : "Open link";
+        a.innerHTML = `<i data-lucide="external-link" style="width:12px; height:12px;"></i> ` + (parts.length > 1 ? "Link " + (i + 1) : "Open Specs");
         td.appendChild(a);
       });
     } else {
@@ -477,13 +881,14 @@ body {
       td.colSpan = data.headers.length + (admin ? 1 : 0);
       td.className = "empty";
       td.textContent = words.length
-        ? "No parts match that search. Try fewer or shorter words."
-        : "This sheet has no rows yet.";
+        ? "No matching JCB parts found. Refine your query."
+        : "This catalog view currently contains no entries.";
     }
 
-    let note = "Showing " + shown.length.toLocaleString() + " of " + matches.length.toLocaleString() + " rows";
-    if (matches.length > ROW_LIMIT) note += ". Type more of the part number or description to narrow the list.";
+    let note = "Showing " + shown.length.toLocaleString() + " of " + matches.length.toLocaleString() + " parts";
+    if (matches.length > ROW_LIMIT) note += " (Narrow down search to view all results)";
     setMsg($("count"), note);
+    lucide.createIcons();
   }
 
   document.querySelectorAll(".tabs button").forEach((b) => {
@@ -498,7 +903,6 @@ body {
   /* ---------- Admin: parts ---------- */
   const normH = (s) => String(s).toLowerCase().replace(/\s+/g, "");
 
-  // Search index over the Price List (part number + description), built once per load.
   function partIndex() {
     const d = cache.pricelist;
     if (!d) return null;
@@ -537,7 +941,7 @@ body {
   async function openPartForm(r) {
     const key = currentKey;
     const editing = !!r;
-    const lookup = !editing && key === "partsinfo";   // part no suggestions + automatic description
+    const lookup = !editing && key === "partsinfo";
 
     if (lookup && !cache.pricelist) {
       setMsg($("data-msg"), "Loading part numbers…");
@@ -553,18 +957,18 @@ body {
     const partH = data.headers.find((h) => normH(h) === "partno") || data.headers[0];
     const descH = data.headers.find((h) => normH(h) === "description");
     const isAdmin = role === "admin";
-    const addTitle = key === "partsinfo" ? "Add part info" : "Add part";
+    const addTitle = key === "partsinfo" ? "Add Part Info Record" : "Add Spare Part";
 
     openForm({
-      title: editing ? "Edit part" : addTitle,
-      saveLabel: editing ? "Save changes" : addTitle,
+      title: editing ? "Edit Part Details" : addTitle,
+      saveLabel: editing ? "Save Changes" : addTitle,
       fields: data.headers.map((h, i) => {
         const f = { name: h, label: h, value: editing ? String(r.cells[i] ?? "") : "", wide: /desc|link/i.test(h) || (lookup && h === partH) };
-        if (lookup && h === partH) { f.suggest = true; f.placeholder = "Start typing a part number"; }
+        if (lookup && h === partH) { f.suggest = true; f.placeholder = "Type part number (e.g. 320/08608)"; }
         if (lookup && h === descH) {
           f.readonly = true;
-          f.placeholder = "Filled in from the Price List";
-          f.hint = "Filled in automatically from the Price List.";
+          f.placeholder = "Auto-filled from Price List";
+          f.hint = "Description is matched automatically from the Price List catalog.";
         }
         return f;
       }),
@@ -587,7 +991,7 @@ body {
         } else {
           if (lookup) {
             const hit = findPart(values[partH]);
-            if (!hit && !isAdmin) return { ok: false, error: "Pick a part number from the Price List suggestions." };
+            if (!hit && !isAdmin) return { ok: false, error: "Please select a valid part number from the Price List suggestions." };
             if (hit) { values[partH] = hit.pn; if (descH) values[descH] = hit.desc; }
           }
           body.values = values;
@@ -600,8 +1004,8 @@ body {
   }
 
   async function deletePart(r) {
-    if (!confirm("Delete part " + r.cells[0] + "?\nThis removes its row from the Google Sheet.")) return;
-    setMsg($("data-msg"), "Deleting…");
+    if (!confirm("Delete part " + r.cells[0] + "?\nThis action will permanently remove the record from the Google Sheet.")) return;
+    setMsg($("data-msg"), "Deleting record...");
     const out = await api({ action: "row_delete", token: token, sheet: currentKey, row: r.num, check: r.cells[0] });
     if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
     if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
@@ -615,7 +1019,7 @@ body {
   async function loadUsers(mySeq) {
     $("table").innerHTML = "";
     setMsg($("count"), "");
-    setMsg($("data-msg"), "Loading…");
+    setMsg($("data-msg"), "Loading authorized user access list...");
     const out = await api({ action: "users_list", token: token });
     if (mySeq !== loadSeq) return;
     if (!out.ok) {
@@ -632,41 +1036,41 @@ body {
     const table = $("table");
     table.innerHTML = "";
     const headRow = table.createTHead().insertRow();
-    ["Email", "Role", "Can add PartsInfo", "Actions"].forEach((h) => addHeader(headRow, h));
+    ["Operator Email", "Role", "Can Add PartsInfo", "Actions"].forEach((h) => addHeader(headRow, h));
     const body = table.createTBody();
     usersList.forEach((u) => {
       const tr = body.insertRow();
       const isMe = u.email === email;
-      const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (you)" : "");
-      tr.insertCell().textContent = u.role === "admin" ? "Admin" : "User";
-      tr.insertCell().textContent = u.role === "admin" ? "Yes (admin)" : (u.canAdd ? "Yes" : "No");
+      const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (You)" : "");
+      tr.insertCell().textContent = u.role === "admin" ? "Administrator" : "Standard User";
+      tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canAdd ? "Yes" : "No");
       const td = tr.insertCell(); td.className = "actions";
       td.appendChild(smallButton("Edit", "ghost", () => openUserForm(u)));
       const del = smallButton("Remove", "danger", () => removeUser(u));
       del.disabled = isMe;
       td.appendChild(del);
     });
-    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user" : " users") +
-      ". Users can search and view. Admins can also edit parts and manage users.");
+    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user registered" : " users registered"));
+    lucide.createIcons();
   }
 
   function openUserForm(u) {
     const editing = !!u;
     openForm({
-      title: editing ? "Edit user" : "Add user",
-      saveLabel: editing ? "Save changes" : "Add user",
+      title: editing ? "Edit User Privileges" : "Add New Operator",
+      saveLabel: editing ? "Save Changes" : "Create User",
       fields: [
-        { name: "email", label: "Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
-        { name: "password", label: editing ? "New password" : "Password", type: "password",
+        { name: "email", label: "Operator Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
+        { name: "password", label: editing ? "New Password" : "Password", type: "password",
           autocomplete: "new-password", wide: true,
-          hint: editing ? "Leave blank to keep the current password." : "At least 6 characters." },
-        { name: "role", label: "Role", wide: true, value: editing ? u.role : "user",
+          hint: editing ? "Leave blank to keep current password." : "Minimum 6 characters." },
+        { name: "role", label: "Access Role", wide: true, value: editing ? u.role : "user",
           options: [
-            { value: "user", label: "User (search and view)" },
-            { value: "admin", label: "Admin (edit parts and manage users)" }
+            { value: "user", label: "User (Search and View Only)" },
+            { value: "admin", label: "Admin (Full Edit & User Management)" }
           ] },
-        { name: "canAdd", label: "Can add PartsInfo", wide: true, value: editing && u.canAdd ? "yes" : "no",
-          hint: "Lets a user add new rows to PartsInfo (not edit or delete). Admins can always do this.",
+        { name: "canAdd", label: "Can Add PartsInfo", wide: true, value: editing && u.canAdd ? "yes" : "no",
+          hint: "Allows standard users to insert new rows to PartsInfo without edit/delete rights.",
           options: [
             { value: "no", label: "No" },
             { value: "yes", label: "Yes" }
@@ -686,7 +1090,7 @@ body {
   }
 
   async function removeUser(u) {
-    if (!confirm("Remove " + u.email + "?\nThey will no longer be able to sign in.")) return;
+    if (!confirm("Revoke access for " + u.email + "?\nThey will no longer be able to log in to the portal.")) return;
     const out = await api({ action: "user_delete", token: token, email: u.email });
     if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
     if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
@@ -701,7 +1105,6 @@ body {
   let dlgInputs = [];
   let dlgSubmit = null;
 
-  // Suggestion list under a text input (used for PART NO when adding PartsInfo).
   function attachSuggest(input, list, cfg, setField) {
     let items = [];
     let active = -1;
@@ -830,7 +1233,7 @@ body {
     const values = {};
     dlgInputs.forEach((i) => { values[i.name] = i.el.value.trim(); });
     $("dlg-save").disabled = true;
-    setMsg($("dlg-msg"), "Saving…");
+    setMsg($("dlg-msg"), "Updating database...");
     const out = await dlgSubmit(values);
     if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
     if (out.ok) { $("dlg").close(); return; }
@@ -838,13 +1241,15 @@ body {
     setMsg($("dlg-msg"), out.error, true);
   });
 
-  /* ---------- Start ---------- */
-  if (token) showApp(); else showLogin("");
+  /* ---------- Startup Initialization ---------- */
+  window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    if (token) showApp(); else showLogin("");
+  });
 </script>
-  </script>
 
 <script>
-  // Login box hide hote hi video hata do
+  // Hide media widget once login view vanishes
   (function () {
     var login = document.getElementById('login');
     var ad = document.getElementById('adBox');
@@ -866,7 +1271,5 @@ body {
     check();
   })();
 </script>
-</body>
-</html>
 </body>
 </html>

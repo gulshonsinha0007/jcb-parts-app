@@ -528,6 +528,31 @@
     .ad-box { width: 220px; left: 10px; bottom: 10px; }
     .ad-box video, .ad-box img { height: 110px; }
   }
+.blink-glow {
+    color: #ffeb00;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    text-shadow:
+        0 0 5px #ffeb00,
+        0 0 10px #ffcc00,
+        0 0 20px #ff9900,
+        0 0 30px #ff9900;
+
+    animation: goldenBlink 1.2s infinite;
+}
+
+@keyframes goldenBlink {
+    0%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 5px #ffeb00, 0 0 15px #ff9900;
+    }
+
+    50% {
+        opacity: 0.4;
+        text-shadow: 0 0 15px #ffeb00, 0 0 30px #ff9900;
+    }
+}
 </style>
 </head>
 <body>
@@ -553,7 +578,7 @@
       <h1 style="font-size:22px; text-align:centre; line-height:1.1;">
       Price & Parts-info Podder(Dist)
       </h1>
-      <h2>Pricelist November 2026</h2>
+      <h2 class="blink-glow">Pricelist November 2026</h2>
       <p>Website Developed & Designed by Gulshon Sinha</p>
             
       <form id="login-form" novalidate>

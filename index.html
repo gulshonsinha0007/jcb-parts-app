@@ -553,6 +553,56 @@
         text-shadow: 0 0 15px #ffeb00, 0 0 30px #ff9900;
     }
 }
+
+  /* ---------- Live Date & Time ---------- */
+  .live-datetime {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin: 14px 0 18px;
+    padding: 10px 12px;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 20px;
+    background: rgba(245, 158, 11, 0.07);
+    text-align: center;
+    font-family: var(--mono-font);
+  }
+  .live-datetime .live-date {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+  .live-datetime .live-time {
+    color: var(--jcb-amber);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+  }
+  .top-live-datetime {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-family: var(--mono-font);
+    white-space: nowrap;
+  }
+  .top-live-datetime .live-date {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .top-live-datetime .live-time {
+    color: var(--jcb-amber);
+    font-size: 1.9rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 768px) {
+    .top-live-datetime { align-items: flex-start; }
+  }
+
 </style>
 </head>
 <body>
@@ -579,6 +629,10 @@
       Price & Parts-info Podder(Dist)
       </h1>
       <h2 class="blink-glow">Pricelist November 2026</h2>
+      <div class="live-datetime" aria-live="off">
+        <span class="live-date" id="login-date">Loading date...</span>
+        <span class="live-time" id="login-time">--:--:--</span>
+      </div>
       <p>Website Developed & Designed by Gulshon Sinha</p>
             
       <form id="login-form" novalidate>
@@ -625,6 +679,10 @@
         <button id="logout" class="ghost small" type="button">
           <i data-lucide="log-out" style="width: 12px; height: 12px;"></i> Sign Out
         </button>
+      </div>
+      <div class="top-live-datetime" aria-live="off">
+        <span class="live-date" id="app-date">Loading date...</span>
+        <span class="live-time" id="app-time">--:--:--</span>
       </div>
     </div>
   </header>
@@ -1269,8 +1327,37 @@
     setMsg($("dlg-msg"), out.error, true);
   });
 
+
+  /* ---------- Live Date & Time ---------- */
+  function updateLiveDateTime() {
+    const now = new Date();
+    const dateText = new Intl.DateTimeFormat("en-IN", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    }).format(now);
+    const timeText = new Intl.DateTimeFormat("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true
+    }).format(now);
+
+    ["login-date", "app-date"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = dateText;
+    });
+    ["login-time", "app-time"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = timeText;
+    });
+  }
+
   /* ---------- Startup Initialization ---------- */
   window.addEventListener('DOMContentLoaded', () => {
+    updateLiveDateTime();
+    setInterval(updateLiveDateTime, 1000);
     lucide.createIcons();
     if (token) showApp(); else showLogin("");
   });

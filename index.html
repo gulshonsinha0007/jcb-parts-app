@@ -554,6 +554,38 @@
     }
 }
 
+  /* ---------- Search hit blink (PriceList / PartsInfo) ---------- */
+  td.hit-cell {
+    background: #fbbf24 !important;
+    color: #111827 !important;
+    font-weight: 700;
+    animation: hitBlink 1s ease-in-out infinite;
+  }
+  mark.hit {
+    background: #fbbf24;
+    color: #111827;
+    font-weight: 700;
+    padding: 1px 3px;
+    border-radius: 3px;
+    animation: hitBlink 1s ease-in-out infinite;
+  }
+  @keyframes hitBlink {
+    0%, 100% { background-color: #fbbf24; color: #111827; box-shadow: 0 0 8px rgba(251,191,36,.9); }
+    50%      { background-color: rgba(251,191,36,.12); color: #fbbf24; box-shadow: none; }
+  }
+
+  /* ---------- User online / offline ---------- */
+  .pres { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; white-space: nowrap; }
+  .pres::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+  .pres.on  { color: #22c55e; }
+  .pres.on::before { box-shadow: 0 0 8px #22c55e; animation: presPulse 1.6s infinite; }
+  .pres.off { color: #ef4444; }
+  @keyframes presPulse { 50% { opacity: .35; } }
+  td.lastseen { white-space: nowrap; color: var(--text-muted); font-size: 0.8rem; }
+
+  /* ---------- PurchaseOrder: Ord_Qnty white ---------- */
+  td.qty-white { color: #fff !important; font-weight: 700; font-family: var(--mono-font); text-align: center; }
+
   /* ---------- Live Date & Time ---------- */
   .live-datetime {
     display: flex;
@@ -595,13 +627,90 @@
   }
   .top-live-datetime .live-time {
     color: var(--jcb-amber);
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
   @media (max-width: 768px) {
     .top-live-datetime { align-items: flex-start; }
   }
+
+
+  /* ---------- MyOrder module ---------- */
+  .myorder { margin-left: auto; }
+  .myorder[aria-pressed=true] { background: transparent; color: var(--jcb-amber); }
+
+  .otabs {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--bg-main);
+    padding: 4px; border-radius: 8px;
+    border: 1px solid var(--border-color);
+    width: fit-content; max-width: 100%;
+    margin-bottom: 16px;
+  }
+  .otabs button {
+    background: transparent; color: var(--text-muted);
+    border: none; border-radius: 6px;
+    padding: 8px 16px; font-size: 0.825rem; font-weight: 600;
+    box-shadow: none;
+  }
+  .otabs button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
+  .otabs button[aria-selected=true] { background: var(--jcb-amber); color: var(--text-dark); }
+
+  .po-entry { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); }
+  .po-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .po-head strong { font-family: var(--display-font); font-size: 0.95rem; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; }
+  .po-head small { display: block; color: var(--text-muted); font-size: 0.7rem; }
+  .po-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .po-entry .msg { margin: 6px 0 0; min-height: 0; font-size: 0.78rem; }
+
+  .og-wrap {
+    overflow: auto; max-height: 30vh;
+    border: 1px solid var(--border-color);
+    border-radius: 8px; background: var(--bg-main);
+  }
+  table.og { width: max-content; min-width: 100%; }
+  table.og th, table.og td { border-right: 1px solid var(--border-color); }
+  table.og th { padding: 6px 8px; font-size: 0.65rem; }
+  table.og td { padding: 0; max-width: none; }
+  table.og td.og-auto {
+    padding: 0 8px; text-align: center; white-space: nowrap;
+    color: var(--text-muted); font-family: var(--mono-font); font-size: 0.72rem;
+    background: rgba(255,255,255,0.02);
+  }
+  table.og td.og-act { padding: 0 6px; text-align: center; }
+  table.og input, table.og select {
+    display: block; width: 100%; margin: 0;
+    border: none; border-radius: 0;
+    background: transparent; padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+  table.og select { background: var(--bg-input); }
+  table.og input:focus, table.og select:focus {
+    background: #1e2330;
+    box-shadow: inset 0 0 0 2px var(--jcb-amber);
+  }
+  table.og .ac-wrap { min-width: 120px; }
+  table.og button.small { padding: 2px 7px; }
+  table.og input[readonly] { color: var(--text-muted); cursor: default; background: rgba(255,255,255,0.02); }
+  .og-wrap .ac-list { position: fixed; }
+  /* PurchaseOrder entry: Ord_Qnty me user jo type kare wo font white (background same) */
+  table.og input.og-qty-input {
+    color: #ffffff; -webkit-text-fill-color: #ffffff; caret-color: #ffffff;
+    font-weight: 700; text-align: center; font-family: var(--mono-font);
+  }
+  table.og input.og-qty-input::placeholder { color: var(--text-muted); font-weight: 400; -webkit-text-fill-color: var(--text-muted); }
+
+  /* CustOrder(Master) filter bar */
+  .mbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .mbar select, .mbar input[type=search] { width: auto; min-width: 180px; margin-top: 0; padding: 7px 12px; font-size: 0.82rem; }
+  .mview { display: flex; gap: 4px; background: var(--bg-main); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
+  .mview button { background: transparent; color: var(--text-muted); border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.775rem; font-weight: 600; box-shadow: none; }
+  .mview button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
+  .mview button[aria-selected=true] { background: var(--jcb-amber); color: var(--text-dark); }
+  tr.m-sum-row { cursor: pointer; }
+  tr.m-sum-row:hover td { background: var(--bg-card-hover); }
+  td.num { text-align: right; font-family: var(--mono-font); white-space: nowrap; }
 
 </style>
 </head>
@@ -614,7 +723,7 @@
     <button class="ad-close-btn" onclick="document.getElementById('adBox').style.display='none'" title="Hide promo">✕</button>
   </div>
   <video src="jcb-video.mp4" autoplay muted loop playsinline controls></video>
-  <img src="jcb-image.jpeg" alt="JCB OFFERS">
+  <img src="jcb-image.jpeg" alt="JCB Banner Image">
 </div>
 
 <!-- ======== LOGIN VIEW (RIGHT SIDE) ======== -->
@@ -628,14 +737,13 @@
       <h1 style="font-size:23.70px; text-align:centre; line-height:1.0;">
       Price & Parts-info Podder(Dist)
       </h1>
-      <h2 class="blink-glow">Happy Diwali</h2>
+     <h2 class="blink-glow" style="margin-bottom: 1px;color:white;">Pricelist Nov 26</h2>
+     <h3 class="blink-glow" style="margin-top: 0;color:orange;">Your Parts Order here</h3>
       <div class="live-datetime" aria-live="off">
         <span class="live-date" id="login-date">Loading date...</span>
         <span class="live-time" id="login-time">--:--:--</span>
       </div>
-      <p style="text-align: center; width: 100%; display: block;">
-  Website Developed & Designed by Gulshon Sinha
-</p>
+      <p>Website Developed & Designed by Gulshon Sinha</p>
             
       <form id="login-form" novalidate>
         <label>Retailers Email
@@ -692,7 +800,7 @@
   <main>
     <div class="controls">
       <!-- Sheet Selector Tabs -->
-      <div class="tabs" role="tablist" aria-label="Sheets">
+      <div class="tabs" id="main-tabs" role="tablist" aria-label="Sheets">
         <button type="button" role="tab" data-key="pricelist" aria-selected="true">Price List</button>
         <button type="button" role="tab" data-key="partsinfo" aria-selected="false">PartsInfo</button>
         <button type="button" role="tab" data-key="users" id="tab-users" aria-selected="false" hidden>Users</button>
@@ -712,15 +820,64 @@
       <button id="add-btn" type="button" hidden>
         <i data-lucide="plus" style="width: 16px; height: 16px;"></i> Add Part
       </button>
+
+      <!-- MyOrder: single button on the right, opens PurchaseOrder / Available / OutOfStock / CustOrder(Master) -->
+      <button id="myorder-btn" class="myorder" type="button" aria-pressed="false">
+        <i data-lucide="clipboard-list" style="width: 16px; height: 16px;"></i> <span id="myorder-label">MyOrder</span>
+      </button>
     </div>
 
     <!-- Main Data Table Container -->
-    <div class="panel">
+    <div class="panel" id="data-panel">
       <p id="count" class="count" role="status"></p>
       <div class="table-wrap">
         <table id="table"></table>
       </div>
       <p id="data-msg" class="msg" role="status"></p>
+    </div>
+
+    <!-- ======== MYORDER PANEL ======== -->
+    <div class="panel" id="order-panel" hidden>
+      <div class="otabs" role="tablist" aria-label="MyOrder sheets">
+        <button type="button" role="tab" data-okey="purchase" aria-selected="true">PurchaseOrder</button>
+        <button type="button" role="tab" data-okey="available" aria-selected="false">Available</button>
+        <button type="button" role="tab" data-okey="outofstock" aria-selected="false">OutOfStock</button>
+        <button type="button" role="tab" data-okey="master" id="otab-master" aria-selected="false" hidden>CustOrder(Master)</button>
+      </div>
+
+      <!-- Excel-style entry grid (PurchaseOrder tab only) -->
+      <div id="po-entry" class="po-entry" hidden>
+        <div class="po-head">
+          <div>
+            <strong>New Purchase Order</strong>
+            <small>Scroll Down to view your Orders</small>
+          </div>
+          <div class="po-actions">
+            <button id="po-add-row" type="button" class="ghost small">+ Add Row</button>
+            <button id="po-clear" type="button" class="ghost small">Clear</button>
+            <button id="po-save" type="button" class="small">Save Order</button>
+          </div>
+        </div>
+        <div class="og-wrap" id="po-grid"></div>
+        <p id="po-msg" class="msg" role="status"></p>
+      </div>
+
+      <!-- CustOrder(Master) filters -->
+      <div id="m-bar" class="mbar" hidden>
+        <select id="m-cust" aria-label="Customer filter"><option value="">All Customers</option></select>
+        <input id="m-part" type="search" placeholder="Part No filter" autocomplete="off">
+        <div class="mview" role="tablist" aria-label="Master view">
+          <button type="button" data-mview="lines" aria-selected="true">All Lines</button>
+          <button type="button" data-mview="summary" aria-selected="false">Customer + Part Summary</button>
+        </div>
+        <button id="m-reset" type="button" class="ghost small">Reset</button>
+      </div>
+
+      <p id="o-count" class="count" role="status"></p>
+      <div class="table-wrap">
+        <table id="o-table"></table>
+      </div>
+      <p id="o-msg" class="msg" role="status"></p>
     </div>
   </main>
 </div>
@@ -741,7 +898,7 @@
 
 <script>
   // Paste your Apps Script Web App URL here (ends in /exec).
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzimWxeaL6EEeld9hMC_hltiA-ARb2nbFVva3bu6VFgC5iWGovUdKdHr-AVn-OqrCZ2/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB1FXpCfisWKbZfaPOghH-jajENXXVgaudQ79hST8A2rr7Uhh5mTgDTIcXNUgjjIPL/exec";
 
   const ROW_LIMIT = 300;
   const NOWRAP_COLS = ["PART NO", "RP", "MRP", "HSN", "GST", "CAT1", "CAT2", "GROUP"];
@@ -757,10 +914,15 @@
   let email = store.get("jcb_email");
   let role = store.get("jcb_role") || "user";
   let canAdd = store.get("jcb_canadd") === "1";   // may add rows to PartsInfo
+  let userName = store.get("jcb_name") || "";     // Users sheet -> column E (Name)
+  let canOrder = store.get("jcb_canorder") !== "0"; // MyOrder tab enabled for this user?
+  let userBranch = store.get("jcb_branch") || "";   // Users sheet -> "Branch" column
   let currentKey = "pricelist";
   let loadSeq = 0;
   const cache = {};   // key -> { headers, rows: [{cells, hay, num}] }
   let searchTimer = null;
+  let orderMode = false;      // MyOrder view open?
+  let oKey = "purchase";      // active MyOrder tab
 
   /* ---------- Server calls ---------- */
   async function api(body) {
@@ -774,7 +936,12 @@
         body: JSON.stringify(body)
       });
       const out = await res.json();
-      if (out && out.ok && out.role && (out.role !== role || !!out.canAdd !== canAdd)) updateRole(out.role, out.canAdd);
+      if (out && out.ok && out.role && (out.role !== role || !!out.canAdd !== canAdd ||
+          (out.canOrder !== undefined && !!out.canOrder !== canOrder) ||
+          (out.name !== undefined && out.name !== userName) ||
+          (out.branch !== undefined && out.branch !== userBranch))) {
+        updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
+      }
       return out;
     } catch (err) {
       return { ok: false, error: "Can't reach the server. Check your internet and the web app URL." };
@@ -787,17 +954,31 @@
   }
 
   /* ---------- Role ---------- */
-  function updateRole(r, c) {
+  function updateRole(r, c, o, n, b) {
     role = r === "admin" ? "admin" : "user";
     canAdd = role === "admin" || !!c;
+    if (o !== undefined) canOrder = !!o;          // old server without canOrder => keep current
+    if (n !== undefined) userName = n || "";
+    if (b !== undefined) userBranch = b || "";
     store.set("jcb_role", role);
     store.set("jcb_canadd", canAdd ? "1" : "0");
+    store.set("jcb_canorder", canOrder ? "1" : "0");
+    store.set("jcb_name", userName);
+    store.set("jcb_branch", userBranch);
     applyRole();
   }
+
+  // Admin always has MyOrder; normal users only when enabled in Users sheet
+  function hasOrderAccess() { return role === "admin" || canOrder; }
 
   function applyRole() {
     const admin = role === "admin";
     $("tab-users").hidden = !admin;
+    $("otab-master").hidden = !admin;
+    $("who").textContent = userName || email || "";
+    $("myorder-btn").hidden = !hasOrderAccess();
+    if (!hasOrderAccess() && orderMode) setOrderMode(false);
+    if (!admin && oKey === "master") oKey = "purchase";
     $("badge").textContent = admin ? "Admin" : canAdd ? "User (can add PartsInfo)" : "User";
     $("badge").classList.toggle("admin", admin);
     if (!admin && currentKey === "users") currentKey = "pricelist";
@@ -806,9 +987,116 @@
 
   function updateAddButton() {
     const btn = $("add-btn");
-    btn.hidden = !(role === "admin" || (canAdd && currentKey === "partsinfo"));
+    btn.hidden = orderMode || !(role === "admin" || (canAdd && currentKey === "partsinfo"));
     btn.textContent = currentKey === "users" ? "Add User"
       : currentKey === "partsinfo" ? "Add Part Info" : "Add Part";
+  }
+
+  /* ---------- Online / Offline presence ---------- */
+  const PING_MS = 45000;           // user har 45 sec me "main online hoon" bhejta hai
+  const ONLINE_WINDOW_MS = 120000; // 2 min se zyada ping nahi aaya => Offline
+  let pingTimer = null, usersTimer = null, autoTimer = null, serverOffset = 0;
+  const AUTO_REFRESH_MS = 60000;   // har 60 sec me data chup-chaap refresh
+  const orderSig = {};             // MyOrder tabs ka last data signature
+  let autoBusy = false, lastTypeAt = 0;
+
+  function sendPing() {
+    if (!token) return;
+    api({ action: "ping", token: token }).then((out) => {
+      if (out && out.error === "auth") logout("Your session ended. Sign in again.");
+    });
+  }
+  function startPresence() {
+    stopPresence();
+    sendPing();
+    pingTimer = setInterval(sendPing, PING_MS);
+    autoTimer = setInterval(autoRefresh, AUTO_REFRESH_MS);
+  }
+  function stopPresence() {
+    clearInterval(pingTimer); pingTimer = null;
+    clearInterval(usersTimer); usersTimer = null;
+    clearInterval(autoTimer); autoTimer = null;
+  }
+  function sendOffline(tk) {
+    if (!tk || SCRIPT_URL.startsWith("PASTE")) return;
+    const body = JSON.stringify({ action: "offline", token: tk });
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(SCRIPT_URL, new Blob([body], { type: "text/plain;charset=utf-8" }))) return;
+    } catch (e) {}
+    try { fetch(SCRIPT_URL, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: body }); } catch (e) {}
+  }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { sendPing(); autoRefresh(); } });
+  document.addEventListener("input", () => { lastTypeAt = Date.now(); }, true);
+
+  /* ---------- Auto refresh (background, kaam me rukawat nahi) ----------
+     - Sirf tab refresh hota hai jab data sach me badla ho
+     - Scroll position, search text, PurchaseOrder ki unsaved entry rows safe rehti hain
+     - Dialog khula ho / user abhi type kar raha ho / tab hidden ho => skip */
+  function keepScroll(sel, fn) {
+    const w = document.querySelector(sel);
+    const t = w ? w.scrollTop : 0, l = w ? w.scrollLeft : 0;
+    fn();
+    if (w) { w.scrollTop = t; w.scrollLeft = l; }
+  }
+
+  async function autoRefresh() {
+    if (!token || autoBusy || document.hidden || $("dlg").open) return;
+    if (Date.now() - lastTypeAt < 4000) return;       // abhi type kar raha hai
+    autoBusy = true;
+    try {
+      if (orderMode) {
+        const key = oKey, seq = oSeq;
+        const [out, pl] = await Promise.all([
+          api({ action: "order_list", token: token, sheet: key }),
+          api({ action: "data", token: token, sheet: "pricelist" })
+        ]);
+        if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+        // PriceList cache (Part_No suggestions) chup-chaap taaza, screen nahi badalti
+        if (pl && pl.ok && (!cache.pricelist || cache.pricelist.sig !== JSON.stringify(pl.rows))) storeSheet("pricelist", pl);
+        if (!out || !out.ok || seq !== oSeq || key !== oKey || !orderMode) return;
+        const sig = JSON.stringify(out.rows);
+        if (sig === orderSig[key]) return;
+        orderSig[key] = sig;
+        if (out.branches && out.branches.length) oBranches = out.branches;
+        keepScroll("#order-panel .table-wrap", () => {
+          if (key === "master") { setMasterData(out); renderMaster(); }
+          else renderOrderTable(out, key);
+        });
+      } else if (currentKey !== "users") {
+        const key = currentKey, seq = loadSeq;
+        const out = await api({ action: "data", token: token, sheet: key });
+        if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+        if (!out || !out.ok || seq !== loadSeq || key !== currentKey || orderMode) return;
+        if (cache[key] && cache[key].sig === JSON.stringify(out.rows)) return;
+        storeSheet(key, out);
+        keepScroll("#data-panel .table-wrap", render);
+      }
+    } catch (e) {
+      /* silent: agle round me phir try hoga */
+    } finally {
+      autoBusy = false;
+    }
+  }
+  window.addEventListener("pagehide", () => sendOffline(token));
+
+  function agoText(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    if (s < 60) return "just now";
+    const m = Math.floor(s / 60);
+    if (m < 60) return m + " min ago";
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + " hr ago";
+    return Math.floor(h / 24) + " day ago";
+  }
+  function lastSeenText(ts) {
+    if (!ts) return "Never";
+    const d = new Date(ts);
+    const full = new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true }).format(d);
+    return full + " (" + agoText(Date.now() + serverOffset - ts) + ")";
+  }
+  function isOnline(u) {
+    if (u.email === email) return true;
+    return !!u.lastSeen && (Date.now() + serverOffset - u.lastSeen) < ONLINE_WINDOW_MS;
   }
 
   /* ---------- Login / logout ---------- */
@@ -822,16 +1110,20 @@
   function showApp() {
     $("login").hidden = true;
     $("app").hidden = false;
-    $("who").textContent = email || "";
+    $("who").textContent = userName || email || "";
     applyRole();
     loadSheet(currentKey);
+    startPresence();
     lucide.createIcons();
   }
 
   function logout(message) {
-    token = null; email = null; role = "user"; canAdd = false; currentKey = "pricelist";
-    ["jcb_token", "jcb_email", "jcb_role", "jcb_canadd"].forEach((k) => store.del(k));
+    if (token) sendOffline(token);
+    stopPresence();
+    token = null; email = null; role = "user"; canAdd = false; canOrder = true; userName = ""; userBranch = ""; currentKey = "pricelist";
+    ["jcb_token", "jcb_email", "jcb_role", "jcb_canadd", "jcb_canorder", "jcb_name", "jcb_branch"].forEach((k) => store.del(k));
     Object.keys(cache).forEach((k) => delete cache[k]);
+    resetOrders();
     if ($("dlg").open) $("dlg").close();
     showLogin(message);
   }
@@ -846,7 +1138,10 @@
     if (!out.ok) { setMsg($("login-msg"), out.error, true); return; }
     token = out.token; email = out.email;
     store.set("jcb_token", token); store.set("jcb_email", email);
-    updateRole(out.role, out.canAdd);
+    updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
+    if (out.canOrder === undefined || out.name === undefined || out.branch === undefined) {
+      alert("Warning: Apps Script ka PURANA version chal raha hai.\nName aur MyOrder yes/no tabhi kaam karega jab naya Code.gs paste karke\nDeploy > Manage deployments > Edit > New version > Deploy karo.");
+    }
     setMsg($("login-msg"), "");
     showApp();
   });
@@ -869,7 +1164,8 @@
         cells: cells,
         hay: cells.join(" ").toLowerCase(),
         num: out.nums[i]
-      }))
+      })),
+      sig: JSON.stringify(out.rows)
     };
   }
 
@@ -919,6 +1215,25 @@
     }
   }
 
+  // Search words ko cell ke andar <mark> karke blink karata hai (safe: innerHTML use nahi)
+  function fillCellHL(td, value, words) {
+    const text = String(value ?? "");
+    const parts = text.split(/[\s,]+/).filter(Boolean);
+    if (!words.length || (parts.length && parts.every(isUrl))) { fillCell(td, value); return; }
+    const re = new RegExp("(" + words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
+    let last = 0, m, hit = false;
+    while ((m = re.exec(text)) !== null) {
+      if (!m[0]) { re.lastIndex++; continue; }
+      if (m.index > last) td.appendChild(document.createTextNode(text.slice(last, m.index)));
+      const mk = document.createElement("mark");
+      mk.className = "hit"; mk.textContent = m[0];
+      td.appendChild(mk);
+      last = m.index + m[0].length; hit = true;
+    }
+    if (!hit) { td.textContent = text; return; }
+    if (last < text.length) td.appendChild(document.createTextNode(text.slice(last)));
+  }
+
   function addHeader(row, text) {
     const th = document.createElement("th");
     th.textContent = text;
@@ -954,7 +1269,17 @@
       data.headers.forEach((h, i) => {
         const td = tr.insertCell();
         if (NOWRAP_COLS.indexOf(String(h).trim().toUpperCase()) !== -1) td.className = "nowrap";
-        fillCell(td, r.cells[i]);
+        const hn = String(h).toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (words.length && currentKey === "pricelist" && (hn === "partno" || hn === "mrp")) {
+          // PriceList: search karne par PART NO + MRP highlight hoke blink
+          td.classList.add("hit-cell");
+          fillCell(td, r.cells[i]);
+        } else if (words.length && currentKey === "partsinfo") {
+          // PartsInfo: jo search kiya wo text har cell me highlight hoke blink
+          fillCellHL(td, r.cells[i], words);
+        } else {
+          fillCell(td, r.cells[i]);
+        }
       });
       if (admin) {
         const td = tr.insertCell();
@@ -1116,29 +1441,64 @@
       return;
     }
     usersList = out.users;
+    if (typeof out.now === "number") serverOffset = out.now - Date.now();
+    if (out.branches && out.branches.length) oBranches = out.branches;
     setMsg($("data-msg"), "");
     renderUsers();
+    startUsersRefresh();
+  }
+
+  // Admin Users tab khula ho to har 30 sec me status refresh (table clear kiye bina)
+  function startUsersRefresh() {
+    clearInterval(usersTimer);
+    usersTimer = setInterval(async () => {
+      if (currentKey !== "users" || orderMode || role !== "admin" || !token || $("dlg").open) return;
+      const out = await api({ action: "users_list", token: token });
+      if (!out || !out.ok || currentKey !== "users") return;
+      usersList = out.users;
+      if (typeof out.now === "number") serverOffset = out.now - Date.now();
+      renderUsers();
+    }, 30000);
   }
 
   function renderUsers() {
     const table = $("table");
     table.innerHTML = "";
     const headRow = table.createTHead().insertRow();
-    ["Operator Email", "Role", "Can Add PartsInfo", "Actions"].forEach((h) => addHeader(headRow, h));
+    ["Name", "Status", "Last Seen", "Branch", "Operator Email", "Role", "Can Add PartsInfo", "MyOrder Access", "Actions"].forEach((h) => addHeader(headRow, h));
     const body = table.createTBody();
     usersList.forEach((u) => {
       const tr = body.insertRow();
       const isMe = u.email === email;
+      tr.insertCell().textContent = u.name || "-";
+      const online = isOnline(u);
+      const st = tr.insertCell();
+      const pill = document.createElement("span");
+      pill.className = "pres " + (online ? "on" : "off");
+      pill.textContent = online ? "Online" : "Offline";
+      st.appendChild(pill);
+      const ls = tr.insertCell();
+      ls.className = "lastseen";
+      ls.textContent = online ? "Active now" : lastSeenText(u.lastSeen);
+      tr.insertCell().textContent = u.branch || "-";
       const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (You)" : "");
       tr.insertCell().textContent = u.role === "admin" ? "Administrator" : "Standard User";
       tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canAdd ? "Yes" : "No");
+      tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canOrder ? "Enabled" : "Disabled");
       const td = tr.insertCell(); td.className = "actions";
+      if (u.role !== "admin") {
+        td.appendChild(smallButton(u.canOrder ? "Disable MyOrder" : "Enable MyOrder", "ghost", () => toggleMyOrder(u)));
+      }
       td.appendChild(smallButton("Edit", "ghost", () => openUserForm(u)));
       const del = smallButton("Remove", "danger", () => removeUser(u));
       del.disabled = isMe;
       td.appendChild(del);
     });
-    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user registered" : " users registered"));
+    const onN = usersList.filter(isOnline).length;
+    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user registered" : " users registered") + "  |  Online: " + onN + "  |  Offline: " + (usersList.length - onN));
+    if (usersList.length && !usersList.some((u) => u.lastSeen !== undefined)) {
+      setMsg($("data-msg"), "Online/Offline ke liye Apps Script me naya Code.gs (presence_Code.gs.txt) paste karke New version deploy karo.", true);
+    }
     lucide.createIcons();
   }
 
@@ -1149,6 +1509,9 @@
       saveLabel: editing ? "Save Changes" : "Create User",
       fields: [
         { name: "email", label: "Operator Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
+        { name: "name", label: "Name (header me dikhta hai aur MyOrder ke Customer_Name me aata hai)", type: "text", value: editing ? (u.name || "") : "", wide: true },
+        { name: "branch", label: "Branch (used for MyOrder Unique_ID)", wide: true, value: editing ? (u.branch || "") : "",
+          options: [{ value: "", label: "— Select branch —" }].concat(oBranches.map((b) => ({ value: b, label: b }))) },
         { name: "password", label: editing ? "New Password" : "Password", type: "password",
           autocomplete: "new-password", wide: true,
           hint: editing ? "Leave blank to keep current password." : "Minimum 6 characters." },
@@ -1162,11 +1525,18 @@
           options: [
             { value: "no", label: "No" },
             { value: "yes", label: "Yes" }
+          ] },
+        { name: "canOrder", label: "MyOrder Tab", wide: true, value: editing && !u.canOrder ? "no" : "yes",
+          hint: "Enable or disable the MyOrder button for this user.",
+          options: [
+            { value: "yes", label: "Enabled" },
+            { value: "no", label: "Disabled" }
           ] }
       ],
       onSubmit: async (values) => {
         const out = await api({
           action: "user_save", token: token,
+          name: values.name, branch: values.branch, canOrder: values.canOrder === "yes",
           email: editing ? u.email : values.email,
           password: values.password, role: values.role,
           canAdd: values.canAdd === "yes"
@@ -1175,6 +1545,21 @@
         return out;
       }
     });
+  }
+
+  // Admin only: one-click MyOrder enable / disable for a user
+  async function toggleMyOrder(u) {
+    if (role !== "admin") return;
+    const next = !u.canOrder;
+    if (!confirm((next ? "Enable" : "Disable") + " MyOrder for " + (u.name || u.email) + "?")) return;
+    const out = await api({
+      action: "user_save", token: token,
+      email: u.email, name: u.name || "", branch: u.branch || "", password: "",
+      role: u.role, canAdd: !!u.canAdd, canOrder: next
+    });
+    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+    loadSheet("users");
   }
 
   async function removeUser(u) {
@@ -1329,6 +1714,406 @@
     setMsg($("dlg-msg"), out.error, true);
   });
 
+
+  /* =====================================================
+     MyOrder module  (PurchaseOrder / Available / OutOfStock / CustOrder(Master))
+     ===================================================== */
+  let oBranches = ["Meghalaya", "Silchar", "Agartala"];   // replaced by server list on first load
+  let oSeq = 0;
+  let gridBuilt = false;
+
+  const pad2 = (n) => String(n).padStart(2, "0");
+  function todayText() {
+    const d = new Date();
+    return pad2(d.getDate()) + "/" + pad2(d.getMonth() + 1) + "/" + d.getFullYear();
+  }
+
+  function setOrderMode(on) {
+    orderMode = on;
+    $("main-tabs").hidden = on;
+    $("search-wrap").hidden = on;
+    $("data-panel").hidden = on;
+    $("order-panel").hidden = !on;
+    $("myorder-btn").setAttribute("aria-pressed", String(on));
+    $("myorder-label").textContent = on ? "Back to Price List" : "MyOrder";
+    if (on) {
+      $("add-btn").hidden = true;
+      $("otab-master").hidden = role !== "admin";
+      if (oKey === "master" && role !== "admin") oKey = "purchase";
+      loadOrderTab(oKey);
+    } else {
+      oSeq++;
+      loadSheet(currentKey);
+    }
+  }
+
+  function resetOrders() {
+    orderMode = false; gridBuilt = false; oKey = "purchase"; oSeq++;
+    $("main-tabs").hidden = false;
+    $("data-panel").hidden = false;
+    $("order-panel").hidden = true;
+    $("myorder-btn").setAttribute("aria-pressed", "false");
+    $("myorder-label").textContent = "MyOrder";
+    $("po-grid").innerHTML = "";
+    setMsg($("po-msg"), "");
+  }
+
+  // Admin ne MyOrder band kar diya (server ne mana kiya) -> button turant hata do
+  function orderDenied(out) {
+    if (!out || out.ok || !/MyOrder access is disabled/i.test(String(out.error || ""))) return false;
+    canOrder = false;
+    store.set("jcb_canorder", "0");
+    applyRole();
+    return true;
+  }
+
+  async function ensurePricelist() {
+    if (cache.pricelist) return;
+    const out = await api({ action: "data", token: token, sheet: "pricelist" });
+    if (out.ok && !cache.pricelist) storeSheet("pricelist", out);
+  }
+
+  async function loadOrderTab(key) {
+    oKey = key;
+    const mySeq = ++oSeq;
+    document.querySelectorAll(".otabs button").forEach((b) => {
+      b.setAttribute("aria-selected", String(b.dataset.okey === key));
+    });
+    $("po-entry").hidden = key !== "purchase";
+    $("m-bar").hidden = key !== "master";
+    $("o-table").innerHTML = "";
+    setMsg($("o-count"), "");
+    setMsg($("o-msg"), "Loading " + key + " data...");
+
+    const [out] = await Promise.all([
+      api({ action: "order_list", token: token, sheet: key }),
+      key === "purchase" ? ensurePricelist() : null
+    ]);
+    if (mySeq !== oSeq) return;
+
+    if (!out.ok) {
+      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+      if (orderDenied(out)) { setMsg($("data-msg"), out.error, true); return; }
+      setMsg($("o-msg"), out.error, true);
+      return;
+    }
+    setMsg($("o-msg"), "");
+    orderSig[key] = JSON.stringify(out.rows);
+    if (out.branches && out.branches.length) oBranches = out.branches;
+    if (key === "purchase") buildGrid();
+    if (key === "master") { setMasterData(out); renderMaster(); }
+    else renderOrderTable(out, key);
+  }
+
+  function renderOrderTable(out, key) {
+    const table = $("o-table");
+    table.innerHTML = "";
+    const hr = table.createTHead().insertRow();
+    out.headers.forEach((h) => addHeader(hr, h));
+    const body = table.createTBody();
+
+    // PurchaseOrder: Sl_No har Unique_ID ke andar 1,2,3,4... sequence me
+    const hn = out.headers.map((h) => String(h).toLowerCase().replace(/[^a-z0-9]/g, ""));
+    const uidIdx = hn.indexOf("uniqueid"), slIdx = hn.indexOf("slno");
+    const slCount = {};
+    const slFor = (r) => {
+      const id = uidIdx >= 0 ? String(r[uidIdx] ?? "").trim() : "";
+      slCount[id] = (slCount[id] || 0) + 1;
+      return slCount[id];
+    };
+
+    out.rows.forEach((r) => {
+      const tr = body.insertRow();
+      const slNow = (key === "purchase" && slIdx >= 0) ? slFor(r) : null;
+      out.headers.forEach((h, i) => {
+        const td = tr.insertCell();
+        const hl = String(h).toLowerCase();
+        if (key === "purchase" && /^ord_?qn/.test(hl)) td.classList.add("qty-white");
+        if (slNow !== null && i === slIdx) { td.textContent = String(slNow); td.style.textAlign = "center"; return; }
+        if (hl === "unique_id" || hl === "part_no") td.className = "nowwrap";
+        if (hl === "avail" && r[i]) td.style.color = "#34d399";
+        if (hl === "out_of-stock" && r[i]) td.style.color = "#f87171";
+        fillCell(td, r[i]);
+      });
+    });
+    if (!out.rows.length) {
+      const td = body.insertRow().insertCell();
+      td.colSpan = out.headers.length;
+      td.className = "empty";
+      td.textContent = out.emptyText ? out.emptyText : key === "purchase" ? "No orders saved yet."
+        : key === "master" ? "Master sheet is empty."
+        : key === "available" ? "Abhi koi line Available nahi hai. Admin review ke baad yaha dikhegi."
+        : "Abhi koi line Out of Stock nahi hai.";
+    }
+    const label = key === "purchase" ? "Submitted order lines: "
+      : key === "master" ? "Master lines: " : "Lines: ";
+    setMsg($("o-count"), label + out.rows.length.toLocaleString() + (out.truncated ? " (latest only)" : "") + (key === "available" || key === "outofstock" ? "  |  View only" : key === "master" ? "  |  View only (Avail se aage ka data admin Google Sheet me bharta hai)" : ""));
+    lucide.createIcons();
+  }
+
+  /* ---------- CustOrder(Master): filter + Customer/Part summary ---------- */
+  let mData = null;
+  let mView = "lines";
+
+  function mCols(h) {
+    const f = (re) => h.findIndex((x) => re.test(String(x).toLowerCase().replace(/[^a-z0-9]/g, "")));
+    return { uid: f(/^uniqueid$/), date: f(/^date$/), cust: f(/^customer/), part: f(/^partno/), desc: f(/^desc/), qty: f(/^(ordqn|ordqt|qty|quantity)/) };
+  }
+  const mVal = (r, i) => (i >= 0 ? String(r[i] ?? "").trim() : "");
+
+  function setMasterData(out) {
+    mData = out;
+    const c = mCols(out.headers);
+    const sel = $("m-cust");
+    const prev = sel.value;
+    const custs = [...new Set(out.rows.map((r) => mVal(r, c.cust)).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    sel.innerHTML = "";
+    sel.add(new Option("All Customers", ""));
+    custs.forEach((n) => sel.add(new Option(n, n)));
+    sel.value = custs.includes(prev) ? prev : "";
+  }
+
+  function renderMaster() {
+    if (!mData) return;
+    const c = mCols(mData.headers);
+    document.querySelectorAll(".mview button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mview === mView)));
+    const cf = $("m-cust").value;
+    const pf = $("m-part").value.trim().toLowerCase();
+    const rows = mData.rows.filter((r) =>
+      (!cf || mVal(r, c.cust) === cf) && (!pf || mVal(r, c.part).toLowerCase().includes(pf)));
+    const filtered = !!(cf || pf);
+    const qtyOf = (r) => { const q = parseFloat(String(r[c.qty] ?? "").replace(/,/g, "")); return isFinite(q) ? q : 0; };
+
+    if (mView === "lines") {
+      renderOrderTable({ headers: mData.headers, rows: rows, truncated: mData.truncated,
+        emptyText: filtered ? "Is filter me koi line nahi mili." : "" }, "master");
+      const tq = rows.reduce((a, r) => a + qtyOf(r), 0);
+      setMsg($("o-count"), "Lines: " + rows.length.toLocaleString() + (filtered ? " (filtered)" : "") +
+        "  |  Total Qty: " + tq.toLocaleString() + (mData.truncated ? "  |  latest only" : "") + "  |  View only");
+      return;
+    }
+
+    // Summary: har Customer + Part_No ka count aur total qty
+    const map = new Map();
+    rows.forEach((r) => {
+      const cu = mVal(r, c.cust), pn = mVal(r, c.part);
+      const k = cu.toLowerCase() + "\u0001" + pn.toUpperCase();
+      let g = map.get(k);
+      if (!g) { g = { cu: cu, pn: pn, desc: mVal(r, c.desc), ids: new Set(), lines: 0, qty: 0 }; map.set(k, g); }
+      g.ids.add(mVal(r, c.uid) + "|" + mVal(r, c.date));
+      g.lines++;
+      g.qty += qtyOf(r);
+    });
+    const groups = [...map.values()].sort((a, b) => b.qty - a.qty || a.cu.localeCompare(b.cu));
+    const table = $("o-table");
+    table.innerHTML = "";
+    const hr = table.createTHead().insertRow();
+    ["Customer_Name", "Part_No", "Description", "Times Ordered", "Total Qty"].forEach((h) => addHeader(hr, h));
+    const body = table.createTBody();
+    groups.forEach((g) => {
+      const tr = body.insertRow();
+      tr.className = "m-sum-row";
+      tr.title = "Click: is customer + part ki saari lines dekho";
+      const times = (c.uid < 0 && c.date < 0) ? g.lines : g.ids.size;
+      [g.cu, g.pn, g.desc, times, g.qty.toLocaleString()].forEach((v, i) => {
+        const td = tr.insertCell();
+        td.textContent = String(v);
+        if (i === 1) td.className = "nowrap";
+        if (i >= 3) td.className = "num";
+      });
+      tr.addEventListener("click", () => {
+        $("m-cust").value = g.cu;
+        $("m-part").value = g.pn;
+        mView = "lines";
+        renderMaster();
+      });
+    });
+    if (!groups.length) {
+      const td = body.insertRow().insertCell();
+      td.colSpan = 5; td.className = "empty";
+      td.textContent = filtered ? "Is filter me koi line nahi mili." : "Master sheet is empty.";
+    }
+    const custN = new Set(groups.map((g) => g.cu)).size;
+    const partN = new Set(groups.map((g) => g.pn.toUpperCase())).size;
+    const tq = groups.reduce((a, g) => a + g.qty, 0);
+    setMsg($("o-count"), "Customers: " + custN + "  |  Parts: " + partN + "  |  Total Qty: " + tq.toLocaleString() +
+      (mData.truncated ? "  |  latest only" : "") + "  |  Row par click = detail lines");
+  }
+
+  $("m-cust").addEventListener("change", renderMaster);
+  $("m-part").addEventListener("input", renderMaster);
+  $("m-reset").addEventListener("click", () => { $("m-cust").value = ""; $("m-part").value = ""; renderMaster(); });
+  document.querySelectorAll(".mview button").forEach((b) => {
+    b.addEventListener("click", () => { mView = b.dataset.mview; renderMaster(); });
+  });
+
+  /* ---------- Excel-style entry grid ---------- */
+  function buildGrid() {
+    if (gridBuilt) return;
+    gridBuilt = true;
+    const box = $("po-grid");
+    box.innerHTML = "";
+    const table = document.createElement("table");
+    table.className = "og";
+    const hr = table.createTHead().insertRow();
+    ["Unique_ID", "Date", "Sl_No", "Customer_Name", "Part_No", "Description", "Ord_Qnty", "Remark if any", "Branch", ""]
+      .forEach((h) => addHeader(hr, h));
+    const tb = table.createTBody();
+    tb.id = "og-body";
+    box.appendChild(table);
+    for (let i = 0; i < 3; i++) addGridRow();
+    updatePoState();
+  }
+
+  // Branch set nahi hai to order save nahi ho sakta
+  function updatePoState() {
+    const ok = !!userBranch;
+    $("po-save").disabled = !ok;
+    if (!ok) setMsg($("po-msg"), "Aapki Branch set nahi hai. Admin se Users tab me Branch set karwao, tabhi order save hoga.", true);
+  }
+
+  function ogInput(td, key, type, width, placeholder, nav, readonly) {
+    const el = document.createElement("input");
+    el.type = type;
+    el.autocomplete = "off";
+    el.style.minWidth = width + "px";
+    if (placeholder) el.placeholder = placeholder;
+    if (readonly) { el.readOnly = true; el.tabIndex = -1; }
+    if (type === "number") { el.min = "1"; el.step = "1"; el.inputMode = "numeric"; }
+    td.appendChild(el);
+    if (nav !== false && !readonly) ogNav(el, key);
+    return el;
+  }
+
+  // Enter = same column, next row (last row par naya row) - Excel jaisa
+  function ogNav(el, key) {
+    el.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" || e.defaultPrevented) return;
+      e.preventDefault();
+      const tr = el.closest("tr");
+      let nxt = tr.nextElementSibling;
+      if (!nxt) { addGridRow(); nxt = tr.nextElementSibling; }
+      nxt._f[key].focus();
+    });
+  }
+
+  function addGridRow() {
+    const body = $("og-body");
+    const tr = body.insertRow();
+    const f = (tr._f = {});
+    const cell = (cls) => { const td = tr.insertCell(); if (cls) td.className = cls; return td; };
+
+    cell("og-auto").textContent = "Auto";                       // Unique_ID (server banata hai)
+    cell("og-auto").textContent = todayText();                  // Date
+    cell("og-auto").textContent = "Auto";                       // Sl_No (server banata hai)
+    f.cust = ogInput(cell(), "cust", "text", 130, "", false, true);
+    f.cust.value = userName || email || "";   // header me jo naam dikhta hai wahi
+
+    // Part_No with Price List suggestions
+    const partTd = cell();
+    const wrap = document.createElement("span");
+    wrap.className = "ac-wrap";
+    const list = document.createElement("ul");
+    list.className = "ac-list";
+    list.hidden = true;
+    list.setAttribute("role", "listbox");
+    f.part = ogInput(wrap, "part", "text", 120, "Part no", false);
+    wrap.appendChild(list);
+    partTd.appendChild(wrap);
+
+    f.desc = ogInput(cell(), "desc", "text", 200, "Auto from Price List", false, true);
+
+    const syncDesc = (v) => {
+      const hit = findPart(v);
+      f.desc.value = hit ? hit.desc : "";
+      f.part.style.color = (!v.trim() || hit) ? "" : "#f87171";
+      f.part.title = (!v.trim() || hit) ? "" : "Ye Part_No Price List me nahi mila";
+    };
+    attachSuggest(f.part, list, {
+      getSuggestions: suggestParts,
+      onPick: (it) => { f.desc.value = it.data.desc; f.part.style.color = ""; f.part.title = ""; },
+      onType: syncDesc
+    }, () => {});
+    f.part.addEventListener("blur", () => syncDesc(f.part.value));
+    ogNav(f.part, "part");   // attachSuggest ke baad, taaki suggestion pick wala Enter pehle chale
+    const place = () => {
+      const r = f.part.getBoundingClientRect();
+      // Suggestions Part_No cell ki RIGHT side me khulte hain (neeche ki rows dhakti nahi)
+      const w = 340;
+      let left = r.right + 6;
+      if (left + w > window.innerWidth - 8) left = Math.max(8, r.left - w - 6);   // jagah na ho to left side
+      let top = Math.min(r.top, window.innerHeight - 240);
+      Object.assign(list.style, { position: "fixed", left: left + "px", top: Math.max(8, top) + "px", width: w + "px", right: "auto", margin: "0" });
+    };
+    f.part.addEventListener("input", place);
+    f.part.addEventListener("focus", place);
+
+    f.qty = ogInput(cell(), "qty", "number", 70, "Qty");
+    f.qty.classList.add("og-qty-input");
+    f.remark = ogInput(cell(), "remark", "text", 130, "Remark");
+
+    f.branch = ogInput(cell(), "branch", "text", 90, "", false, true);
+    f.branch.value = userBranch || "—";
+
+    const actTd = cell("og-act");
+    const del = document.createElement("button");
+    del.type = "button"; del.className = "small danger"; del.textContent = "✕"; del.tabIndex = -1;
+    del.title = "Remove row";
+    del.addEventListener("click", () => {
+      tr.remove();
+      if (!$("og-body").rows.length) addGridRow();
+    });
+    actTd.appendChild(del);
+  }
+
+  function clearGrid() {
+    gridBuilt = false;
+    buildGrid();
+  }
+
+  async function saveOrder() {
+    const msg = $("po-msg");
+    if (!userBranch) { updatePoState(); return; }
+    const rows = [];
+    let bad = "";
+    [...$("og-body").rows].forEach((tr, i) => {
+      const f = tr._f;
+      const v = { partNo: f.part.value.trim(), qty: f.qty.value.trim(), remark: f.remark.value.trim() };
+      if (!(v.partNo || v.qty || v.remark)) return;   // khali row
+      const n = "Row " + (i + 1) + ": ";
+      if (!bad) {
+        if (!v.partNo) bad = n + "Part_No is required.";
+        else if (!findPart(v.partNo)) bad = n + "Part_No \"" + v.partNo + "\" Price List me nahi mila. Suggestions me se chuno.";
+        else if (!(Number(v.qty) > 0) || !Number.isInteger(Number(v.qty))) bad = n + "Ord_Qnty poora number hona chahiye (1 ya usse zyada).";
+      }
+      const hit = findPart(v.partNo);
+      v.partNo = hit ? hit.pn : v.partNo;
+      rows.push(v);
+    });
+    if (bad) { setMsg(msg, bad, true); return; }
+    if (!rows.length) { setMsg(msg, "Kuch save karne ke liye nahi hai. Kam se kam ek row bharo.", true); return; }
+
+    $("po-save").disabled = true;
+    setMsg(msg, "Saving order...");
+    const out = await api({ action: "order_save", token: token, rows: rows });
+    $("po-save").disabled = false;
+    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+    if (!out.ok) { if (!orderDenied(out)) setMsg(msg, out.error, true); return; }
+    clearGrid();
+    const done = "Saved " + out.count + " line(s). Unique_ID: " + out.ids.join(", ");
+    setMsg(msg, done);
+    loadOrderTab("purchase").then(() => setMsg(msg, done));
+  }
+
+  $("myorder-btn").addEventListener("click", () => setOrderMode(!orderMode));
+  document.querySelectorAll(".otabs button").forEach((b) => {
+    b.addEventListener("click", () => loadOrderTab(b.dataset.okey));
+  });
+  $("po-add-row").addEventListener("click", () => { addGridRow(); });
+  $("po-clear").addEventListener("click", () => {
+    if (confirm("Clear all unsaved rows?")) { clearGrid(); setMsg($("po-msg"), ""); }
+  });
+  $("po-save").addEventListener("click", saveOrder);
 
   /* ---------- Live Date & Time ---------- */
   function updateLiveDateTime() {

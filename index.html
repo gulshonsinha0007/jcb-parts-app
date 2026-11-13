@@ -7,732 +7,30 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-<!-- Lucide Icons -->
+
 <script src="https://unpkg.com/lucide@latest"></script>
 
-<style>
-  :root {
-    --bg-main: #0c0e12;
-    --bg-card: #14171f;
-    --bg-card-hover: #1c202b;
-    --bg-input: #1a1e29;
-    --border-color: #2a2f3d;
-    --border-focus: #f59e0b;
-    
-    --jcb-amber: #f59e0b;
-    --jcb-amber-dark: #d97706;
-    --jcb-amber-glow: rgba(245, 158, 11, 0.15);
-    
-    --text-main: #f3f4f6;
-    --text-muted: #9ca3af;
-    --text-dark: #111827;
-    
-    --error-bg: rgba(239, 68, 68, 0.1);
-    --error-color: #f87171;
-    
-    --display-font: "Oswald", sans-serif;
-    --body-font: "Inter", system-ui, -apple-system, sans-serif;
-    --mono-font: "JetBrains Mono", monospace;
-  }
-
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    font-family: var(--body-font);
-    font-size: 14px;
-    line-height: 1.5;
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.05) 0%, transparent 70%),
-      linear-gradient(to bottom, rgba(0,0,0,0.6), var(--bg-main)),
-      url('./jcb-background.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-  }
-
-  /* Hazard Stripe Accent Line */
-  .stripe {
-    height: 4px;
-    width: 100%;
-    background: repeating-linear-gradient(
-      -45deg,
-      #f59e0b,
-      #f59e0b 10px,
-      #111827 10px,
-      #111827 20px
-    );
-  }
-
-  /* Core Buttons */
-  button {
-    font-family: var(--body-font);
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    background: var(--jcb-amber);
-    color: var(--text-dark);
-    border: 1px solid var(--jcb-amber);
-    border-radius: 8px;
-    padding: 8px 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-  }
-  button:hover:not(:disabled) {
-    background: var(--jcb-amber-dark);
-    border-color: var(--jcb-amber-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
-  }
-  button:disabled { opacity: 0.4; cursor: not-allowed; }
-  
-  button.ghost {
-    background: transparent;
-    color: var(--text-main);
-    border-color: var(--border-color);
-    box-shadow: none;
-  }
-  button.ghost:hover:not(:disabled) {
-    background: var(--bg-card-hover);
-    border-color: var(--text-muted);
-    color: #fff;
-    box-shadow: none;
-  }
-
-  button.small { padding: 4px 10px; font-size: 0.775rem; border-radius: 6px; }
-  button.danger {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #f87171;
-  }
-  button.danger:hover:not(:disabled) {
-    background: rgba(239, 68, 68, 0.9);
-    border-color: rgba(239, 68, 68, 0.9);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  }
-
-  input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible {
-    outline: 2px solid var(--jcb-amber);
-    outline-offset: 1px;
-  }
-
-  /* Form Elements */
-  label {
-    display: block;
-    font-weight: 500;
-    font-size: 0.825rem;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  label small {
-    display: block;
-    font-weight: 400;
-    color: var(--text-muted);
-    text-transform: none;
-    margin-top: 4px;
-    letter-spacing: normal;
-  }
-  input[type=email], input[type=password], input[type=text], input[type=search], select {
-    display: block;
-    width: 100%;
-    margin-top: 6px;
-    padding: 10px 14px;
-    font-family: var(--body-font);
-    font-size: 0.9rem;
-    color: var(--text-main);
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-  }
-  input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, input[type=search]:focus, select:focus {
-    border-color: var(--jcb-amber);
-    box-shadow: 0 0 0 3px var(--jcb-amber-glow);
-    background: #1e2330;
-  }
-
-  /* Feedback Messages */
-  .msg { min-height: 1.4em; margin: 12px 0 0; font-size: 0.85rem; color: var(--text-muted); font-family: var(--mono-font); }
-  .msg.error {
-    color: var(--error-color);
-    background: var(--error-bg);
-    padding: 8px 12px;
-    border-radius: 6px;
-    border-left: 3px solid var(--error-color);
-  }
-
-  /* ---------- Login Section (Right Side) ---------- */
-  #login {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 24px 60px;
-    position: relative;
-    z-index: 10;
-  }
-  .login-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(26, 30, 41, 0.95);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-  }
-  .login-body { padding: 32px 28px; }
-  .login-brand-tag {
-    font-family: var(--mono-font);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--jcb-amber);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .login-body h1 {
-    font-family: var(--display-font);
-    font-size: 2rem;
-    color: var(--jcb-amber);
-    margin: 0 0 6px 0;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-  .login-body p { margin: 0 0 24px; color: var(--text-muted); font-size: 0.875rem; }
-  .pw-row { position: relative; display: block; }
-  .pw-row input { padding-right: 80px; }
-  .pw-toggle {
-    position: absolute; right: 6px; bottom: 5px;
-    padding: 4px 10px; font-size: 0.75rem;
-    border-radius: 6px; background: var(--bg-card);
-  }
-  #login-btn { width: 100%; margin-top: 10px; padding: 12px; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-
-  /* ---------- Application View ---------- */
-  header.top {
-    background: rgba(20, 23, 31, 0.9);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 40;
-  }
-  .top-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .top-brand-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .top-logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--jcb-amber);
-    color: var(--text-dark);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-  }
-  .top h1 {
-    font-family: var(--display-font);
-    font-size: 1.5rem;
-    color: #fff;
-    letter-spacing: 0.03em;
-  }
-  .top-subtitle {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-family: var(--mono-font);
-    display: block;
-    margin-top: -2px;
-  }
-  .who { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--text-muted); }
-  .badge {
-    font-family: var(--mono-font);
-    font-weight: 600;
-    font-size: 0.725rem;
-    padding: 3px 10px;
-    border-radius: 999px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-input);
-    color: var(--jcb-amber);
-    text-transform: uppercase;
-  }
-  .badge.admin {
-    background: var(--jcb-amber-glow);
-    border-color: var(--jcb-amber);
-    color: var(--jcb-amber);
-  }
-
-  main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 80px; }
-  
-  .controls {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    background: rgba(20, 23, 31, 0.7);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border-color);
-    padding: 12px;
-    border-radius: 12px;
-  }
-  
-  .tabs { display: flex; gap: 4px; background: var(--bg-main); padding: 4px; border-radius: 8px; border: 1px solid var(--border-color); }
-  .tabs button {
-    background: transparent;
-    color: var(--text-muted);
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 0.825rem;
-    font-weight: 600;
-    box-shadow: none;
-  }
-  .tabs button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
-  .tabs button[aria-selected=true] {
-    background: var(--jcb-amber);
-    color: var(--text-dark);
-  }
-
-  .search { flex: 1; max-width: 500px; position: relative; }
-  .search label { margin: 0; text-transform: none; }
-  .search input {
-    margin: 0;
-    padding-left: 38px;
-    background: var(--bg-main);
-  }
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    pointer-events: none;
-  }
-
-  .panel {
-    background: rgba(20, 23, 31, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  }
-  
-  .count {
-    margin: 0 0 12px;
-    font-size: 0.8rem;
-    font-family: var(--mono-font);
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .table-wrap {
-    overflow: auto;
-    max-height: 65vh;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: var(--bg-main);
-  }
-  
-  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.85rem; }
-  th {
-    position: sticky; top: 0; z-index: 10;
-    background: #181c27;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    font-size: 0.725rem;
-    font-family: var(--mono-font);
-    letter-spacing: 0.05em;
-    text-align: left;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border-color);
-    white-space: nowrap;
-  }
-  td {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border-color);
-    vertical-align: middle;
-    color: var(--text-main);
-    max-width: 380px;
-    overflow-wrap: anywhere;
-  }
-  td.nowrap {
-    white-space: nowrap;
-    font-family: var(--mono-font);
-    font-weight: 600;
-    color: var(--jcb-amber);
-  }
-  td.actions { white-space: nowrap; text-align: right; }
-  td.actions button + button { margin-left: 6px; }
-  tbody tr { transition: background 0.15s ease; }
-  tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
-  tbody tr:hover { background: rgba(245, 158, 11, 0.06); }
-  td a {
-    color: #60a5fa;
-    text-decoration: none;
-    font-weight: 500;
-    margin-right: 8px;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  td a:hover { text-decoration: underline; }
-  .empty { padding: 36px 12px; text-align: center; color: var(--text-muted); font-family: var(--mono-font); }
-
-  /* ---------- Modal Dialog ---------- */
-  dialog {
-    width: min(580px, 92vw);
-    max-height: 90vh;
-    overflow: auto;
-    padding: 0;
-    background: var(--bg-card);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-  }
-  dialog::backdrop { background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px); }
-  .dlg-body { padding: 28px; }
-  .dlg-body h2 {
-    font-family: var(--display-font);
-    font-size: 1.6rem;
-    margin-bottom: 20px;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-  #dlg-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 18px; }
-  #dlg-fields label.wide { grid-column: 1 / -1; }
-  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color); }
-  input[readonly] { opacity: 0.7; background: rgba(255,255,255,0.03); cursor: not-allowed; }
-  
-  /* Autocomplete Suggestions dropdown */
-  .ac-wrap { display: block; position: relative; }
-  .ac-list {
-    position: absolute; left: 0; right: 0; top: 100%; z-index: 50;
-    margin: 4px 0 0; padding: 4px; list-style: none; max-height: 220px; overflow: auto;
-    background: #181c27; border: 1px solid var(--jcb-amber); border-radius: 8px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  }
-  .ac-list li {
-    padding: 8px 12px;
-    cursor: pointer;
-    font-weight: 400;
-    border-radius: 6px;
-    transition: background 0.15s ease;
-  }
-  .ac-list li strong { display: block; color: var(--jcb-amber); font-family: var(--mono-font); font-size: 0.85rem; }
-  .ac-list li small { margin: 0; color: var(--text-muted); font-size: 0.775rem; }
-  .ac-list li:hover, .ac-list li.active { background: var(--jcb-amber-glow); color: #fff; }
-
-  /* ---------- Media Widget (Left Side: Video & Image) ---------- */
-  .ad-box {
-    position: fixed;
-    left: 20px;
-    right: auto;
-    bottom: 20px;
-    width: 300px;
-    z-index: 100;
-    background: rgba(20, 23, 31, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    transition: all 0.3s ease;
-  }
-  .ad-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 6px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .ad-header small {
-    color: var(--jcb-amber);
-    font-family: var(--mono-font);
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .ad-close-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 2px 6px;
-    font-size: 0.75rem;
-    border-radius: 4px;
-  }
-  .ad-close-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .ad-box video {
-    display: block;
-    width: 100%;
-    height: 155px;
-    object-fit: cover;
-    background: #000;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  .ad-box img {
-    display: block;
-    width: 100%;
-    height: 315px;
-    object-fit: cover;
-    background: #000;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-    margin-top: 8px;
-  }
-
-  @media (max-width: 768px) {
-    #login { padding: 24px 16px; justify-content: center; }
-    .top-inner { flex-direction: column; align-items: flex-start; }
-    .controls { flex-direction: column; align-items: stretch; }
-    .search { max-width: 100%; }
-    .ad-box { width: 220px; left: 10px; bottom: 10px; }
-    .ad-box video, .ad-box img { height: 110px; }
-  }
-.blink-glow {
-    color: #ffeb00;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 900;
-    text-shadow:
-        0 0 5px #ffeb00,
-        0 0 10px #ffcc00,
-        0 0 20px #ff9900,
-        0 0 30px #ff9900;
-
-    animation: goldenBlink 1.2s infinite;
-}
-
-@keyframes goldenBlink {
-    0%, 100% {
-        opacity: 1;
-        text-shadow: 0 0 5px #ffeb00, 0 0 15px #ff9900;
-    }
-
-    50% {
-        opacity: 0.4;
-        text-shadow: 0 0 15px #ffeb00, 0 0 30px #ff9900;
-    }
-}
-
-  /* ---------- Search hit blink (PriceList / PartsInfo) ---------- */
-  td.hit-cell {
-    background: #fbbf24 !important;
-    color: #111827 !important;
-    font-weight: 700;
-    animation: hitBlink 1s ease-in-out infinite;
-  }
-  mark.hit {
-    background: #fbbf24;
-    color: #111827;
-    font-weight: 700;
-    padding: 1px 3px;
-    border-radius: 3px;
-    animation: hitBlink 1s ease-in-out infinite;
-  }
-  @keyframes hitBlink {
-    0%, 100% { background-color: #fbbf24; color: #111827; box-shadow: 0 0 8px rgba(251,191,36,.9); }
-    50%      { background-color: rgba(251,191,36,.12); color: #fbbf24; box-shadow: none; }
-  }
-
-  /* ---------- User online / offline ---------- */
-  .pres { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; white-space: nowrap; }
-  .pres::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
-  .pres.on  { color: #22c55e; }
-  .pres.on::before { box-shadow: 0 0 8px #22c55e; animation: presPulse 1.6s infinite; }
-  .pres.off { color: #ef4444; }
-  @keyframes presPulse { 50% { opacity: .35; } }
-  td.lastseen { white-space: nowrap; color: var(--text-muted); font-size: 0.8rem; }
-
-  /* ---------- PurchaseOrder: Ord_Qnty white ---------- */
-  td.qty-white { color: #fff !important; font-weight: 700; font-family: var(--mono-font); text-align: center; }
-
-  /* ---------- Live Date & Time ---------- */
-  .live-datetime {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    margin: 14px 0 18px;
-    padding: 10px 12px;
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    border-radius: 20px;
-    background: rgba(245, 158, 11, 0.07);
-    text-align: center;
-    font-family: var(--mono-font);
-  }
-  .live-datetime .live-date {
-    color: var(--text-muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
-  }
-  .live-datetime .live-time {
-    color: var(--jcb-amber);
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    font-variant-numeric: tabular-nums;
-  }
-  .top-live-datetime {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    font-family: var(--mono-font);
-    white-space: nowrap;
-  }
-  .top-live-datetime .live-date {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
-  .top-live-datetime .live-time {
-    color: var(--jcb-amber);
-    font-size: 1.9rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-  @media (max-width: 768px) {
-    .top-live-datetime { align-items: flex-start; }
-  }
-
-
-  /* ---------- MyOrder module ---------- */
-  .myorder { margin-left: auto; }
-  .myorder[aria-pressed=true] { background: transparent; color: var(--jcb-amber); }
-
-  .otabs {
-    display: flex; gap: 4px; flex-wrap: wrap;
-    background: var(--bg-main);
-    padding: 4px; border-radius: 8px;
-    border: 1px solid var(--border-color);
-    width: fit-content; max-width: 100%;
-    margin-bottom: 16px;
-  }
-  .otabs button {
-    background: transparent; color: var(--text-muted);
-    border: none; border-radius: 6px;
-    padding: 8px 16px; font-size: 0.825rem; font-weight: 600;
-    box-shadow: none;
-  }
-  .otabs button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
-  .otabs button[aria-selected=true] { background: var(--jcb-amber); color: var(--text-dark); }
-
-  .po-entry { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); }
-  .po-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-  .po-head strong { font-family: var(--display-font); font-size: 0.95rem; letter-spacing: 0.03em; text-transform: uppercase; color: #fff; }
-  .po-head small { display: block; color: var(--text-muted); font-size: 0.7rem; }
-  .po-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-  .po-entry .msg { margin: 6px 0 0; min-height: 0; font-size: 0.78rem; }
-
-  .og-wrap {
-    overflow: auto; max-height: 30vh;
-    border: 1px solid var(--border-color);
-    border-radius: 8px; background: var(--bg-main);
-  }
-  table.og { width: max-content; min-width: 100%; }
-  table.og th, table.og td { border-right: 1px solid var(--border-color); }
-  table.og th { padding: 6px 8px; font-size: 0.65rem; }
-  table.og td { padding: 0; max-width: none; }
-  table.og td.og-auto {
-    padding: 0 8px; text-align: center; white-space: nowrap;
-    color: var(--text-muted); font-family: var(--mono-font); font-size: 0.72rem;
-    background: rgba(255,255,255,0.02);
-  }
-  table.og td.og-act { padding: 0 6px; text-align: center; }
-  table.og input, table.og select {
-    display: block; width: 100%; margin: 0;
-    border: none; border-radius: 0;
-    background: transparent; padding: 5px 8px;
-    font-size: 0.8rem;
-  }
-  table.og select { background: var(--bg-input); }
-  table.og input:focus, table.og select:focus {
-    background: #1e2330;
-    box-shadow: inset 0 0 0 2px var(--jcb-amber);
-  }
-  table.og .ac-wrap { min-width: 120px; }
-  table.og button.small { padding: 2px 7px; }
-  table.og input[readonly] { color: var(--text-muted); cursor: default; background: rgba(255,255,255,0.02); }
-  .og-wrap .ac-list { position: fixed; }
-  /* PurchaseOrder entry: Ord_Qnty me user jo type kare wo font white (background same) */
-  table.og input.og-qty-input {
-    color: #ffffff; -webkit-text-fill-color: #ffffff; caret-color: #ffffff;
-    font-weight: 700; text-align: center; font-family: var(--mono-font);
-  }
-  table.og input.og-qty-input::placeholder { color: var(--text-muted); font-weight: 400; -webkit-text-fill-color: var(--text-muted); }
-
-  /* CustOrder(Master) filter bar */
-  .mbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
-  .mbar select, .mbar input[type=search] { width: auto; min-width: 180px; margin-top: 0; padding: 7px 12px; font-size: 0.82rem; }
-  .mview { display: flex; gap: 4px; background: var(--bg-main); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
-  .mview button { background: transparent; color: var(--text-muted); border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.775rem; font-weight: 600; box-shadow: none; }
-  .mview button:hover { background: var(--bg-card-hover); color: #fff; transform: none; }
-  .mview button[aria-selected=true] { background: var(--jcb-amber); color: var(--text-dark); }
-  tr.m-sum-row { cursor: pointer; }
-  tr.m-sum-row:hover td { background: var(--bg-card-hover); }
-  td.num { text-align: right; font-family: var(--mono-font); white-space: nowrap; }
-
-</style>
+<style>:root{--bg-main: #0c0e12;--bg-card: #14171f;--bg-card-hover: #1c202b;--bg-input: #1a1e29;--border-color: #2a2f3d;--border-focus: #f59e0b;--jcb-amber: #f59e0b;--jcb-amber-dark: #d97706;--jcb-amber-glow: rgba(245,158,11,0.15);--text-main: #f3f4f6;--text-muted: #9ca3af;--text-dark: #111827;--error-bg: rgba(239,68,68,0.1);--error-color: #f87171;--display-font: "Oswald",sans-serif;--body-font: "Inter",system-ui,-apple-system,sans-serif;--mono-font: "JetBrains Mono",monospace;}*{box-sizing: border-box;}[hidden]{display: none !important;}body{margin: 0;min-height: 100vh;background-color: var(--bg-main);color: var(--text-main);font-family: var(--body-font);font-size: 14px;line-height: 1.5;background-image: radial-gradient(circle at 50% 0%,rgba(245,158,11,0.05) 0%,transparent 70%),linear-gradient(to bottom,rgba(0,0,0,0.6),var(--bg-main)),url('./jcb-background.jpeg');background-size: cover;background-position: center;background-attachment: fixed;}.stripe{height: 4px;width: 100%;background: repeating-linear-gradient( -45deg,#f59e0b,#f59e0b 10px,#111827 10px,#111827 20px );}button{font-family: var(--body-font);font-size: 0.875rem;font-weight: 600;cursor: pointer;background: var(--jcb-amber);color: var(--text-dark);border: 1px solid var(--jcb-amber);border-radius: 8px;padding: 8px 16px;display: inline-flex;align-items: center;justify-content: center;gap: 6px;transition: all 0.2s cubic-bezier(0.4,0,0.2,1);box-shadow: 0 1px 2px rgba(0,0,0,0.2);}button:hover:not(:disabled){background: var(--jcb-amber-dark);border-color: var(--jcb-amber-dark);transform: translateY(-1px);box-shadow: 0 4px 12px rgba(245,158,11,0.25);}button:disabled{opacity: 0.4;cursor: not-allowed;}button.ghost{background: transparent;color: var(--text-main);border-color: var(--border-color);box-shadow: none;}button.ghost:hover:not(:disabled){background: var(--bg-card-hover);border-color: var(--text-muted);color: #fff;box-shadow: none;}button.small{padding: 4px 10px;font-size: 0.775rem;border-radius: 6px;}button.danger{background: rgba(239,68,68,0.15);border-color: rgba(239,68,68,0.3);color: #f87171;}button.danger:hover:not(:disabled){background: rgba(239,68,68,0.9);border-color: rgba(239,68,68,0.9);color: #fff;box-shadow: 0 4px 12px rgba(239,68,68,0.3);}input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline: 2px solid var(--jcb-amber);outline-offset: 1px;}label{display: block;font-weight: 500;font-size: 0.825rem;color: var(--text-muted);margin-bottom: 12px;text-transform: uppercase;letter-spacing: 0.04em;}label small{display: block;font-weight: 400;color: var(--text-muted);text-transform: none;margin-top: 4px;letter-spacing: normal;}input[type=email],input[type=password],input[type=text],input[type=search],select{display: block;width: 100%;margin-top: 6px;padding: 10px 14px;font-family: var(--body-font);font-size: 0.9rem;color: var(--text-main);background: var(--bg-input);border: 1px solid var(--border-color);border-radius: 8px;transition: all 0.2s ease;}input[type=email]:focus,input[type=password]:focus,input[type=text]:focus,input[type=search]:focus,select:focus{border-color: var(--jcb-amber);box-shadow: 0 0 0 3px var(--jcb-amber-glow);background: #1e2330;}.msg{min-height: 1.4em;margin: 12px 0 0;font-size: 0.85rem;color: var(--text-muted);font-family: var(--mono-font);}.msg.error{color: var(--error-color);background: var(--error-bg);padding: 8px 12px;border-radius: 6px;border-left: 3px solid var(--error-color);}#login{min-height: 100vh;display: flex;align-items: center;justify-content: flex-end;padding: 24px 60px;position: relative;z-index: 10;}.login-card{width: 100%;max-width: 420px;background: rgba(26,30,41,0.95);backdrop-filter: blur(16px);border: 1px solid var(--border-color);border-radius: 16px;overflow: hidden;box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);}.login-body{padding: 32px 28px;}.login-brand-tag{font-family: var(--mono-font);font-size: 0.75rem;font-weight: 600;color: var(--jcb-amber);letter-spacing: 0.1em;text-transform: uppercase;margin-bottom: 4px;display: flex;align-items: center;gap: 6px;}.login-body h1{font-family: var(--display-font);font-size: 2rem;color: var(--jcb-amber);margin: 0 0 6px 0;letter-spacing: 0.02em;text-transform: uppercase;}.login-body p{margin: 0 0 24px;color: var(--text-muted);font-size: 0.875rem;}.pw-row{position: relative;display: block;}.pw-row input{padding-right: 80px;}.pw-toggle{position: absolute;right: 6px;bottom: 5px;padding: 4px 10px;font-size: 0.75rem;border-radius: 6px;background: var(--bg-card);}#login-btn{width: 100%;margin-top: 10px;padding: 12px;font-size: 0.95rem;font-weight: 700;text-transform: uppercase;letter-spacing: 0.05em;}header.top{background: rgba(20,23,31,0.9);backdrop-filter: blur(12px);border-bottom: 1px solid var(--border-color);position: sticky;top: 0;z-index: 40;}.top-inner{max-width:1800px;margin:0 auto;padding:6px 14px;display: flex;align-items: center;justify-content: space-between;gap: 16px;flex-wrap: wrap;}.top-brand-group{display: flex;align-items: center;gap: 12px;}.top-logo-icon{width: 36px;height: 36px;background: var(--jcb-amber);color: var(--text-dark);border-radius: 8px;display: flex;align-items: center;justify-content: center;font-weight: 900;}.top h1{font-family: var(--display-font);font-size:1.2rem;margin:0;color: #fff;letter-spacing: 0.03em;}.top-subtitle{font-size: 0.75rem;color: var(--text-muted);font-family: var(--mono-font);display: block;margin-top: -2px;}.who{display: flex;align-items: center;gap: 12px;font-size: 0.85rem;color: var(--text-muted);}.badge{font-family: var(--mono-font);font-weight: 600;font-size: 0.725rem;padding: 3px 10px;border-radius: 999px;border: 1px solid var(--border-color);background: var(--bg-input);color: var(--jcb-amber);text-transform: uppercase;}.badge.admin{background: var(--jcb-amber-glow);border-color: var(--jcb-amber);color: var(--jcb-amber);}main{max-width:1800px;margin:0 auto;padding:10px 14px 50px}.controls{display: flex;gap: 16px;flex-wrap: wrap;align-items: center;justify-content: space-between;margin-bottom:10px;background: rgba(20,23,31,0.7);backdrop-filter: blur(8px);border: 1px solid var(--border-color);padding:8px;border-radius: 12px;}.tabs{display: flex;gap: 4px;background: var(--bg-main);padding: 4px;border-radius: 8px;border: 1px solid var(--border-color);}.tabs button{background: transparent;color: var(--text-muted);border: none;border-radius: 6px;padding: 8px 16px;font-size: 0.825rem;font-weight: 600;box-shadow: none;}.tabs button:hover{background: var(--bg-card-hover);color: #fff;transform: none;}.tabs button[aria-selected=true]{background: var(--jcb-amber);color: var(--text-dark);}.search{flex: 1;max-width: 700px;position: relative;}.search input{margin: 0;padding-left: 38px;background: var(--bg-main);}.search-icon{position: absolute;left: 12px;top: 50%;transform: translateY(-50%);color: var(--text-muted);pointer-events: none;}.panel{background: rgba(20,23,31,0.85);backdrop-filter: blur(12px);border: 1px solid var(--border-color);border-radius: 12px;padding:10px;box-shadow: 0 10px 30px rgba(0,0,0,0.5);}.count{margin: 0 0 12px;font-size: 0.8rem;font-family: var(--mono-font);color: var(--text-muted);display: flex;align-items: center;justify-content: space-between;}.table-wrap{overflow: auto;max-height: calc(100vh - 190px);min-height: 320px;border: 1px solid var(--border-color);border-radius: 8px;background: var(--bg-main);}table{border-collapse: separate;border-spacing: 0;width: 100%;font-size:0.76rem;}th{position: sticky;top: 0;z-index: 10;background: #181c27;color: var(--text-muted);text-transform: uppercase;font-size:0.66rem;font-family: var(--mono-font);letter-spacing: 0.05em;text-align: left;padding:7px 10px;border-bottom: 1px solid var(--border-color);white-space: nowrap;}td{padding:5px 10px;font-size:0.76rem;line-height:1.35;border-bottom: 1px solid var(--border-color);vertical-align: middle;color: var(--text-main);max-width: 520px;overflow-wrap: anywhere;}td.nowrap{white-space: nowrap;font-family: var(--mono-font);font-weight: 600;color: var(--jcb-amber);}td.actions{white-space: nowrap;text-align: right;}td.actions button + button{margin-left: 6px;}tbody tr{transition: background 0.15s ease;}tbody tr:nth-child(even){background: rgba(255,255,255,0.015);}tbody tr:hover{background: rgba(245,158,11,0.06);}td a{color: #60a5fa;text-decoration: none;font-weight: 500;margin-right: 8px;display: inline-flex;align-items: center;gap: 4px;}td a:hover{text-decoration: underline;}.empty{padding: 36px 12px;text-align: center;color: var(--text-muted);font-family: var(--mono-font);}dialog{width: min(780px,96vw);max-height: 90vh;overflow: auto;padding: 0;background: var(--bg-card);color: var(--text-main);border: 1px solid var(--border-color);border-radius: 16px;box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);}dialog::backdrop{background: rgba(0,0,0,0.75);backdrop-filter: blur(4px);}.dlg-body{padding: 18px;}.dlg-body h2{font-family: var(--display-font);font-size: 1.6rem;margin-bottom: 20px;color: #fff;text-transform: uppercase;letter-spacing: 0.03em;}#dlg-fields{display: grid;grid-template-columns: repeat(auto-fit,minmax(280px,1fr));gap: 14px 18px;}#dlg-fields label.wide{grid-column: 1 / -1;}.dlg-actions{display: flex;justify-content: flex-end;gap: 10px;margin-top: 20px;padding-top: 16px;border-top: 1px solid var(--border-color);}input[readonly]{opacity: 0.7;background: rgba(255,255,255,0.03);cursor: not-allowed;}.ac-wrap{display: block;position: relative;}.ac-list{position: absolute;left: 0;right: 0;top: 100%;z-index: 50;margin: 4px 0 0;padding: 4px;list-style: none;max-height: 220px;overflow: auto;background: #181c27;border: 1px solid var(--jcb-amber);border-radius: 8px;box-shadow: 0 10px 25px rgba(0,0,0,0.5);}.ac-list li{padding: 8px 12px;cursor: pointer;font-weight: 400;border-radius: 6px;transition: background 0.15s ease;}.ac-list li strong{display: block;color: var(--jcb-amber);font-family: var(--mono-font);font-size: 0.85rem;}.ac-list li small{margin: 0;color: var(--text-muted);font-size: 0.775rem;}.ac-list li:hover,.ac-list li.active{background: var(--jcb-amber-glow);color: #fff;}.ad-box{position: fixed;left: 20px;right: auto;bottom: 20px;width: 300px;z-index: 100;background: rgba(20,23,31,0.95);backdrop-filter: blur(12px);border: 1px solid var(--border-color);border-radius: 12px;padding: 10px;box-shadow: 0 15px 35px rgba(0,0,0,0.6);transition: all 0.3s ease;}.ad-header{display: flex;align-items: center;justify-content: space-between;margin-bottom: 6px;padding-bottom: 4px;border-bottom: 1px solid rgba(255,255,255,0.05);}.ad-header small{color: var(--jcb-amber);font-family: var(--mono-font);font-size: 0.7rem;font-weight: 700;text-transform: uppercase;letter-spacing: 0.08em;display: flex;align-items: center;gap: 4px;}.ad-close-btn{background: transparent;border: none;color: var(--text-muted);padding: 2px 6px;font-size: 0.75rem;border-radius: 4px;}.ad-close-btn:hover{background: rgba(255,255,255,0.1);color: #fff;}.ad-box video{display: block;width: 100%;height: 155px;object-fit: cover;background: #000;border-radius: 8px;border: 1px solid rgba(255,255,255,0.1);}.ad-box img{display: block;width: 100%;height: 315px;object-fit: cover;background: #000;border-radius: 8px;border: 1px solid rgba(255,255,255,0.1);margin-top: 8px;}@media (max-width: 768px){#login{padding: 24px 16px;justify-content: center;}.top-inner{flex-direction: column;align-items: flex-start;}.controls{flex-direction: column;align-items: stretch;}.search{max-width: 100%;}.ad-box{width: 220px;left: 10px;bottom: 10px;}.ad-box video,.ad-box img{height: 110px;}}.blink-glow{color: #ffeb00;text-align: center;font-size: 24px;font-weight: 900;text-shadow: 0 0 5px #ffeb00,0 0 10px #ffcc00,0 0 20px #ff9900,0 0 30px #ff9900;animation: goldenBlink 1.2s infinite;}@keyframes goldenBlink{0%,100%{opacity: 1;text-shadow: 0 0 5px #ffeb00,0 0 15px #ff9900;}50%{opacity: 0.4;text-shadow: 0 0 15px #ffeb00,0 0 30px #ff9900;}}td.hit-cell{background: #fbbf24 !important;color: #111827 !important;font-weight: 700;animation: hitBlink 1s ease-in-out infinite;}mark.hit{background: #fbbf24;color: #111827;font-weight: 700;padding: 1px 3px;border-radius: 3px;animation: hitBlink 1s ease-in-out infinite;}@keyframes hitBlink{0%,100%{background-color: #fbbf24;color: #111827;box-shadow: 0 0 8px rgba(251,191,36,.9);}50%{background-color: rgba(251,191,36,.12);color: #fbbf24;box-shadow: none;}}.pres{display: inline-flex;align-items: center;gap: 7px;font-weight: 600;white-space: nowrap;}.pres::before{content: "";width: 10px;height: 10px;border-radius: 50%;background: currentColor;}.pres.on{color: #22c55e;}.pres.on::before{box-shadow: 0 0 8px #22c55e;animation: presPulse 1.6s infinite;}.pres.off{color: #ef4444;}@keyframes presPulse{50%{opacity: .35;}}td.lastseen{white-space: nowrap;color: var(--text-muted);font-size: 0.8rem;}td.qty-white{color: #fff !important;font-weight: 700;font-family: var(--mono-font);text-align: center;}.live-datetime{display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 3px;margin: 14px 0 18px;padding: 10px 12px;border: 1px solid rgba(245,158,11,0.35);border-radius: 20px;background: rgba(245,158,11,0.07);text-align: center;font-family: var(--mono-font);}.live-datetime .live-date{color: var(--text-muted);font-size: 0.78rem;letter-spacing: 0.04em;}.live-datetime .live-time{color: var(--jcb-amber);font-size: 1.25rem;font-weight: 700;letter-spacing: 0.08em;font-variant-numeric: tabular-nums;}.top-live-datetime{display: flex;flex-direction: column;align-items: flex-end;gap: 2px;font-family: var(--mono-font);white-space: nowrap;}.top-live-datetime .live-date{color: var(--text-muted);font-size: 0.9rem;}.top-live-datetime .live-time{color: var(--jcb-amber);font-size: 1.35rem;font-weight: 700;font-variant-numeric: tabular-nums;}@media (max-width: 768px){.top-live-datetime{align-items: flex-start;}}.myorder{margin-left: auto;}.myorder[aria-pressed=true]{background: transparent;color: var(--jcb-amber);}.otabs{display: flex;gap: 4px;flex-wrap: wrap;background: var(--bg-main);padding: 4px;border-radius: 8px;border: 1px solid var(--border-color);width: fit-content;max-width: 100%;margin-bottom: 16px;}.otabs button{background: transparent;color: var(--text-muted);border: none;border-radius: 6px;padding: 8px 16px;font-size: 0.825rem;font-weight: 600;box-shadow: none;}.otabs button:hover{background: var(--bg-card-hover);color: #fff;transform: none;}.otabs button[aria-selected=true]{background: var(--jcb-amber);color: var(--text-dark);}.po-entry{margin-bottom: 12px;padding-bottom: 10px;border-bottom: 1px dashed var(--border-color);}.po-head{display: flex;align-items: center;justify-content: space-between;gap: 8px;flex-wrap: wrap;margin-bottom: 6px;}.po-head strong{font-family: var(--display-font);font-size: 0.95rem;letter-spacing: 0.03em;text-transform: uppercase;color: #fff;}.po-head small{display: block;color: var(--text-muted);font-size: 0.7rem;}.po-actions{display: flex;gap: 6px;flex-wrap: wrap;}.po-entry .msg{margin: 6px 0 0;min-height: 0;font-size: 0.78rem;}.og-wrap{overflow: auto;max-height: 48vh;border: 1px solid var(--border-color);border-radius: 8px;background: var(--bg-main);}table.og{width: max-content;min-width: 100%;}table.og th,table.og td{border-right: 1px solid var(--border-color);}table.og th{padding: 6px 8px;font-size: 0.65rem;}table.og td{padding: 0;max-width: none;}table.og td.og-auto{padding: 0 8px;text-align: center;white-space: nowrap;color: var(--text-muted);font-family: var(--mono-font);font-size: 0.72rem;background: rgba(255,255,255,0.02);}table.og td.og-act{padding: 0 6px;text-align: center;}table.og input,table.og select{display: block;width: 100%;margin: 0;border: none;border-radius: 0;background:transparent;padding:6px 8px;font-size:0.78rem;}table.og select{background: var(--bg-input);}table.og input:focus,table.og select:focus{background: #1e2330;box-shadow: inset 0 0 0 2px var(--jcb-amber);}table.og .ac-wrap{min-width: 120px;}table.og button.small{padding: 2px 7px;}table.og input[readonly]{color: var(--text-muted);cursor: default;background: rgba(255,255,255,0.02);}.og-wrap .ac-list{position: fixed;}table.og input.og-qty-input{color: #ffffff;-webkit-text-fill-color: #ffffff;caret-color: #ffffff;font-weight: 700;text-align: center;font-family: var(--mono-font);}table.og input.og-qty-input::placeholder{color: var(--text-muted);font-weight: 400;-webkit-text-fill-color: var(--text-muted);}.mbar{display: flex;gap: 8px;flex-wrap: wrap;align-items: center;margin-bottom: 12px;}.mbar select,.mbar input[type=search]{width: auto;min-width: 180px;margin-top: 0;padding: 7px 12px;font-size: 0.82rem;}.mview{display: flex;gap: 4px;background: var(--bg-main);padding: 3px;border-radius: 8px;border: 1px solid var(--border-color);}.mview button{background: transparent;color: var(--text-muted);border: none;border-radius: 6px;padding: 6px 12px;font-size: 0.775rem;font-weight: 600;box-shadow: none;}.mview button:hover{background: var(--bg-card-hover);color: #fff;transform: none;}.mview button[aria-selected=true]{background: var(--jcb-amber);color: var(--text-dark);}tr.m-sum-row{cursor: pointer;}tr.m-sum-row:hover td{background: var(--bg-card-hover);}td.num{text-align: right;font-family: var(--mono-font);white-space: nowrap;}.tabs button[aria-selected=true],.otabs button[aria-selected=true],.mview button[aria-selected=true]{background:#ff6a00;color:#fff;animation:tabBlink 1s ease-in-out infinite}@keyframes tabBlink{0%,100%{background:#ff6a00;color:#fff;box-shadow:0 0 14px #ff6a00}50%{background:rgba(255,106,0,.18);color:#ff8a2b;box-shadow:none}}#dlg-fields input,#dlg-fields select{padding:12px 14px;font-size:1rem}#net{position:fixed;top:0;left:0;right:0;z-index:200;background:#ef4444;color:#fff;text-align:center;padding:5px;font-weight:600;font-size:.8rem}td.lastseen{font-size:0.72rem}table.og td.og-auto{font-size:0.68rem}table.og th{font-size:0.62rem}table .small{font-size:0.68rem;padding:3px 8px}td a{font-size:0.76rem}.pres{font-size:0.76rem}.count{font-size:0.72rem}.mbar select,.mbar input[type=search]{font-size:0.76rem}</style>
 </head>
 <body>
 
-<!-- MEDIA WIDGET (VIDEO + IMAGE ON LEFT) -->
+
 <div class="ad-box" id="adBox">
   <div class="ad-header">
-    <small><i data-lucide="play-circle" style="width: 12px; height: 12px;"></i> Official JCB Media</small>
+    <small><i data-lucide="play-circle" width="12" height="12"></i> Official JCB Media</small>
     <button class="ad-close-btn" onclick="document.getElementById('adBox').style.display='none'" title="Hide promo">✕</button>
   </div>
   <video src="jcb-video.mp4" autoplay muted loop playsinline controls></video>
   <img src="jcb-image.jpeg" alt="JCB Banner Image">
 </div>
 
-<!-- ======== LOGIN VIEW (RIGHT SIDE) ======== -->
+
 <div id="login">
   <div class="login-card">
     <div class="stripe"></div>
     <div class="login-body">
       <div class="login-brand-tag">
-        <i data-lucide="shield-check" style="width:14px; height:14px;"></i> Enterprise Access
+        <i data-lucide="shield-check" width="14" height="14"></i> Enterprise Access
       </div>
       <h1 style="font-size:23.70px; text-align:centre; line-height:1.0;">
       Price & Parts-info Podder(Dist)
@@ -767,14 +65,14 @@
   </div>
 </div>
 
-<!-- ======== MAIN APPLICATION VIEW ======== -->
+
 <div id="app" hidden>
   <header class="top">
     <div class="stripe"></div>
     <div class="top-inner">
       <div class="top-brand-group">
         <div class="top-logo-icon">
-          <i data-lucide="wrench" style="width: 20px; height: 20px;"></i>
+          <i data-lucide="wrench" width="20" height="20"></i>
         </div>
         <div>
           <h1>Gulshon's JCB Parts Portal  / Price List Nov 2026</h1>
@@ -783,11 +81,11 @@
       </div>
       
       <div class="who">
-        <i data-lucide="user" style="width: 14px; height: 14px;"></i>
+        <i data-lucide="user" width="14" height="14"></i>
         <span id="who"></span>
         <span id="badge" class="badge">User</span>
         <button id="logout" class="ghost small" type="button">
-          <i data-lucide="log-out" style="width: 12px; height: 12px;"></i> Sign Out
+          <i data-lucide="log-out" width="12" height="12"></i> Sign Out
         </button>
       </div>
       <div class="top-live-datetime" aria-live="off">
@@ -799,35 +97,28 @@
 
   <main>
     <div class="controls">
-      <!-- Sheet Selector Tabs -->
+      
       <div class="tabs" id="main-tabs" role="tablist" aria-label="Sheets">
         <button type="button" role="tab" data-key="pricelist" aria-selected="true">Price List</button>
         <button type="button" role="tab" data-key="partsinfo" aria-selected="false">PartsInfo</button>
         <button type="button" role="tab" data-key="users" id="tab-users" aria-selected="false" hidden>Users</button>
       </div>
 
-      <!-- Live Table Search Field -->
-      <div class="search" id="search-wrap">
-        <label for="q">
-          <div style="position: relative;">
-            <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
-            <input id="q" type="search" placeholder="Search Part Number, Description, or Model (e.g. 332/ filter 3DX)..." autocomplete="off">
-          </div>
-        </label>
-      </div>
+      
+      <div class="search" id="search-wrap"><i data-lucide="search" class="search-icon" width="16" height="16"></i><input id="q" type="search" placeholder="Search Part Number, Description or Model (e.g. 332/ filter 3DX)..." autocomplete="off" aria-label="Search"></div>
 
-      <!-- Contextual Action Button -->
+      
       <button id="add-btn" type="button" hidden>
-        <i data-lucide="plus" style="width: 16px; height: 16px;"></i> Add Part
+        <i data-lucide="plus" width="16" height="16"></i> Add Part
       </button>
 
-      <!-- MyOrder: single button on the right, opens PurchaseOrder / Available / OutOfStock / CustOrder(Master) -->
+      
       <button id="myorder-btn" class="myorder" type="button" aria-pressed="false">
-        <i data-lucide="clipboard-list" style="width: 16px; height: 16px;"></i> <span id="myorder-label">MyOrder</span>
+        <i data-lucide="clipboard-list" width="16" height="16"></i> <span id="myorder-label">MyOrder</span>
       </button>
     </div>
 
-    <!-- Main Data Table Container -->
+    
     <div class="panel" id="data-panel">
       <p id="count" class="count" role="status"></p>
       <div class="table-wrap">
@@ -836,7 +127,7 @@
       <p id="data-msg" class="msg" role="status"></p>
     </div>
 
-    <!-- ======== MYORDER PANEL ======== -->
+    
     <div class="panel" id="order-panel" hidden>
       <div class="otabs" role="tablist" aria-label="MyOrder sheets">
         <button type="button" role="tab" data-okey="purchase" aria-selected="true">PurchaseOrder</button>
@@ -845,7 +136,7 @@
         <button type="button" role="tab" data-okey="master" id="otab-master" aria-selected="false" hidden>CustOrder(Master)</button>
       </div>
 
-      <!-- Excel-style entry grid (PurchaseOrder tab only) -->
+      
       <div id="po-entry" class="po-entry" hidden>
         <div class="po-head">
           <div>
@@ -862,7 +153,7 @@
         <p id="po-msg" class="msg" role="status"></p>
       </div>
 
-      <!-- CustOrder(Master) filters -->
+      
       <div id="m-bar" class="mbar" hidden>
         <select id="m-cust" aria-label="Customer filter"><option value="">All Customers</option></select>
         <input id="m-part" type="search" placeholder="Part No filter" autocomplete="off">
@@ -882,7 +173,7 @@
   </main>
 </div>
 
-<!-- ======== ADD / EDIT DIALOG MODAL ======== -->
+
 <dialog id="dlg" aria-labelledby="dlg-title">
   <div class="stripe"></div>
   <form id="dlg-form" class="dlg-body" novalidate>
@@ -897,1281 +188,1143 @@
 </dialog>
 
 <script>
-  // Paste your Apps Script Web App URL here (ends in /exec).
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB1FXpCfisWKbZfaPOghH-jajENXXVgaudQ79hST8A2rr7Uhh5mTgDTIcXNUgjjIPL/exec";
-
-  const ROW_LIMIT = 300;
-  const NOWRAP_COLS = ["PART NO", "RP", "MRP", "HSN", "GST", "CAT1", "CAT2", "GROUP"];
-
-  const $ = (id) => document.getElementById(id);
-  const store = {
-    get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
-    del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
-  };
-
-  let token = store.get("jcb_token");
-  let email = store.get("jcb_email");
-  let role = store.get("jcb_role") || "user";
-  let canAdd = store.get("jcb_canadd") === "1";   // may add rows to PartsInfo
-  let userName = store.get("jcb_name") || "";     // Users sheet -> column E (Name)
-  let canOrder = store.get("jcb_canorder") !== "0"; // MyOrder tab enabled for this user?
-  let userBranch = store.get("jcb_branch") || "";   // Users sheet -> "Branch" column
-  let currentKey = "pricelist";
-  let loadSeq = 0;
-  const cache = {};   // key -> { headers, rows: [{cells, hay, num}] }
-  let searchTimer = null;
-  let orderMode = false;      // MyOrder view open?
-  let oKey = "purchase";      // active MyOrder tab
-
-  /* ---------- Server calls ---------- */
-  async function api(body) {
-    if (SCRIPT_URL.startsWith("PASTE")) {
-      return { ok: false, error: "Set SCRIPT_URL at the top of this file's script first." };
-    }
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(body)
-      });
-      const out = await res.json();
-      if (out && out.ok && out.role && (out.role !== role || !!out.canAdd !== canAdd ||
-          (out.canOrder !== undefined && !!out.canOrder !== canOrder) ||
-          (out.name !== undefined && out.name !== userName) ||
-          (out.branch !== undefined && out.branch !== userBranch))) {
-        updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
-      }
-      return out;
-    } catch (err) {
-      return { ok: false, error: "Can't reach the server. Check your internet and the web app URL." };
-    }
-  }
-
-  function setMsg(el, text, isError) {
-    el.textContent = text || "";
-    el.classList.toggle("error", !!isError);
-  }
-
-  /* ---------- Role ---------- */
-  function updateRole(r, c, o, n, b) {
-    role = r === "admin" ? "admin" : "user";
-    canAdd = role === "admin" || !!c;
-    if (o !== undefined) canOrder = !!o;          // old server without canOrder => keep current
-    if (n !== undefined) userName = n || "";
-    if (b !== undefined) userBranch = b || "";
-    store.set("jcb_role", role);
-    store.set("jcb_canadd", canAdd ? "1" : "0");
-    store.set("jcb_canorder", canOrder ? "1" : "0");
-    store.set("jcb_name", userName);
-    store.set("jcb_branch", userBranch);
-    applyRole();
-  }
-
-  // Admin always has MyOrder; normal users only when enabled in Users sheet
-  function hasOrderAccess() { return role === "admin" || canOrder; }
-
-  function applyRole() {
-    const admin = role === "admin";
-    $("tab-users").hidden = !admin;
-    $("otab-master").hidden = !admin;
-    $("who").textContent = userName || email || "";
-    $("myorder-btn").hidden = !hasOrderAccess();
-    if (!hasOrderAccess() && orderMode) setOrderMode(false);
-    if (!admin && oKey === "master") oKey = "purchase";
-    $("badge").textContent = admin ? "Admin" : canAdd ? "User (can add PartsInfo)" : "User";
-    $("badge").classList.toggle("admin", admin);
-    if (!admin && currentKey === "users") currentKey = "pricelist";
-    updateAddButton();
-  }
-
-  function updateAddButton() {
-    const btn = $("add-btn");
-    btn.hidden = orderMode || !(role === "admin" || (canAdd && currentKey === "partsinfo"));
-    btn.textContent = currentKey === "users" ? "Add User"
-      : currentKey === "partsinfo" ? "Add Part Info" : "Add Part";
-  }
-
-  /* ---------- Online / Offline presence ---------- */
-  const PING_MS = 45000;           // user har 45 sec me "main online hoon" bhejta hai
-  const ONLINE_WINDOW_MS = 120000; // 2 min se zyada ping nahi aaya => Offline
-  let pingTimer = null, usersTimer = null, autoTimer = null, serverOffset = 0;
-  const AUTO_REFRESH_MS = 60000;   // har 60 sec me data chup-chaap refresh
-  const orderSig = {};             // MyOrder tabs ka last data signature
-  let autoBusy = false, lastTypeAt = 0;
-
-  function sendPing() {
-    if (!token) return;
-    api({ action: "ping", token: token }).then((out) => {
-      if (out && out.error === "auth") logout("Your session ended. Sign in again.");
-    });
-  }
-  function startPresence() {
-    stopPresence();
-    sendPing();
-    pingTimer = setInterval(sendPing, PING_MS);
-    autoTimer = setInterval(autoRefresh, AUTO_REFRESH_MS);
-  }
-  function stopPresence() {
-    clearInterval(pingTimer); pingTimer = null;
-    clearInterval(usersTimer); usersTimer = null;
-    clearInterval(autoTimer); autoTimer = null;
-  }
-  function sendOffline(tk) {
-    if (!tk || SCRIPT_URL.startsWith("PASTE")) return;
-    const body = JSON.stringify({ action: "offline", token: tk });
-    try {
-      if (navigator.sendBeacon && navigator.sendBeacon(SCRIPT_URL, new Blob([body], { type: "text/plain;charset=utf-8" }))) return;
-    } catch (e) {}
-    try { fetch(SCRIPT_URL, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: body }); } catch (e) {}
-  }
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) { sendPing(); autoRefresh(); } });
-  document.addEventListener("input", () => { lastTypeAt = Date.now(); }, true);
-
-  /* ---------- Auto refresh (background, kaam me rukawat nahi) ----------
-     - Sirf tab refresh hota hai jab data sach me badla ho
-     - Scroll position, search text, PurchaseOrder ki unsaved entry rows safe rehti hain
-     - Dialog khula ho / user abhi type kar raha ho / tab hidden ho => skip */
-  function keepScroll(sel, fn) {
-    const w = document.querySelector(sel);
-    const t = w ? w.scrollTop : 0, l = w ? w.scrollLeft : 0;
-    fn();
-    if (w) { w.scrollTop = t; w.scrollLeft = l; }
-  }
-
-  async function autoRefresh() {
-    if (!token || autoBusy || document.hidden || $("dlg").open) return;
-    if (Date.now() - lastTypeAt < 4000) return;       // abhi type kar raha hai
-    autoBusy = true;
-    try {
-      if (orderMode) {
-        const key = oKey, seq = oSeq;
-        const [out, pl] = await Promise.all([
-          api({ action: "order_list", token: token, sheet: key }),
-          api({ action: "data", token: token, sheet: "pricelist" })
-        ]);
-        if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-        // PriceList cache (Part_No suggestions) chup-chaap taaza, screen nahi badalti
-        if (pl && pl.ok && (!cache.pricelist || cache.pricelist.sig !== JSON.stringify(pl.rows))) storeSheet("pricelist", pl);
-        if (!out || !out.ok || seq !== oSeq || key !== oKey || !orderMode) return;
-        const sig = JSON.stringify(out.rows);
-        if (sig === orderSig[key]) return;
-        orderSig[key] = sig;
-        if (out.branches && out.branches.length) oBranches = out.branches;
-        keepScroll("#order-panel .table-wrap", () => {
-          if (key === "master") { setMasterData(out); renderMaster(); }
-          else renderOrderTable(out, key);
-        });
-      } else if (currentKey !== "users") {
-        const key = currentKey, seq = loadSeq;
-        const out = await api({ action: "data", token: token, sheet: key });
-        if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-        if (!out || !out.ok || seq !== loadSeq || key !== currentKey || orderMode) return;
-        if (cache[key] && cache[key].sig === JSON.stringify(out.rows)) return;
-        storeSheet(key, out);
-        keepScroll("#data-panel .table-wrap", render);
-      }
-    } catch (e) {
-      /* silent: agle round me phir try hoga */
-    } finally {
-      autoBusy = false;
-    }
-  }
-  window.addEventListener("pagehide", () => sendOffline(token));
-
-  function agoText(ms) {
-    const s = Math.max(0, Math.floor(ms / 1000));
-    if (s < 60) return "just now";
-    const m = Math.floor(s / 60);
-    if (m < 60) return m + " min ago";
-    const h = Math.floor(m / 60);
-    if (h < 24) return h + " hr ago";
-    return Math.floor(h / 24) + " day ago";
-  }
-  function lastSeenText(ts) {
-    if (!ts) return "Never";
-    const d = new Date(ts);
-    const full = new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true }).format(d);
-    return full + " (" + agoText(Date.now() + serverOffset - ts) + ")";
-  }
-  function isOnline(u) {
-    if (u.email === email) return true;
-    return !!u.lastSeen && (Date.now() + serverOffset - u.lastSeen) < ONLINE_WINDOW_MS;
-  }
-
-  /* ---------- Login / logout ---------- */
-  function showLogin(message) {
-    $("app").hidden = true;
-    $("login").hidden = false;
-    setMsg($("login-msg"), message || "", !!message);
-    $("password").value = "";
-  }
-
-  function showApp() {
-    $("login").hidden = true;
-    $("app").hidden = false;
-    $("who").textContent = userName || email || "";
-    applyRole();
-    loadSheet(currentKey);
-    startPresence();
-    lucide.createIcons();
-  }
-
-  function logout(message) {
-    if (token) sendOffline(token);
-    stopPresence();
-    token = null; email = null; role = "user"; canAdd = false; canOrder = true; userName = ""; userBranch = ""; currentKey = "pricelist";
-    ["jcb_token", "jcb_email", "jcb_role", "jcb_canadd", "jcb_canorder", "jcb_name", "jcb_branch"].forEach((k) => store.del(k));
-    Object.keys(cache).forEach((k) => delete cache[k]);
-    resetOrders();
-    if ($("dlg").open) $("dlg").close();
-    showLogin(message);
-  }
-
-  $("login-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const btn = $("login-btn");
-    btn.disabled = true;
-    setMsg($("login-msg"), "Authenticating in Retailers...");
-    const out = await api({ action: "login", email: $("email").value, password: $("password").value });
-    btn.disabled = false;
-    if (!out.ok) { setMsg($("login-msg"), out.error, true); return; }
-    token = out.token; email = out.email;
-    store.set("jcb_token", token); store.set("jcb_email", email);
-    updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
-    if (out.canOrder === undefined || out.name === undefined || out.branch === undefined) {
-      alert("Warning: Apps Script ka PURANA version chal raha hai.\nName aur MyOrder yes/no tabhi kaam karega jab naya Code.gs paste karke\nDeploy > Manage deployments > Edit > New version > Deploy karo.");
-    }
-    setMsg($("login-msg"), "");
-    showApp();
-  });
-
-  $("pw-toggle").addEventListener("click", () => {
-    const pw = $("password");
-    const show = pw.type === "password";
-    pw.type = show ? "text" : "password";
-    $("pw-toggle").textContent = show ? "Hide" : "Show";
-    $("pw-toggle").setAttribute("aria-pressed", String(show));
-  });
-
-  $("logout").addEventListener("click", () => logout(""));
-
-  /* ---------- Loading a tab ---------- */
-  function storeSheet(key, out) {
-    cache[key] = {
-      headers: out.headers,
-      rows: out.rows.map((cells, i) => ({
-        cells: cells,
-        hay: cells.join(" ").toLowerCase(),
-        num: out.nums[i]
-      })),
-      sig: JSON.stringify(out.rows)
-    };
-  }
-
-  async function loadSheet(key) {
-    currentKey = key;
-    const mySeq = ++loadSeq;
-    document.querySelectorAll(".tabs button").forEach((b) => {
-      b.setAttribute("aria-selected", String(b.dataset.key === key));
-    });
-    $("search-wrap").hidden = key === "users";
-    updateAddButton();
-
-    if (key === "users") { await loadUsers(mySeq); return; }
-    if (cache[key]) { render(); return; }
-
-    $("table").innerHTML = "";
-    setMsg($("count"), "");
-    setMsg($("data-msg"), "Fetching JCB Catalog Data...");
-    const out = await api({ action: "data", token: token, sheet: key });
-    if (mySeq !== loadSeq) return;
-
-    if (!out.ok) {
-      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-      setMsg($("data-msg"), out.error, true);
-      return;
-    }
-    storeSheet(key, out);
-    setMsg($("data-msg"), "");
-    render();
-  }
-
-  /* ---------- Parts table ---------- */
-  function isUrl(s) { return /^https?:\/\/\S+$/i.test(s); }
-
-  function fillCell(td, value) {
-    const text = String(value ?? "");
-    const parts = text.split(/[\s,]+/).filter(Boolean);
-    if (parts.length && parts.every(isUrl)) {
-      parts.forEach((u, i) => {
-        const a = document.createElement("a");
-        a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer";
-        a.innerHTML = `<i data-lucide="external-link" style="width:12px; height:12px;"></i> ` + (parts.length > 1 ? "Link " + (i + 1) : "Open Specs");
-        td.appendChild(a);
-      });
-    } else {
-      td.textContent = text;
-    }
-  }
-
-  // Search words ko cell ke andar <mark> karke blink karata hai (safe: innerHTML use nahi)
-  function fillCellHL(td, value, words) {
-    const text = String(value ?? "");
-    const parts = text.split(/[\s,]+/).filter(Boolean);
-    if (!words.length || (parts.length && parts.every(isUrl))) { fillCell(td, value); return; }
-    const re = new RegExp("(" + words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
-    let last = 0, m, hit = false;
-    while ((m = re.exec(text)) !== null) {
-      if (!m[0]) { re.lastIndex++; continue; }
-      if (m.index > last) td.appendChild(document.createTextNode(text.slice(last, m.index)));
-      const mk = document.createElement("mark");
-      mk.className = "hit"; mk.textContent = m[0];
-      td.appendChild(mk);
-      last = m.index + m[0].length; hit = true;
-    }
-    if (!hit) { td.textContent = text; return; }
-    if (last < text.length) td.appendChild(document.createTextNode(text.slice(last)));
-  }
-
-  function addHeader(row, text) {
-    const th = document.createElement("th");
-    th.textContent = text;
-    row.appendChild(th);
-  }
-
-  function smallButton(label, cls, handler) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "small " + (cls || "");
-    b.textContent = label;
-    b.addEventListener("click", handler);
-    return b;
-  }
-
-  function render() {
-    const data = cache[currentKey];
-    if (!data) return;
-    const admin = role === "admin";
-    const words = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
-    const matches = words.length ? data.rows.filter((r) => words.every((w) => r.hay.includes(w))) : data.rows;
-    const shown = matches.slice(0, ROW_LIMIT);
-
-    const table = $("table");
-    table.innerHTML = "";
-    const headRow = table.createTHead().insertRow();
-    data.headers.forEach((h) => addHeader(headRow, h));
-    if (admin) addHeader(headRow, "Actions");
-
-    const body = table.createTBody();
-    shown.forEach((r) => {
-      const tr = body.insertRow();
-      data.headers.forEach((h, i) => {
-        const td = tr.insertCell();
-        if (NOWRAP_COLS.indexOf(String(h).trim().toUpperCase()) !== -1) td.className = "nowrap";
-        const hn = String(h).toLowerCase().replace(/[^a-z0-9]/g, "");
-        if (words.length && currentKey === "pricelist" && (hn === "partno" || hn === "mrp")) {
-          // PriceList: search karne par PART NO + MRP highlight hoke blink
-          td.classList.add("hit-cell");
-          fillCell(td, r.cells[i]);
-        } else if (words.length && currentKey === "partsinfo") {
-          // PartsInfo: jo search kiya wo text har cell me highlight hoke blink
-          fillCellHL(td, r.cells[i], words);
-        } else {
-          fillCell(td, r.cells[i]);
-        }
-      });
-      if (admin) {
-        const td = tr.insertCell();
-        td.className = "actions";
-        td.appendChild(smallButton("Edit", "ghost", () => openPartForm(r)));
-        td.appendChild(smallButton("Delete", "danger", () => deletePart(r)));
-      }
-    });
-
-    if (!shown.length) {
-      const td = body.insertRow().insertCell();
-      td.colSpan = data.headers.length + (admin ? 1 : 0);
-      td.className = "empty";
-      td.textContent = words.length
-        ? "No matching JCB parts found. Refine your query."
-        : "This catalog view currently contains no entries.";
-    }
-
-    let note = "Showing " + shown.length.toLocaleString() + " of " + matches.length.toLocaleString() + " parts";
-    if (matches.length > ROW_LIMIT) note += " (Narrow down search to view all results)";
-    setMsg($("count"), note);
-    lucide.createIcons();
-  }
-
-  document.querySelectorAll(".tabs button").forEach((b) => {
-    b.addEventListener("click", () => loadSheet(b.dataset.key));
-  });
-
-  $("q").addEventListener("input", () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(render, 150);
-  });
-
-  /* ---------- Admin: parts ---------- */
-  const normH = (s) => String(s).toLowerCase().replace(/\s+/g, "");
-
-  function partIndex() {
-    const d = cache.pricelist;
-    if (!d) return null;
-    if (!d.index) {
-      let pi = d.headers.findIndex((h) => normH(h) === "partno");
-      if (pi < 0) pi = 0;
-      const di = d.headers.findIndex((h) => normH(h) === "description");
-      const list = d.rows
-        .map((r) => ({ pn: String(r.cells[pi] ?? "").trim(), desc: di >= 0 ? String(r.cells[di] ?? "").trim() : "" }))
-        .filter((x) => x.pn);
-      list.forEach((x) => { x.low = x.pn.toLowerCase(); x.dlow = x.desc.toLowerCase(); });
-      d.index = { list: list, map: new Map(list.map((x) => [x.low, x])) };
-    }
-    return d.index;
-  }
-
-  function findPart(v) {
-    const idx = partIndex();
-    return idx ? idx.map.get(String(v).trim().toLowerCase()) || null : null;
-  }
-
-  function suggestParts(q) {
-    const idx = partIndex();
-    const s = String(q).trim().toLowerCase();
-    if (!idx || !s) return [];
-    const starts = [], has = [], inDesc = [];
-    for (const x of idx.list) {
-      if (x.low.startsWith(s)) starts.push(x);
-      else if (x.low.includes(s)) has.push(x);
-      else if (x.dlow.includes(s)) inDesc.push(x);
-      if (starts.length >= 8) break;
-    }
-    return starts.concat(has, inDesc).slice(0, 8).map((x) => ({ value: x.pn, detail: x.desc, data: x }));
-  }
-
-  async function openPartForm(r) {
-    const key = currentKey;
-    const editing = !!r;
-    const lookup = !editing && key === "partsinfo";
-
-    if (lookup && !cache.pricelist) {
-      setMsg($("data-msg"), "Loading part numbers…");
-      const out = await api({ action: "data", token: token, sheet: "pricelist" });
-      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-      if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
-      storeSheet("pricelist", out);
-      setMsg($("data-msg"), "");
-    }
-
-    const data = cache[key];
-    if (!data) return;
-    const partH = data.headers.find((h) => normH(h) === "partno") || data.headers[0];
-    const descH = data.headers.find((h) => normH(h) === "description");
-    const isAdmin = role === "admin";
-    const addTitle = key === "partsinfo" ? "Add Part Info Record" : "Add Spare Part";
-
-    openForm({
-      title: editing ? "Edit Part Details" : addTitle,
-      saveLabel: editing ? "Save Changes" : addTitle,
-      fields: data.headers.map((h, i) => {
-        const f = { name: h, label: h, value: editing ? String(r.cells[i] ?? "") : "", wide: /desc|link/i.test(h) || (lookup && h === partH) };
-        if (lookup && h === partH) { f.suggest = true; f.placeholder = "Type part number (e.g. 320/08608)"; }
-        if (lookup && h === descH) {
-          f.readonly = true;
-          f.placeholder = "Auto-filled from Price List";
-          f.hint = "Description is matched automatically from the Price List catalog.";
-        }
-        return f;
-      }),
-      getSuggestions: lookup ? suggestParts : null,
-      onPick: (item, set) => { if (descH) set(descH, item.data.desc); },
-      onType: (value, set) => {
-        const hit = findPart(value);
-        if (descH) set(descH, hit ? hit.desc : "");
-      },
-      onSubmit: async (values) => {
-        const body = { action: editing ? "row_update" : "row_add", token: token, sheet: key };
-        if (editing) {
-          const changed = {};
-          let any = false;
-          data.headers.forEach((h, i) => {
-            if (values[h] !== String(r.cells[i] ?? "").trim()) { changed[h] = values[h]; any = true; }
-          });
-          if (!any) return { ok: true };
-          body.row = r.num; body.check = r.cells[0]; body.values = changed;
-        } else {
-          if (lookup) {
-            const hit = findPart(values[partH]);
-            if (!hit && !isAdmin) return { ok: false, error: "Please select a valid part number from the Price List suggestions." };
-            if (hit) { values[partH] = hit.pn; if (descH) values[descH] = hit.desc; }
-          }
-          body.values = values;
-        }
-        const out = await api(body);
-        if (out.ok) { delete cache[key]; loadSheet(key); }
-        return out;
-      }
-    });
-  }
-
-  async function deletePart(r) {
-    if (!confirm("Delete part " + r.cells[0] + "?\nThis action will permanently remove the record from the Google Sheet.")) return;
-    setMsg($("data-msg"), "Deleting record...");
-    const out = await api({ action: "row_delete", token: token, sheet: currentKey, row: r.num, check: r.cells[0] });
-    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
-    delete cache[currentKey];
-    loadSheet(currentKey);
-  }
-
-  /* ---------- Admin: users ---------- */
-  let usersList = [];
-
-  async function loadUsers(mySeq) {
-    $("table").innerHTML = "";
-    setMsg($("count"), "");
-    setMsg($("data-msg"), "Loading authorized user access list...");
-    const out = await api({ action: "users_list", token: token });
-    if (mySeq !== loadSeq) return;
-    if (!out.ok) {
-      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-      setMsg($("data-msg"), out.error, true);
-      return;
-    }
-    usersList = out.users;
-    if (typeof out.now === "number") serverOffset = out.now - Date.now();
-    if (out.branches && out.branches.length) oBranches = out.branches;
-    setMsg($("data-msg"), "");
-    renderUsers();
-    startUsersRefresh();
-  }
-
-  // Admin Users tab khula ho to har 30 sec me status refresh (table clear kiye bina)
-  function startUsersRefresh() {
-    clearInterval(usersTimer);
-    usersTimer = setInterval(async () => {
-      if (currentKey !== "users" || orderMode || role !== "admin" || !token || $("dlg").open) return;
-      const out = await api({ action: "users_list", token: token });
-      if (!out || !out.ok || currentKey !== "users") return;
-      usersList = out.users;
-      if (typeof out.now === "number") serverOffset = out.now - Date.now();
-      renderUsers();
-    }, 30000);
-  }
-
-  function renderUsers() {
-    const table = $("table");
-    table.innerHTML = "";
-    const headRow = table.createTHead().insertRow();
-    ["Name", "Status", "Last Seen", "Branch", "Operator Email", "Role", "Can Add PartsInfo", "MyOrder Access", "Actions"].forEach((h) => addHeader(headRow, h));
-    const body = table.createTBody();
-    usersList.forEach((u) => {
-      const tr = body.insertRow();
-      const isMe = u.email === email;
-      tr.insertCell().textContent = u.name || "-";
-      const online = isOnline(u);
-      const st = tr.insertCell();
-      const pill = document.createElement("span");
-      pill.className = "pres " + (online ? "on" : "off");
-      pill.textContent = online ? "Online" : "Offline";
-      st.appendChild(pill);
-      const ls = tr.insertCell();
-      ls.className = "lastseen";
-      ls.textContent = online ? "Active now" : lastSeenText(u.lastSeen);
-      tr.insertCell().textContent = u.branch || "-";
-      const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (You)" : "");
-      tr.insertCell().textContent = u.role === "admin" ? "Administrator" : "Standard User";
-      tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canAdd ? "Yes" : "No");
-      tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canOrder ? "Enabled" : "Disabled");
-      const td = tr.insertCell(); td.className = "actions";
-      if (u.role !== "admin") {
-        td.appendChild(smallButton(u.canOrder ? "Disable MyOrder" : "Enable MyOrder", "ghost", () => toggleMyOrder(u)));
-      }
-      td.appendChild(smallButton("Edit", "ghost", () => openUserForm(u)));
-      const del = smallButton("Remove", "danger", () => removeUser(u));
-      del.disabled = isMe;
-      td.appendChild(del);
-    });
-    const onN = usersList.filter(isOnline).length;
-    setMsg($("count"), usersList.length + (usersList.length === 1 ? " user registered" : " users registered") + "  |  Online: " + onN + "  |  Offline: " + (usersList.length - onN));
-    if (usersList.length && !usersList.some((u) => u.lastSeen !== undefined)) {
-      setMsg($("data-msg"), "Online/Offline ke liye Apps Script me naya Code.gs (presence_Code.gs.txt) paste karke New version deploy karo.", true);
-    }
-    lucide.createIcons();
-  }
-
-  function openUserForm(u) {
-    const editing = !!u;
-    openForm({
-      title: editing ? "Edit User Privileges" : "Add New Operator",
-      saveLabel: editing ? "Save Changes" : "Create User",
-      fields: [
-        { name: "email", label: "Operator Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
-        { name: "name", label: "Name (header me dikhta hai aur MyOrder ke Customer_Name me aata hai)", type: "text", value: editing ? (u.name || "") : "", wide: true },
-        { name: "branch", label: "Branch (used for MyOrder Unique_ID)", wide: true, value: editing ? (u.branch || "") : "",
-          options: [{ value: "", label: "— Select branch —" }].concat(oBranches.map((b) => ({ value: b, label: b }))) },
-        { name: "password", label: editing ? "New Password" : "Password", type: "password",
-          autocomplete: "new-password", wide: true,
-          hint: editing ? "Leave blank to keep current password." : "Minimum 6 characters." },
-        { name: "role", label: "Access Role", wide: true, value: editing ? u.role : "user",
-          options: [
-            { value: "user", label: "User (Search and View Only)" },
-            { value: "admin", label: "Admin (Full Edit & User Management)" }
-          ] },
-        { name: "canAdd", label: "Can Add PartsInfo", wide: true, value: editing && u.canAdd ? "yes" : "no",
-          hint: "Allows standard users to insert new rows to PartsInfo without edit/delete rights.",
-          options: [
-            { value: "no", label: "No" },
-            { value: "yes", label: "Yes" }
-          ] },
-        { name: "canOrder", label: "MyOrder Tab", wide: true, value: editing && !u.canOrder ? "no" : "yes",
-          hint: "Enable or disable the MyOrder button for this user.",
-          options: [
-            { value: "yes", label: "Enabled" },
-            { value: "no", label: "Disabled" }
-          ] }
-      ],
-      onSubmit: async (values) => {
-        const out = await api({
-          action: "user_save", token: token,
-          name: values.name, branch: values.branch, canOrder: values.canOrder === "yes",
-          email: editing ? u.email : values.email,
-          password: values.password, role: values.role,
-          canAdd: values.canAdd === "yes"
-        });
-        if (out.ok) loadSheet("users");
-        return out;
-      }
-    });
-  }
-
-  // Admin only: one-click MyOrder enable / disable for a user
-  async function toggleMyOrder(u) {
-    if (role !== "admin") return;
-    const next = !u.canOrder;
-    if (!confirm((next ? "Enable" : "Disable") + " MyOrder for " + (u.name || u.email) + "?")) return;
-    const out = await api({
-      action: "user_save", token: token,
-      email: u.email, name: u.name || "", branch: u.branch || "", password: "",
-      role: u.role, canAdd: !!u.canAdd, canOrder: next
-    });
-    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
-    loadSheet("users");
-  }
-
-  async function removeUser(u) {
-    if (!confirm("Revoke access for " + u.email + "?\nThey will no longer be able to log in to the portal.")) return;
-    const out = await api({ action: "user_delete", token: token, email: u.email });
-    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-    if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
-    loadSheet("users");
-  }
-
-  $("add-btn").addEventListener("click", () => {
-    if (currentKey === "users") openUserForm(null); else openPartForm(null);
-  });
-
-  /* ---------- Generic dialog ---------- */
-  let dlgInputs = [];
-  let dlgSubmit = null;
-
-  function attachSuggest(input, list, cfg, setField) {
-    let items = [];
-    let active = -1;
-    input.setAttribute("role", "combobox");
-    input.setAttribute("aria-autocomplete", "list");
-    input.setAttribute("aria-expanded", "false");
-
-    const close = () => { list.hidden = true; active = -1; input.setAttribute("aria-expanded", "false"); };
-    const pick = (i) => {
-      const it = items[i];
-      if (!it) return;
-      input.value = it.value;
-      close();
-      cfg.onPick(it, setField);
-    };
-    const paint = () => {
-      list.innerHTML = "";
-      items.forEach((it, i) => {
-        const li = document.createElement("li");
-        li.setAttribute("role", "option");
-        if (i === active) li.className = "active";
-        const b = document.createElement("strong");
-        b.textContent = it.value;
-        li.appendChild(b);
-        if (it.detail) {
-          const sm = document.createElement("small");
-          sm.textContent = it.detail;
-          li.appendChild(sm);
-        }
-        li.addEventListener("mousedown", (e) => { e.preventDefault(); pick(i); });
-        list.appendChild(li);
-      });
-      list.hidden = !items.length;
-      input.setAttribute("aria-expanded", String(!!items.length));
-      const cur = list.querySelector(".active");
-      if (cur) cur.scrollIntoView({ block: "nearest" });
-    };
-
-    input.addEventListener("input", () => {
-      items = cfg.getSuggestions(input.value);
-      active = -1;
-      paint();
-      cfg.onType(input.value.trim(), setField);
-    });
-    input.addEventListener("focus", () => {
-      if (input.value.trim()) { items = cfg.getSuggestions(input.value); active = -1; paint(); }
-    });
-    input.addEventListener("blur", () => setTimeout(close, 120));
-    input.addEventListener("keydown", (e) => {
-      const open = !list.hidden && items.length;
-      if (e.key === "ArrowDown" && open) { e.preventDefault(); active = (active + 1) % items.length; paint(); }
-      else if (e.key === "ArrowUp" && open) { e.preventDefault(); active = (active - 1 + items.length) % items.length; paint(); }
-      else if (e.key === "Enter" && open && active >= 0) { e.preventDefault(); pick(active); }
-      else if (e.key === "Escape" && open) { e.preventDefault(); e.stopPropagation(); close(); }
-    });
-  }
-
-  function openForm(cfg) {
-    $("dlg-title").textContent = cfg.title;
-    $("dlg-save").textContent = cfg.saveLabel || "Save";
-    $("dlg-save").disabled = false;
-    setMsg($("dlg-msg"), "");
-    const box = $("dlg-fields");
-    box.innerHTML = "";
-    dlgInputs = [];
-    const setField = (name, value) => {
-      const t = dlgInputs.find((i) => i.name === name);
-      if (t) t.el.value = value;
-    };
-    cfg.fields.forEach((f) => {
-      const label = document.createElement("label");
-      if (f.wide) label.className = "wide";
-      label.appendChild(document.createTextNode(f.label));
-      let input;
-      if (f.options) {
-        input = document.createElement("select");
-        f.options.forEach((o) => {
-          const op = document.createElement("option");
-          op.value = o.value; op.textContent = o.label;
-          input.appendChild(op);
-        });
-      } else {
-        input = document.createElement("input");
-        input.type = f.type || "text";
-        if (f.autocomplete) input.autocomplete = f.autocomplete;
-      }
-      input.value = f.value || "";
-      input.disabled = !!f.disabled;
-      if (f.readonly) input.readOnly = true;
-      if (f.placeholder) input.placeholder = f.placeholder;
-
-      if (f.suggest && cfg.getSuggestions) {
-        input.autocomplete = "off";
-        const wrap = document.createElement("span");
-        wrap.className = "ac-wrap";
-        const list = document.createElement("ul");
-        list.className = "ac-list";
-        list.hidden = true;
-        list.setAttribute("role", "listbox");
-        wrap.appendChild(input);
-        wrap.appendChild(list);
-        label.appendChild(wrap);
-        attachSuggest(input, list, cfg, setField);
-      } else {
-        label.appendChild(input);
-      }
-      if (f.hint) {
-        const s = document.createElement("small");
-        s.textContent = f.hint;
-        label.appendChild(s);
-      }
-      box.appendChild(label);
-      dlgInputs.push({ name: f.name, el: input });
-    });
-    dlgSubmit = cfg.onSubmit;
-    $("dlg").showModal();
-    const first = dlgInputs.find((i) => !i.el.disabled && !i.el.readOnly);
-    if (first) first.el.focus();
-  }
-
-  $("dlg-cancel").addEventListener("click", () => $("dlg").close());
-
-  $("dlg-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!dlgSubmit) return;
-    const values = {};
-    dlgInputs.forEach((i) => { values[i.name] = i.el.value.trim(); });
-    $("dlg-save").disabled = true;
-    setMsg($("dlg-msg"), "Updating database...");
-    const out = await dlgSubmit(values);
-    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-    if (out.ok) { $("dlg").close(); return; }
-    $("dlg-save").disabled = false;
-    setMsg($("dlg-msg"), out.error, true);
-  });
-
-
-  /* =====================================================
-     MyOrder module  (PurchaseOrder / Available / OutOfStock / CustOrder(Master))
-     ===================================================== */
-  let oBranches = ["Meghalaya", "Silchar", "Agartala"];   // replaced by server list on first load
-  let oSeq = 0;
-  let gridBuilt = false;
-
-  const pad2 = (n) => String(n).padStart(2, "0");
-  function todayText() {
-    const d = new Date();
-    return pad2(d.getDate()) + "/" + pad2(d.getMonth() + 1) + "/" + d.getFullYear();
-  }
-
-  function setOrderMode(on) {
-    orderMode = on;
-    $("main-tabs").hidden = on;
-    $("search-wrap").hidden = on;
-    $("data-panel").hidden = on;
-    $("order-panel").hidden = !on;
-    $("myorder-btn").setAttribute("aria-pressed", String(on));
-    $("myorder-label").textContent = on ? "Back to Price List" : "MyOrder";
-    if (on) {
-      $("add-btn").hidden = true;
-      $("otab-master").hidden = role !== "admin";
-      if (oKey === "master" && role !== "admin") oKey = "purchase";
-      loadOrderTab(oKey);
-    } else {
-      oSeq++;
-      loadSheet(currentKey);
-    }
-  }
-
-  function resetOrders() {
-    orderMode = false; gridBuilt = false; oKey = "purchase"; oSeq++;
-    $("main-tabs").hidden = false;
-    $("data-panel").hidden = false;
-    $("order-panel").hidden = true;
-    $("myorder-btn").setAttribute("aria-pressed", "false");
-    $("myorder-label").textContent = "MyOrder";
-    $("po-grid").innerHTML = "";
-    setMsg($("po-msg"), "");
-  }
-
-  // Admin ne MyOrder band kar diya (server ne mana kiya) -> button turant hata do
-  function orderDenied(out) {
-    if (!out || out.ok || !/MyOrder access is disabled/i.test(String(out.error || ""))) return false;
-    canOrder = false;
-    store.set("jcb_canorder", "0");
-    applyRole();
-    return true;
-  }
-
-  async function ensurePricelist() {
-    if (cache.pricelist) return;
-    const out = await api({ action: "data", token: token, sheet: "pricelist" });
-    if (out.ok && !cache.pricelist) storeSheet("pricelist", out);
-  }
-
-  async function loadOrderTab(key) {
-    oKey = key;
-    const mySeq = ++oSeq;
-    document.querySelectorAll(".otabs button").forEach((b) => {
-      b.setAttribute("aria-selected", String(b.dataset.okey === key));
-    });
-    $("po-entry").hidden = key !== "purchase";
-    $("m-bar").hidden = key !== "master";
-    $("o-table").innerHTML = "";
-    setMsg($("o-count"), "");
-    setMsg($("o-msg"), "Loading " + key + " data...");
-
-    const [out] = await Promise.all([
-      api({ action: "order_list", token: token, sheet: key }),
-      key === "purchase" ? ensurePricelist() : null
-    ]);
-    if (mySeq !== oSeq) return;
-
-    if (!out.ok) {
-      if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-      if (orderDenied(out)) { setMsg($("data-msg"), out.error, true); return; }
-      setMsg($("o-msg"), out.error, true);
-      return;
-    }
-    setMsg($("o-msg"), "");
-    orderSig[key] = JSON.stringify(out.rows);
-    if (out.branches && out.branches.length) oBranches = out.branches;
-    if (key === "purchase") buildGrid();
-    if (key === "master") { setMasterData(out); renderMaster(); }
-    else renderOrderTable(out, key);
-  }
-
-  function renderOrderTable(out, key) {
-    const table = $("o-table");
-    table.innerHTML = "";
-    const hr = table.createTHead().insertRow();
-    out.headers.forEach((h) => addHeader(hr, h));
-    const body = table.createTBody();
-
-    // PurchaseOrder: Sl_No har Unique_ID ke andar 1,2,3,4... sequence me
-    const hn = out.headers.map((h) => String(h).toLowerCase().replace(/[^a-z0-9]/g, ""));
-    const uidIdx = hn.indexOf("uniqueid"), slIdx = hn.indexOf("slno");
-    const slCount = {};
-    const slFor = (r) => {
-      const id = uidIdx >= 0 ? String(r[uidIdx] ?? "").trim() : "";
-      slCount[id] = (slCount[id] || 0) + 1;
-      return slCount[id];
-    };
-
-    out.rows.forEach((r) => {
-      const tr = body.insertRow();
-      const slNow = (key === "purchase" && slIdx >= 0) ? slFor(r) : null;
-      out.headers.forEach((h, i) => {
-        const td = tr.insertCell();
-        const hl = String(h).toLowerCase();
-        if (key === "purchase" && /^ord_?qn/.test(hl)) td.classList.add("qty-white");
-        if (slNow !== null && i === slIdx) { td.textContent = String(slNow); td.style.textAlign = "center"; return; }
-        if (hl === "unique_id" || hl === "part_no") td.className = "nowwrap";
-        if (hl === "avail" && r[i]) td.style.color = "#34d399";
-        if (hl === "out_of-stock" && r[i]) td.style.color = "#f87171";
-        fillCell(td, r[i]);
-      });
-    });
-    if (!out.rows.length) {
-      const td = body.insertRow().insertCell();
-      td.colSpan = out.headers.length;
-      td.className = "empty";
-      td.textContent = out.emptyText ? out.emptyText : key === "purchase" ? "No orders saved yet."
-        : key === "master" ? "Master sheet is empty."
-        : key === "available" ? "Abhi koi line Available nahi hai. Admin review ke baad yaha dikhegi."
-        : "Abhi koi line Out of Stock nahi hai.";
-    }
-    const label = key === "purchase" ? "Submitted order lines: "
-      : key === "master" ? "Master lines: " : "Lines: ";
-    setMsg($("o-count"), label + out.rows.length.toLocaleString() + (out.truncated ? " (latest only)" : "") + (key === "available" || key === "outofstock" ? "  |  View only" : key === "master" ? "  |  View only (Avail se aage ka data admin Google Sheet me bharta hai)" : ""));
-    lucide.createIcons();
-  }
-
-  /* ---------- CustOrder(Master): filter + Customer/Part summary ---------- */
-  let mData = null;
-  let mView = "lines";
-
-  function mCols(h) {
-    const f = (re) => h.findIndex((x) => re.test(String(x).toLowerCase().replace(/[^a-z0-9]/g, "")));
-    return { uid: f(/^uniqueid$/), date: f(/^date$/), cust: f(/^customer/), part: f(/^partno/), desc: f(/^desc/), qty: f(/^(ordqn|ordqt|qty|quantity)/) };
-  }
-  const mVal = (r, i) => (i >= 0 ? String(r[i] ?? "").trim() : "");
-
-  function setMasterData(out) {
-    mData = out;
-    const c = mCols(out.headers);
-    const sel = $("m-cust");
-    const prev = sel.value;
-    const custs = [...new Set(out.rows.map((r) => mVal(r, c.cust)).filter(Boolean))].sort((a, b) => a.localeCompare(b));
-    sel.innerHTML = "";
-    sel.add(new Option("All Customers", ""));
-    custs.forEach((n) => sel.add(new Option(n, n)));
-    sel.value = custs.includes(prev) ? prev : "";
-  }
-
-  function renderMaster() {
-    if (!mData) return;
-    const c = mCols(mData.headers);
-    document.querySelectorAll(".mview button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mview === mView)));
-    const cf = $("m-cust").value;
-    const pf = $("m-part").value.trim().toLowerCase();
-    const rows = mData.rows.filter((r) =>
-      (!cf || mVal(r, c.cust) === cf) && (!pf || mVal(r, c.part).toLowerCase().includes(pf)));
-    const filtered = !!(cf || pf);
-    const qtyOf = (r) => { const q = parseFloat(String(r[c.qty] ?? "").replace(/,/g, "")); return isFinite(q) ? q : 0; };
-
-    if (mView === "lines") {
-      renderOrderTable({ headers: mData.headers, rows: rows, truncated: mData.truncated,
-        emptyText: filtered ? "Is filter me koi line nahi mili." : "" }, "master");
-      const tq = rows.reduce((a, r) => a + qtyOf(r), 0);
-      setMsg($("o-count"), "Lines: " + rows.length.toLocaleString() + (filtered ? " (filtered)" : "") +
-        "  |  Total Qty: " + tq.toLocaleString() + (mData.truncated ? "  |  latest only" : "") + "  |  View only");
-      return;
-    }
-
-    // Summary: har Customer + Part_No ka count aur total qty
-    const map = new Map();
-    rows.forEach((r) => {
-      const cu = mVal(r, c.cust), pn = mVal(r, c.part);
-      const k = cu.toLowerCase() + "\u0001" + pn.toUpperCase();
-      let g = map.get(k);
-      if (!g) { g = { cu: cu, pn: pn, desc: mVal(r, c.desc), ids: new Set(), lines: 0, qty: 0 }; map.set(k, g); }
-      g.ids.add(mVal(r, c.uid) + "|" + mVal(r, c.date));
-      g.lines++;
-      g.qty += qtyOf(r);
-    });
-    const groups = [...map.values()].sort((a, b) => b.qty - a.qty || a.cu.localeCompare(b.cu));
-    const table = $("o-table");
-    table.innerHTML = "";
-    const hr = table.createTHead().insertRow();
-    ["Customer_Name", "Part_No", "Description", "Times Ordered", "Total Qty"].forEach((h) => addHeader(hr, h));
-    const body = table.createTBody();
-    groups.forEach((g) => {
-      const tr = body.insertRow();
-      tr.className = "m-sum-row";
-      tr.title = "Click: is customer + part ki saari lines dekho";
-      const times = (c.uid < 0 && c.date < 0) ? g.lines : g.ids.size;
-      [g.cu, g.pn, g.desc, times, g.qty.toLocaleString()].forEach((v, i) => {
-        const td = tr.insertCell();
-        td.textContent = String(v);
-        if (i === 1) td.className = "nowrap";
-        if (i >= 3) td.className = "num";
-      });
-      tr.addEventListener("click", () => {
-        $("m-cust").value = g.cu;
-        $("m-part").value = g.pn;
-        mView = "lines";
-        renderMaster();
-      });
-    });
-    if (!groups.length) {
-      const td = body.insertRow().insertCell();
-      td.colSpan = 5; td.className = "empty";
-      td.textContent = filtered ? "Is filter me koi line nahi mili." : "Master sheet is empty.";
-    }
-    const custN = new Set(groups.map((g) => g.cu)).size;
-    const partN = new Set(groups.map((g) => g.pn.toUpperCase())).size;
-    const tq = groups.reduce((a, g) => a + g.qty, 0);
-    setMsg($("o-count"), "Customers: " + custN + "  |  Parts: " + partN + "  |  Total Qty: " + tq.toLocaleString() +
-      (mData.truncated ? "  |  latest only" : "") + "  |  Row par click = detail lines");
-  }
-
-  $("m-cust").addEventListener("change", renderMaster);
-  $("m-part").addEventListener("input", renderMaster);
-  $("m-reset").addEventListener("click", () => { $("m-cust").value = ""; $("m-part").value = ""; renderMaster(); });
-  document.querySelectorAll(".mview button").forEach((b) => {
-    b.addEventListener("click", () => { mView = b.dataset.mview; renderMaster(); });
-  });
-
-  /* ---------- Excel-style entry grid ---------- */
-  function buildGrid() {
-    if (gridBuilt) return;
-    gridBuilt = true;
-    const box = $("po-grid");
-    box.innerHTML = "";
-    const table = document.createElement("table");
-    table.className = "og";
-    const hr = table.createTHead().insertRow();
-    ["Unique_ID", "Date", "Sl_No", "Customer_Name", "Part_No", "Description", "Ord_Qnty", "Remark if any", "Branch", ""]
-      .forEach((h) => addHeader(hr, h));
-    const tb = table.createTBody();
-    tb.id = "og-body";
-    box.appendChild(table);
-    for (let i = 0; i < 3; i++) addGridRow();
-    updatePoState();
-  }
-
-  // Branch set nahi hai to order save nahi ho sakta
-  function updatePoState() {
-    const ok = !!userBranch;
-    $("po-save").disabled = !ok;
-    if (!ok) setMsg($("po-msg"), "Aapki Branch set nahi hai. Admin se Users tab me Branch set karwao, tabhi order save hoga.", true);
-  }
-
-  function ogInput(td, key, type, width, placeholder, nav, readonly) {
-    const el = document.createElement("input");
-    el.type = type;
-    el.autocomplete = "off";
-    el.style.minWidth = width + "px";
-    if (placeholder) el.placeholder = placeholder;
-    if (readonly) { el.readOnly = true; el.tabIndex = -1; }
-    if (type === "number") { el.min = "1"; el.step = "1"; el.inputMode = "numeric"; }
-    td.appendChild(el);
-    if (nav !== false && !readonly) ogNav(el, key);
-    return el;
-  }
-
-  // Enter = same column, next row (last row par naya row) - Excel jaisa
-  function ogNav(el, key) {
-    el.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" || e.defaultPrevented) return;
-      e.preventDefault();
-      const tr = el.closest("tr");
-      let nxt = tr.nextElementSibling;
-      if (!nxt) { addGridRow(); nxt = tr.nextElementSibling; }
-      nxt._f[key].focus();
-    });
-  }
-
-  function addGridRow() {
-    const body = $("og-body");
-    const tr = body.insertRow();
-    const f = (tr._f = {});
-    const cell = (cls) => { const td = tr.insertCell(); if (cls) td.className = cls; return td; };
-
-    cell("og-auto").textContent = "Auto";                       // Unique_ID (server banata hai)
-    cell("og-auto").textContent = todayText();                  // Date
-    cell("og-auto").textContent = "Auto";                       // Sl_No (server banata hai)
-    f.cust = ogInput(cell(), "cust", "text", 130, "", false, true);
-    f.cust.value = userName || email || "";   // header me jo naam dikhta hai wahi
-
-    // Part_No with Price List suggestions
-    const partTd = cell();
-    const wrap = document.createElement("span");
-    wrap.className = "ac-wrap";
-    const list = document.createElement("ul");
-    list.className = "ac-list";
-    list.hidden = true;
-    list.setAttribute("role", "listbox");
-    f.part = ogInput(wrap, "part", "text", 120, "Part no", false);
-    wrap.appendChild(list);
-    partTd.appendChild(wrap);
-
-    f.desc = ogInput(cell(), "desc", "text", 200, "Auto from Price List", false, true);
-
-    const syncDesc = (v) => {
-      const hit = findPart(v);
-      f.desc.value = hit ? hit.desc : "";
-      f.part.style.color = (!v.trim() || hit) ? "" : "#f87171";
-      f.part.title = (!v.trim() || hit) ? "" : "Ye Part_No Price List me nahi mila";
-    };
-    attachSuggest(f.part, list, {
-      getSuggestions: suggestParts,
-      onPick: (it) => { f.desc.value = it.data.desc; f.part.style.color = ""; f.part.title = ""; },
-      onType: syncDesc
-    }, () => {});
-    f.part.addEventListener("blur", () => syncDesc(f.part.value));
-    ogNav(f.part, "part");   // attachSuggest ke baad, taaki suggestion pick wala Enter pehle chale
-    const place = () => {
-      const r = f.part.getBoundingClientRect();
-      // Suggestions Part_No cell ki RIGHT side me khulte hain (neeche ki rows dhakti nahi)
-      const w = 340;
-      let left = r.right + 6;
-      if (left + w > window.innerWidth - 8) left = Math.max(8, r.left - w - 6);   // jagah na ho to left side
-      let top = Math.min(r.top, window.innerHeight - 240);
-      Object.assign(list.style, { position: "fixed", left: left + "px", top: Math.max(8, top) + "px", width: w + "px", right: "auto", margin: "0" });
-    };
-    f.part.addEventListener("input", place);
-    f.part.addEventListener("focus", place);
-
-    f.qty = ogInput(cell(), "qty", "number", 70, "Qty");
-    f.qty.classList.add("og-qty-input");
-    f.remark = ogInput(cell(), "remark", "text", 130, "Remark");
-
-    f.branch = ogInput(cell(), "branch", "text", 90, "", false, true);
-    f.branch.value = userBranch || "—";
-
-    const actTd = cell("og-act");
-    const del = document.createElement("button");
-    del.type = "button"; del.className = "small danger"; del.textContent = "✕"; del.tabIndex = -1;
-    del.title = "Remove row";
-    del.addEventListener("click", () => {
-      tr.remove();
-      if (!$("og-body").rows.length) addGridRow();
-    });
-    actTd.appendChild(del);
-  }
-
-  function clearGrid() {
-    gridBuilt = false;
-    buildGrid();
-  }
-
-  async function saveOrder() {
-    const msg = $("po-msg");
-    if (!userBranch) { updatePoState(); return; }
-    const rows = [];
-    let bad = "";
-    [...$("og-body").rows].forEach((tr, i) => {
-      const f = tr._f;
-      const v = { partNo: f.part.value.trim(), qty: f.qty.value.trim(), remark: f.remark.value.trim() };
-      if (!(v.partNo || v.qty || v.remark)) return;   // khali row
-      const n = "Row " + (i + 1) + ": ";
-      if (!bad) {
-        if (!v.partNo) bad = n + "Part_No is required.";
-        else if (!findPart(v.partNo)) bad = n + "Part_No \"" + v.partNo + "\" Price List me nahi mila. Suggestions me se chuno.";
-        else if (!(Number(v.qty) > 0) || !Number.isInteger(Number(v.qty))) bad = n + "Ord_Qnty poora number hona chahiye (1 ya usse zyada).";
-      }
-      const hit = findPart(v.partNo);
-      v.partNo = hit ? hit.pn : v.partNo;
-      rows.push(v);
-    });
-    if (bad) { setMsg(msg, bad, true); return; }
-    if (!rows.length) { setMsg(msg, "Kuch save karne ke liye nahi hai. Kam se kam ek row bharo.", true); return; }
-
-    $("po-save").disabled = true;
-    setMsg(msg, "Saving order...");
-    const out = await api({ action: "order_save", token: token, rows: rows });
-    $("po-save").disabled = false;
-    if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
-    if (!out.ok) { if (!orderDenied(out)) setMsg(msg, out.error, true); return; }
-    clearGrid();
-    const done = "Saved " + out.count + " line(s). Unique_ID: " + out.ids.join(", ");
-    setMsg(msg, done);
-    loadOrderTab("purchase").then(() => setMsg(msg, done));
-  }
-
-  $("myorder-btn").addEventListener("click", () => setOrderMode(!orderMode));
-  document.querySelectorAll(".otabs button").forEach((b) => {
-    b.addEventListener("click", () => loadOrderTab(b.dataset.okey));
-  });
-  $("po-add-row").addEventListener("click", () => { addGridRow(); });
-  $("po-clear").addEventListener("click", () => {
-    if (confirm("Clear all unsaved rows?")) { clearGrid(); setMsg($("po-msg"), ""); }
-  });
-  $("po-save").addEventListener("click", saveOrder);
-
-  /* ---------- Live Date & Time ---------- */
-  function updateLiveDateTime() {
-    const now = new Date();
-    const dateText = new Intl.DateTimeFormat("en-IN", {
-      weekday: "long",
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    }).format(now);
-    const timeText = new Intl.DateTimeFormat("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true
-    }).format(now);
-
-    ["login-date", "app-date"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = dateText;
-    });
-    ["login-time", "app-time"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = timeText;
-    });
-  }
-
-  /* ---------- Startup Initialization ---------- */
-  window.addEventListener('DOMContentLoaded', () => {
-    updateLiveDateTime();
-    setInterval(updateLiveDateTime, 1000);
-    lucide.createIcons();
-    if (token) showApp(); else showLogin("");
-  });
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzB1FXpCfisWKbZfaPOghH-jajENXXVgaudQ79hST8A2rr7Uhh5mTgDTIcXNUgjjIPL/exec";
+const ROW_LIMIT = 300;
+const NOWRAP_COLS = ["PART NO", "RP", "MRP", "HSN", "GST", "CAT1", "CAT2", "GROUP"];
+const $ = (id) => document.getElementById(id);
+const store = {
+get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+};
+let token = store.get("jcb_token");
+let email = store.get("jcb_email");
+let role = store.get("jcb_role") || "user";
+let canAdd = store.get("jcb_canadd") === "1";   // may add rows to PartsInfo
+let userName = store.get("jcb_name") || "";     // Users sheet -> column E (Name)
+let canOrder = store.get("jcb_canorder") !== "0"; // MyOrder tab enabled for this user?
+let userBranch = store.get("jcb_branch") || "";   // Users sheet -> "Branch" column
+let currentKey = "pricelist";
+let loadSeq = 0;
+const cache = {};   // key -> { headers, rows: [{cells, hay, num}] }
+let searchTimer = null;
+let orderMode = false;      // MyOrder view open?
+let oKey = "purchase";      // active MyOrder tab
+async function api(body) {
+if (SCRIPT_URL.startsWith("PASTE")) {
+return { ok: false, error: "Set SCRIPT_URL at the top of this file's script first." };
+}
+try {
+const res = await fetch(SCRIPT_URL, {
+method: "POST",
+headers: { "Content-Type": "text/plain;charset=utf-8" },
+body: JSON.stringify(body)
+});
+const out = await res.json();
+if (out && out.ok && out.role && (out.role !== role || !!out.canAdd !== canAdd ||
+(out.canOrder !== undefined && !!out.canOrder !== canOrder) ||
+(out.name !== undefined && out.name !== userName) ||
+(out.branch !== undefined && out.branch !== userBranch))) {
+updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
+}
+return out;
+} catch (err) {
+return { ok: false, error: "Can't reach the server. Check your internet and the web app URL." };
+}
+}
+function setMsg(el, text, isError) {
+el.textContent = text || "";
+el.classList.toggle("error", !!isError);
+}
+function updateRole(r, c, o, n, b) {
+role = r === "admin" ? "admin" : "user";
+canAdd = role === "admin" || !!c;
+if (o !== undefined) canOrder = !!o;          // old server without canOrder => keep current
+if (n !== undefined) userName = n || "";
+if (b !== undefined) userBranch = b || "";
+store.set("jcb_role", role);
+store.set("jcb_canadd", canAdd ? "1" : "0");
+store.set("jcb_canorder", canOrder ? "1" : "0");
+store.set("jcb_name", userName);
+store.set("jcb_branch", userBranch);
+applyRole();
+}
+function hasOrderAccess() { return role === "admin" || canOrder; }
+function applyRole() {
+const admin = role === "admin";
+$("tab-users").hidden = !admin;
+$("otab-master").hidden = !admin;
+$("who").textContent = userName || email || "";
+$("myorder-btn").hidden = !hasOrderAccess();
+if (!hasOrderAccess() && orderMode) setOrderMode(false);
+if (!admin && oKey === "master") oKey = "purchase";
+$("badge").textContent = admin ? "Admin" : canAdd ? "User (can add PartsInfo)" : "User";
+$("badge").classList.toggle("admin", admin);
+if (!admin && currentKey === "users") currentKey = "pricelist";
+updateAddButton();
+}
+function updateAddButton() {
+const btn = $("add-btn");
+btn.hidden = orderMode || !(role === "admin" || (canAdd && currentKey === "partsinfo"));
+btn.textContent = currentKey === "users" ? "Add User"
+: currentKey === "partsinfo" ? "Add Part Info" : "Add Part";
+}
+const PING_MS = 45000;           // user har 45 sec me "main online hoon" bhejta hai
+const ONLINE_WINDOW_MS = 120000; // 2 min se zyada ping nahi aaya => Offline
+let pingTimer = null, usersTimer = null, autoTimer = null, serverOffset = 0;
+const AUTO_REFRESH_MS = 60000;   // har 60 sec me data chup-chaap refresh
+const orderSig = {};             // MyOrder tabs ka last data signature
+let autoBusy = false, lastTypeAt = 0;
+function sendPing() {
+if (!token) return;
+api({ action: "ping", token: token }).then((out) => {
+if (out && typeof out.now === "number") serverOffset = out.now - Date.now();
+if (out && out.error === "auth") logout("Your session ended. Sign in again.");
+});
+}
+function startPresence() {
+stopPresence();
+sendPing();
+pingTimer = setInterval(sendPing, PING_MS);
+autoTimer = setInterval(autoRefresh, AUTO_REFRESH_MS);
+}
+function stopPresence() {
+clearInterval(pingTimer); pingTimer = null;
+clearInterval(usersTimer); usersTimer = null;
+clearInterval(autoTimer); autoTimer = null;
+}
+function sendOffline(tk) {
+if (!tk || SCRIPT_URL.startsWith("PASTE")) return;
+const body = JSON.stringify({ action: "offline", token: tk });
+try {
+if (navigator.sendBeacon && navigator.sendBeacon(SCRIPT_URL, new Blob([body], { type: "text/plain;charset=utf-8" }))) return;
+} catch (e) {}
+try { fetch(SCRIPT_URL, { method: "POST", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" }, body: body }); } catch (e) {}
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { sendPing(); autoRefresh(); } });
+document.addEventListener("input", () => { lastTypeAt = Date.now(); }, true);
+function keepScroll(sel, fn) {
+const w = document.querySelector(sel);
+const t = w ? w.scrollTop : 0, l = w ? w.scrollLeft : 0;
+fn();
+if (w) { w.scrollTop = t; w.scrollLeft = l; }
+}
+async function autoRefresh() {
+if (!token || autoBusy || document.hidden || $("dlg").open) return;
+if (Date.now() - lastTypeAt < 4000) return;       // abhi type kar raha hai
+autoBusy = true;
+try {
+if (orderMode) {
+const key = oKey, seq = oSeq;
+const [out, pl] = await Promise.all([
+api({ action: "order_list", token: token, sheet: key }),
+api({ action: "data", token: token, sheet: "pricelist" })
+]);
+if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (pl && pl.ok && (!cache.pricelist || cache.pricelist.sig !== JSON.stringify(pl.rows))) storeSheet("pricelist", pl);
+if (!out || !out.ok || seq !== oSeq || key !== oKey || !orderMode) return;
+const sig = JSON.stringify(out.rows);
+if (sig === orderSig[key]) return;
+orderSig[key] = sig;
+if (out.branches && out.branches.length) oBranches = out.branches;
+keepScroll("#order-panel .table-wrap", () => {
+if (key === "master") { setMasterData(out); renderMaster(); }
+else renderOrderTable(out, key);
+});
+} else if (currentKey !== "users") {
+const key = currentKey, seq = loadSeq;
+const out = await api({ action: "data", token: token, sheet: key });
+if (out && out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out || !out.ok || seq !== loadSeq || key !== currentKey || orderMode) return;
+if (cache[key] && cache[key].sig === JSON.stringify(out.rows)) return;
+storeSheet(key, out);
+keepScroll("#data-panel .table-wrap", render);
+}
+} catch (e) {
+} finally {
+autoBusy = false;
+}
+}
+window.addEventListener("pagehide", () => sendOffline(token));
+const net=document.createElement("div");net.id="net";net.hidden=!!navigator.onLine;net.textContent="Internet connection nahi hai - aap offline ho. Connection aate hi auto-reconnect hoga.";document.body.appendChild(net);
+window.addEventListener("offline",()=>{net.hidden=false});
+window.addEventListener("online",()=>{net.hidden=true;sendPing();autoRefresh()});
+window.addEventListener("pageshow",(e)=>{if(e.persisted)sendPing()});
+function agoText(ms) {
+const s = Math.max(0, Math.floor(ms / 1000));
+if (s < 60) return "just now";
+const m = Math.floor(s / 60);
+if (m < 60) return m + " min ago";
+const h = Math.floor(m / 60);
+if (h < 24) return h + " hr ago";
+return Math.floor(h / 24) + " day ago";
+}
+function lastSeenText(ts) {
+if (!ts) return "Never";
+const d = new Date(ts);
+const full = new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true }).format(d);
+return full + " (" + agoText(Date.now() + serverOffset - ts) + ")";
+}
+function isOnline(u){if(u.email===email)return true;if(u.online!==undefined)return !!u.online;return !!u.lastSeen&&Date.now()+serverOffset-u.lastSeen<ONLINE_WINDOW_MS}
+function showLogin(message) {
+$("app").hidden = true;
+$("login").hidden = false;
+setMsg($("login-msg"), message || "", !!message);
+$("password").value = "";
+}
+function showApp() {
+$("login").hidden = true;
+$("app").hidden = false;
+$("who").textContent = userName || email || "";
+applyRole();
+loadSheet(currentKey);
+startPresence();
+lucide.createIcons();
+}
+function logout(message) {
+if (token) sendOffline(token);
+stopPresence();
+token = null; email = null; role = "user"; canAdd = false; canOrder = true; userName = ""; userBranch = ""; currentKey = "pricelist";
+["jcb_token", "jcb_email", "jcb_role", "jcb_canadd", "jcb_canorder", "jcb_name", "jcb_branch"].forEach((k) => store.del(k));
+Object.keys(cache).forEach((k) => delete cache[k]);
+resetOrders();
+if ($("dlg").open) $("dlg").close();
+showLogin(message);
+}
+$("login-form").addEventListener("submit", async (e) => {
+e.preventDefault();
+const btn = $("login-btn");
+btn.disabled = true;
+setMsg($("login-msg"), "Authenticating in Retailers...");
+const out = await api({ action: "login", email: $("email").value, password: $("password").value });
+btn.disabled = false;
+if (!out.ok) { setMsg($("login-msg"), out.error, true); return; }
+token = out.token; email = out.email;
+store.set("jcb_token", token); store.set("jcb_email", email);
+updateRole(out.role, out.canAdd, out.canOrder, out.name, out.branch);
+if (out.canOrder === undefined || out.name === undefined || out.branch === undefined) {
+alert("Warning: Apps Script ka PURANA version chal raha hai.\nName aur MyOrder yes/no tabhi kaam karega jab naya Code.gs paste karke\nDeploy > Manage deployments > Edit > New version > Deploy karo.");
+}
+setMsg($("login-msg"), "");
+showApp();
+});
+$("pw-toggle").addEventListener("click", () => {
+const pw = $("password");
+const show = pw.type === "password";
+pw.type = show ? "text" : "password";
+$("pw-toggle").textContent = show ? "Hide" : "Show";
+$("pw-toggle").setAttribute("aria-pressed", String(show));
+});
+$("logout").addEventListener("click", () => logout(""));
+function storeSheet(key, out) {
+cache[key] = {
+headers: out.headers,
+rows: out.rows.map((cells, i) => ({
+cells: cells,
+hay: cells.join(" ").toLowerCase(),
+num: out.nums[i]
+})),
+sig: JSON.stringify(out.rows)
+};
+}
+async function loadSheet(key) {
+currentKey = key;
+const mySeq = ++loadSeq;
+document.querySelectorAll(".tabs button").forEach((b) => {
+b.setAttribute("aria-selected", String(b.dataset.key === key));
+});
+$("search-wrap").hidden = key === "users";
+updateAddButton();
+if (key === "users") { await loadUsers(mySeq); return; }
+if (cache[key]) { render(); return; }
+$("table").innerHTML = "";
+setMsg($("count"), "");
+setMsg($("data-msg"), "Fetching JCB Catalog Data...");
+const out = await api({ action: "data", token: token, sheet: key });
+if (mySeq !== loadSeq) return;
+if (!out.ok) {
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+setMsg($("data-msg"), out.error, true);
+return;
+}
+storeSheet(key, out);
+setMsg($("data-msg"), "");
+render();
+}
+function isUrl(s) { return /^https?:\/\/\S+$/i.test(s); }
+function fillCell(td, value) {
+const text = String(value ?? "");
+const parts = text.split(/[\s,]+/).filter(Boolean);
+if (parts.length && parts.every(isUrl)) {
+parts.forEach((u, i) => {
+const a = document.createElement("a");
+a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer";
+a.innerHTML = `<i data-lucide="external-link" width="12" height="12"></i> ` + (parts.length > 1 ? "Link " + (i + 1) : "Open Specs");
+td.appendChild(a);
+});
+} else {
+td.textContent = text;
+}
+}
+function fillCellHL(td, value, words) {
+const text = String(value ?? "");
+const parts = text.split(/[\s,]+/).filter(Boolean);
+if (!words.length || (parts.length && parts.every(isUrl))) { fillCell(td, value); return; }
+const re = new RegExp("(" + words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
+let last = 0, m, hit = false;
+while ((m = re.exec(text)) !== null) {
+if (!m[0]) { re.lastIndex++; continue; }
+if (m.index > last) td.appendChild(document.createTextNode(text.slice(last, m.index)));
+const mk = document.createElement("mark");
+mk.className = "hit"; mk.textContent = m[0];
+td.appendChild(mk);
+last = m.index + m[0].length; hit = true;
+}
+if (!hit) { td.textContent = text; return; }
+if (last < text.length) td.appendChild(document.createTextNode(text.slice(last)));
+}
+function addHeader(row, text) {
+const th = document.createElement("th");
+th.textContent = text;
+row.appendChild(th);
+}
+function smallButton(label, cls, handler) {
+const b = document.createElement("button");
+b.type = "button";
+b.className = "small " + (cls || "");
+b.textContent = label;
+b.addEventListener("click", handler);
+return b;
+}
+function render() {
+const data = cache[currentKey];
+if (!data) return;
+const admin = role === "admin";
+const words = $("q").value.toLowerCase().split(/\s+/).filter(Boolean);
+const matches = words.length ? data.rows.filter((r) => words.every((w) => r.hay.includes(w))) : data.rows;
+const shown = matches.slice(0, ROW_LIMIT);
+const table = $("table");
+table.innerHTML = "";
+const headRow = table.createTHead().insertRow();
+data.headers.forEach((h) => addHeader(headRow, h));
+if (admin) addHeader(headRow, "Actions");
+const body = table.createTBody();
+shown.forEach((r) => {
+const tr = body.insertRow();
+data.headers.forEach((h, i) => {
+const td = tr.insertCell();
+if (NOWRAP_COLS.indexOf(String(h).trim().toUpperCase()) !== -1) td.className = "nowrap";
+const hn = String(h).toLowerCase().replace(/[^a-z0-9]/g, "");
+if (words.length && currentKey === "pricelist" && (hn === "partno" || hn === "mrp")) {
+td.classList.add("hit-cell");
+fillCell(td, r.cells[i]);
+} else if (words.length && currentKey === "partsinfo") {
+fillCellHL(td, r.cells[i], words);
+} else {
+fillCell(td, r.cells[i]);
+}
+});
+if (admin) {
+const td = tr.insertCell();
+td.className = "actions";
+td.appendChild(smallButton("Edit", "ghost", () => openPartForm(r)));
+td.appendChild(smallButton("Delete", "danger", () => deletePart(r)));
+}
+});
+if (!shown.length) {
+const td = body.insertRow().insertCell();
+td.colSpan = data.headers.length + (admin ? 1 : 0);
+td.className = "empty";
+td.textContent = words.length
+? "No matching JCB parts found. Refine your query."
+: "This catalog view currently contains no entries.";
+}
+let note = "Showing " + shown.length.toLocaleString() + " of " + matches.length.toLocaleString() + " parts";
+if (matches.length > ROW_LIMIT) note += " (Narrow down search to view all results)";
+setMsg($("count"), note);
+lucide.createIcons();
+}
+document.querySelectorAll(".tabs button").forEach((b) => {
+b.addEventListener("click", () => loadSheet(b.dataset.key));
+});
+$("q").addEventListener("input", () => {
+clearTimeout(searchTimer);
+searchTimer = setTimeout(render, 150);
+});
+const normH = (s) => String(s).toLowerCase().replace(/\s+/g, "");
+function partIndex() {
+const d = cache.pricelist;
+if (!d) return null;
+if (!d.index) {
+let pi = d.headers.findIndex((h) => normH(h) === "partno");
+if (pi < 0) pi = 0;
+const di = d.headers.findIndex((h) => normH(h) === "description");
+const list = d.rows
+.map((r) => ({ pn: String(r.cells[pi] ?? "").trim(), desc: di >= 0 ? String(r.cells[di] ?? "").trim() : "" }))
+.filter((x) => x.pn);
+list.forEach((x) => { x.low = x.pn.toLowerCase(); x.dlow = x.desc.toLowerCase(); });
+d.index = { list: list, map: new Map(list.map((x) => [x.low, x])) };
+}
+return d.index;
+}
+function findPart(v) {
+const idx = partIndex();
+return idx ? idx.map.get(String(v).trim().toLowerCase()) || null : null;
+}
+function suggestParts(q) {
+const idx = partIndex();
+const s = String(q).trim().toLowerCase();
+if (!idx || !s) return [];
+const starts = [], has = [], inDesc = [];
+for (const x of idx.list) {
+if (x.low.startsWith(s)) starts.push(x);
+else if (x.low.includes(s)) has.push(x);
+else if (x.dlow.includes(s)) inDesc.push(x);
+if (starts.length >= 8) break;
+}
+return starts.concat(has, inDesc).slice(0, 8).map((x) => ({ value: x.pn, detail: x.desc, data: x }));
+}
+async function openPartForm(r) {
+const key = currentKey;
+const editing = !!r;
+const lookup = !editing && key === "partsinfo";
+if (lookup && !cache.pricelist) {
+setMsg($("data-msg"), "Loading part numbers…");
+const out = await api({ action: "data", token: token, sheet: "pricelist" });
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+storeSheet("pricelist", out);
+setMsg($("data-msg"), "");
+}
+const data = cache[key];
+if (!data) return;
+const partH = data.headers.find((h) => normH(h) === "partno") || data.headers[0];
+const descH = data.headers.find((h) => normH(h) === "description");
+const isAdmin = role === "admin";
+const addTitle = key === "partsinfo" ? "Add Part Info Record" : "Add Spare Part";
+openForm({
+title: editing ? "Edit Part Details" : addTitle,
+saveLabel: editing ? "Save Changes" : addTitle,
+fields: data.headers.map((h, i) => {
+const f = { name: h, label: h, value: editing ? String(r.cells[i] ?? "") : "", wide: /desc|link/i.test(h) || (lookup && h === partH) };
+if (lookup && h === partH) { f.suggest = true; f.placeholder = "Type part number (e.g. 320/08608)"; }
+if (lookup && h === descH) {
+f.readonly = true;
+f.placeholder = "Auto-filled from Price List";
+f.hint = "Description is matched automatically from the Price List catalog.";
+}
+return f;
+}),
+getSuggestions: lookup ? suggestParts : null,
+onPick: (item, set) => { if (descH) set(descH, item.data.desc); },
+onType: (value, set) => {
+const hit = findPart(value);
+if (descH) set(descH, hit ? hit.desc : "");
+},
+onSubmit: async (values) => {
+const body = { action: editing ? "row_update" : "row_add", token: token, sheet: key };
+if (editing) {
+const changed = {};
+let any = false;
+data.headers.forEach((h, i) => {
+if (values[h] !== String(r.cells[i] ?? "").trim()) { changed[h] = values[h]; any = true; }
+});
+if (!any) return { ok: true };
+body.row = r.num; body.check = r.cells[0]; body.values = changed;
+} else {
+if (lookup) {
+const hit = findPart(values[partH]);
+if (!hit && !isAdmin) return { ok: false, error: "Please select a valid part number from the Price List suggestions." };
+if (hit) { values[partH] = hit.pn; if (descH) values[descH] = hit.desc; }
+}
+body.values = values;
+}
+const out = await api(body);
+if (out.ok) { delete cache[key]; loadSheet(key); }
+return out;
+}
+});
+}
+async function deletePart(r) {
+if (!confirm("Delete part " + r.cells[0] + "?\nThis action will permanently remove the record from the Google Sheet.")) return;
+setMsg($("data-msg"), "Deleting record...");
+const out = await api({ action: "row_delete", token: token, sheet: currentKey, row: r.num, check: r.cells[0] });
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+delete cache[currentKey];
+loadSheet(currentKey);
+}
+let usersList = [];
+async function loadUsers(mySeq) {
+$("table").innerHTML = "";
+setMsg($("count"), "");
+setMsg($("data-msg"), "Loading authorized user access list...");
+const out = await api({ action: "users_list", token: token });
+if (mySeq !== loadSeq) return;
+if (!out.ok) {
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+setMsg($("data-msg"), out.error, true);
+return;
+}
+usersList = out.users;
+if (typeof out.now === "number") serverOffset = out.now - Date.now();
+if (out.branches && out.branches.length) oBranches = out.branches;
+setMsg($("data-msg"), "");
+renderUsers();
+startUsersRefresh();
+}
+function startUsersRefresh() {
+clearInterval(usersTimer);
+usersTimer = setInterval(async () => {
+if (currentKey !== "users" || orderMode || role !== "admin" || !token || $("dlg").open) return;
+const out = await api({ action: "users_list", token: token });
+if (!out || !out.ok || currentKey !== "users") return;
+usersList = out.users;
+if (typeof out.now === "number") serverOffset = out.now - Date.now();
+renderUsers();
+}, 30000);
+}
+function renderUsers() {
+const table = $("table");
+table.innerHTML = "";
+const headRow = table.createTHead().insertRow();
+["Name", "Status", "Last Seen", "Branch", "Operator Email", "Role", "Can Add PartsInfo", "MyOrder Access", "Actions"].forEach((h) => addHeader(headRow, h));
+const body = table.createTBody();
+usersList.forEach((u) => {
+const tr = body.insertRow();
+const isMe = u.email === email;
+tr.insertCell().textContent = u.name || "-";
+const online = isOnline(u);
+const st = tr.insertCell();
+const pill = document.createElement("span");
+pill.className = "pres " + (online ? "on" : "off");
+pill.textContent = online ? "Online" : "Offline";
+st.appendChild(pill);
+const ls = tr.insertCell();
+ls.className = "lastseen";
+ls.textContent = online ? "Active now" : lastSeenText(u.lastSeen);
+tr.insertCell().textContent = u.branch || "-";
+const c1 = tr.insertCell(); c1.className = "nowrap"; c1.textContent = u.email + (isMe ? " (You)" : "");
+tr.insertCell().textContent = u.role === "admin" ? "Administrator" : "Standard User";
+tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canAdd ? "Yes" : "No");
+tr.insertCell().textContent = u.role === "admin" ? "Yes (Admin Rights)" : (u.canOrder ? "Enabled" : "Disabled");
+const td = tr.insertCell(); td.className = "actions";
+if (u.role !== "admin") {
+td.appendChild(smallButton(u.canOrder ? "Disable MyOrder" : "Enable MyOrder", "ghost", () => toggleMyOrder(u)));
+}
+td.appendChild(smallButton("Edit", "ghost", () => openUserForm(u)));
+const del = smallButton("Remove", "danger", () => removeUser(u));
+del.disabled = isMe;
+td.appendChild(del);
+});
+const onN = usersList.filter(isOnline).length;
+setMsg($("count"), usersList.length + (usersList.length === 1 ? " user registered" : " users registered") + "  |  Online: " + onN + "  |  Offline: " + (usersList.length - onN));
+if (usersList.length && !usersList.some((u) => u.lastSeen !== undefined)) {
+setMsg($("data-msg"), "Online/Offline ke liye Apps Script me naya Code.gs paste karke New version deploy karo.", true);
+}
+lucide.createIcons();
+}
+function openUserForm(u) {
+const editing = !!u;
+openForm({
+title: editing ? "Edit User Privileges" : "Add New Operator",
+saveLabel: editing ? "Save Changes" : "Create User",
+fields: [
+{ name: "email", label: "Operator Email", type: "email", value: editing ? u.email : "", disabled: editing, wide: true },
+{ name: "name", label: "Name (header me dikhta hai aur MyOrder ke Customer_Name me aata hai)", type: "text", value: editing ? (u.name || "") : "", wide: true },
+{ name: "branch", label: "Branch (used for MyOrder Unique_ID)", wide: true, value: editing ? (u.branch || "") : "",
+options: [{ value: "", label: "— Select branch —" }].concat(oBranches.map((b) => ({ value: b, label: b }))) },
+{ name: "password", label: editing ? "New Password" : "Password", type: "password",
+autocomplete: "new-password", wide: true,
+hint: editing ? "Leave blank to keep current password." : "Minimum 6 characters." },
+{ name: "role", label: "Access Role", wide: true, value: editing ? u.role : "user",
+options: [
+{ value: "user", label: "User (Search and View Only)" },
+{ value: "admin", label: "Admin (Full Edit & User Management)" }
+] },
+{ name: "canAdd", label: "Can Add PartsInfo", wide: true, value: editing && u.canAdd ? "yes" : "no",
+hint: "Allows standard users to insert new rows to PartsInfo without edit/delete rights.",
+options: [
+{ value: "no", label: "No" },
+{ value: "yes", label: "Yes" }
+] },
+{ name: "canOrder", label: "MyOrder Tab", wide: true, value: editing && !u.canOrder ? "no" : "yes",
+hint: "Enable or disable the MyOrder button for this user.",
+options: [
+{ value: "yes", label: "Enabled" },
+{ value: "no", label: "Disabled" }
+] }
+],
+onSubmit: async (values) => {
+const out = await api({
+action: "user_save", token: token,
+name: values.name, branch: values.branch, canOrder: values.canOrder === "yes",
+email: editing ? u.email : values.email,
+password: values.password, role: values.role,
+canAdd: values.canAdd === "yes"
+});
+if (out.ok) loadSheet("users");
+return out;
+}
+});
+}
+async function toggleMyOrder(u) {
+if (role !== "admin") return;
+const next = !u.canOrder;
+if (!confirm((next ? "Enable" : "Disable") + " MyOrder for " + (u.name || u.email) + "?")) return;
+const out = await api({
+action: "user_save", token: token,
+email: u.email, name: u.name || "", branch: u.branch || "", password: "",
+role: u.role, canAdd: !!u.canAdd, canOrder: next
+});
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+loadSheet("users");
+}
+async function removeUser(u) {
+if (!confirm("Revoke access for " + u.email + "?\nThey will no longer be able to log in to the portal.")) return;
+const out = await api({ action: "user_delete", token: token, email: u.email });
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out.ok) { setMsg($("data-msg"), out.error, true); return; }
+loadSheet("users");
+}
+$("add-btn").addEventListener("click", () => {
+if (currentKey === "users") openUserForm(null); else openPartForm(null);
+});
+let dlgInputs = [];
+let dlgSubmit = null;
+function attachSuggest(input, list, cfg, setField) {
+let items = [];
+let active = -1;
+input.setAttribute("role", "combobox");
+input.setAttribute("aria-autocomplete", "list");
+input.setAttribute("aria-expanded", "false");
+const close = () => { list.hidden = true; active = -1; input.setAttribute("aria-expanded", "false"); };
+const pick = (i) => {
+const it = items[i];
+if (!it) return;
+input.value = it.value;
+close();
+cfg.onPick(it, setField);
+};
+const paint = () => {
+list.innerHTML = "";
+items.forEach((it, i) => {
+const li = document.createElement("li");
+li.setAttribute("role", "option");
+if (i === active) li.className = "active";
+const b = document.createElement("strong");
+b.textContent = it.value;
+li.appendChild(b);
+if (it.detail) {
+const sm = document.createElement("small");
+sm.textContent = it.detail;
+li.appendChild(sm);
+}
+li.addEventListener("mousedown", (e) => { e.preventDefault(); pick(i); });
+list.appendChild(li);
+});
+list.hidden = !items.length;
+input.setAttribute("aria-expanded", String(!!items.length));
+const cur = list.querySelector(".active");
+if (cur) cur.scrollIntoView({ block: "nearest" });
+};
+input.addEventListener("input", () => {
+items = cfg.getSuggestions(input.value);
+active = -1;
+paint();
+cfg.onType(input.value.trim(), setField);
+});
+input.addEventListener("focus", () => {
+if (input.value.trim()) { items = cfg.getSuggestions(input.value); active = -1; paint(); }
+});
+input.addEventListener("blur", () => setTimeout(close, 120));
+input.addEventListener("keydown", (e) => {
+const open = !list.hidden && items.length;
+if (e.key === "ArrowDown" && open) { e.preventDefault(); active = (active + 1) % items.length; paint(); }
+else if (e.key === "ArrowUp" && open) { e.preventDefault(); active = (active - 1 + items.length) % items.length; paint(); }
+else if (e.key === "Enter" && open && active >= 0) { e.preventDefault(); pick(active); }
+else if (e.key === "Escape" && open) { e.preventDefault(); e.stopPropagation(); close(); }
+});
+}
+function openForm(cfg) {
+$("dlg-title").textContent = cfg.title;
+$("dlg-save").textContent = cfg.saveLabel || "Save";
+$("dlg-save").disabled = false;
+setMsg($("dlg-msg"), "");
+const box = $("dlg-fields");
+box.innerHTML = "";
+dlgInputs = [];
+const setField = (name, value) => {
+const t = dlgInputs.find((i) => i.name === name);
+if (t) t.el.value = value;
+};
+cfg.fields.forEach((f) => {
+const label = document.createElement("label");
+if (f.wide) label.className = "wide";
+label.appendChild(document.createTextNode(f.label));
+let input;
+if (f.options) {
+input = document.createElement("select");
+f.options.forEach((o) => {
+const op = document.createElement("option");
+op.value = o.value; op.textContent = o.label;
+input.appendChild(op);
+});
+} else {
+input = document.createElement("input");
+input.type = f.type || "text";
+if (f.autocomplete) input.autocomplete = f.autocomplete;
+}
+input.value = f.value || "";
+input.disabled = !!f.disabled;
+if (f.readonly) input.readOnly = true;
+if (f.placeholder) input.placeholder = f.placeholder;
+if (f.suggest && cfg.getSuggestions) {
+input.autocomplete = "off";
+const wrap = document.createElement("span");
+wrap.className = "ac-wrap";
+const list = document.createElement("ul");
+list.className = "ac-list";
+list.hidden = true;
+list.setAttribute("role", "listbox");
+wrap.appendChild(input);
+wrap.appendChild(list);
+label.appendChild(wrap);
+attachSuggest(input, list, cfg, setField);
+} else {
+label.appendChild(input);
+}
+if (f.hint) {
+const s = document.createElement("small");
+s.textContent = f.hint;
+label.appendChild(s);
+}
+box.appendChild(label);
+dlgInputs.push({ name: f.name, el: input });
+});
+dlgSubmit = cfg.onSubmit;
+$("dlg").showModal();
+const first = dlgInputs.find((i) => !i.el.disabled && !i.el.readOnly);
+if (first) first.el.focus();
+}
+$("dlg-cancel").addEventListener("click", () => $("dlg").close());
+$("dlg-form").addEventListener("submit", async (e) => {
+e.preventDefault();
+if (!dlgSubmit) return;
+const values = {};
+dlgInputs.forEach((i) => { values[i.name] = i.el.value.trim(); });
+$("dlg-save").disabled = true;
+setMsg($("dlg-msg"), "Updating database...");
+const out = await dlgSubmit(values);
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (out.ok) { $("dlg").close(); return; }
+$("dlg-save").disabled = false;
+setMsg($("dlg-msg"), out.error, true);
+});
+let oBranches = ["Meghalaya", "Silchar", "Agartala"];   // replaced by server list on first load
+let oSeq = 0;
+let gridBuilt = false;
+const pad2 = (n) => String(n).padStart(2, "0");
+function todayText() {
+const d = new Date();
+return pad2(d.getDate()) + "/" + pad2(d.getMonth() + 1) + "/" + d.getFullYear();
+}
+function setOrderMode(on) {
+orderMode = on;
+$("main-tabs").hidden = on;
+$("search-wrap").hidden = on;
+$("data-panel").hidden = on;
+$("order-panel").hidden = !on;
+$("myorder-btn").setAttribute("aria-pressed", String(on));
+$("myorder-label").textContent = on ? "Back to Price List" : "MyOrder";
+if (on) {
+$("add-btn").hidden = true;
+$("otab-master").hidden = role !== "admin";
+if (oKey === "master" && role !== "admin") oKey = "purchase";
+loadOrderTab(oKey);
+} else {
+oSeq++;
+loadSheet(currentKey);
+}
+}
+function resetOrders() {
+orderMode = false; gridBuilt = false; oKey = "purchase"; oSeq++;
+$("main-tabs").hidden = false;
+$("data-panel").hidden = false;
+$("order-panel").hidden = true;
+$("myorder-btn").setAttribute("aria-pressed", "false");
+$("myorder-label").textContent = "MyOrder";
+$("po-grid").innerHTML = "";
+setMsg($("po-msg"), "");
+}
+function orderDenied(out) {
+if (!out || out.ok || !/MyOrder access is disabled/i.test(String(out.error || ""))) return false;
+canOrder = false;
+store.set("jcb_canorder", "0");
+applyRole();
+return true;
+}
+async function ensurePricelist() {
+if (cache.pricelist) return;
+const out = await api({ action: "data", token: token, sheet: "pricelist" });
+if (out.ok && !cache.pricelist) storeSheet("pricelist", out);
+}
+async function loadOrderTab(key) {
+oKey = key;
+const mySeq = ++oSeq;
+document.querySelectorAll(".otabs button").forEach((b) => {
+b.setAttribute("aria-selected", String(b.dataset.okey === key));
+});
+$("po-entry").hidden = key !== "purchase";
+$("m-bar").hidden = key !== "master";
+$("o-table").innerHTML = "";
+setMsg($("o-count"), "");
+setMsg($("o-msg"), "Loading " + key + " data...");
+const [out] = await Promise.all([
+api({ action: "order_list", token: token, sheet: key }),
+key === "purchase" ? ensurePricelist() : null
+]);
+if (mySeq !== oSeq) return;
+if (!out.ok) {
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (orderDenied(out)) { setMsg($("data-msg"), out.error, true); return; }
+setMsg($("o-msg"), out.error, true);
+return;
+}
+setMsg($("o-msg"), "");
+orderSig[key] = JSON.stringify(out.rows);
+if (out.branches && out.branches.length) oBranches = out.branches;
+if (key === "purchase") buildGrid();
+if (key === "master") { setMasterData(out); renderMaster(); }
+else renderOrderTable(out, key);
+}
+function renderOrderTable(out, key) {
+const table = $("o-table");
+table.innerHTML = "";
+const hr = table.createTHead().insertRow();
+out.headers.forEach((h) => addHeader(hr, h));
+const body = table.createTBody();
+const hn = out.headers.map((h) => String(h).toLowerCase().replace(/[^a-z0-9]/g, ""));
+const uidIdx = hn.indexOf("uniqueid"), slIdx = hn.indexOf("slno");
+const slCount = {};
+const slFor = (r) => {
+const id = uidIdx >= 0 ? String(r[uidIdx] ?? "").trim() : "";
+slCount[id] = (slCount[id] || 0) + 1;
+return slCount[id];
+};
+out.rows.forEach((r) => {
+const tr = body.insertRow();
+const slNow = (key === "purchase" && slIdx >= 0) ? slFor(r) : null;
+out.headers.forEach((h, i) => {
+const td = tr.insertCell();
+const hl = String(h).toLowerCase();
+if (key === "purchase" && /^ord_?qn/.test(hl)) td.classList.add("qty-white");
+if (slNow !== null && i === slIdx) { td.textContent = String(slNow); td.style.textAlign = "center"; return; }
+if (hl === "unique_id" || hl === "part_no") td.className = "nowrap";
+if (hl === "avail" && r[i]) td.style.color = "#34d399";
+if (hl === "out_of-stock" && r[i]) td.style.color = "#f87171";
+fillCell(td, r[i]);
+});
+});
+if (!out.rows.length) {
+const td = body.insertRow().insertCell();
+td.colSpan = out.headers.length;
+td.className = "empty";
+td.textContent = out.emptyText ? out.emptyText : key === "purchase" ? "No orders saved yet."
+: key === "master" ? "Master sheet is empty."
+: key === "available" ? "Abhi koi line Available nahi hai. Admin review ke baad yaha dikhegi."
+: "Abhi koi line Out of Stock nahi hai.";
+}
+const label = key === "purchase" ? "Submitted order lines: "
+: key === "master" ? "Master lines: " : "Lines: ";
+setMsg($("o-count"), label + out.rows.length.toLocaleString() + (out.truncated ? " (latest only)" : "") + (key === "available" || key === "outofstock" ? "  |  View only" : key === "master" ? "  |  View only (Avail se aage ka data admin Google Sheet me bharta hai)" : ""));
+lucide.createIcons();
+}
+let mData = null;
+let mView = "lines";
+function mCols(h) {
+const f = (re) => h.findIndex((x) => re.test(String(x).toLowerCase().replace(/[^a-z0-9]/g, "")));
+return { uid: f(/^uniqueid$/), date: f(/^date$/), cust: f(/^customer/), part: f(/^partno/), desc: f(/^desc/), qty: f(/^(ordqn|ordqt|qty|quantity)/) };
+}
+const mVal = (r, i) => (i >= 0 ? String(r[i] ?? "").trim() : "");
+function setMasterData(out) {
+mData = out;
+const c = mCols(out.headers);
+const sel = $("m-cust");
+const prev = sel.value;
+const custs = [...new Set(out.rows.map((r) => mVal(r, c.cust)).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+sel.innerHTML = "";
+sel.add(new Option("All Customers", ""));
+custs.forEach((n) => sel.add(new Option(n, n)));
+sel.value = custs.includes(prev) ? prev : "";
+}
+function renderMaster() {
+if (!mData) return;
+const c = mCols(mData.headers);
+document.querySelectorAll(".mview button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mview === mView)));
+const cf = $("m-cust").value;
+const pf = $("m-part").value.trim().toLowerCase();
+const rows = mData.rows.filter((r) =>
+(!cf || mVal(r, c.cust) === cf) && (!pf || mVal(r, c.part).toLowerCase().includes(pf)));
+const filtered = !!(cf || pf);
+const qtyOf = (r) => { const q = parseFloat(String(r[c.qty] ?? "").replace(/,/g, "")); return isFinite(q) ? q : 0; };
+if (mView === "lines") {
+renderOrderTable({ headers: mData.headers, rows: rows, truncated: mData.truncated,
+emptyText: filtered ? "Is filter me koi line nahi mili." : "" }, "master");
+const tq = rows.reduce((a, r) => a + qtyOf(r), 0);
+setMsg($("o-count"), "Lines: " + rows.length.toLocaleString() + (filtered ? " (filtered)" : "") +
+"  |  Total Qty: " + tq.toLocaleString() + (mData.truncated ? "  |  latest only" : "") + "  |  View only");
+return;
+}
+const map = new Map();
+rows.forEach((r) => {
+const cu = mVal(r, c.cust), pn = mVal(r, c.part);
+const k = cu.toLowerCase() + "\u0001" + pn.toUpperCase();
+let g = map.get(k);
+if (!g) { g = { cu: cu, pn: pn, desc: mVal(r, c.desc), ids: new Set(), lines: 0, qty: 0 }; map.set(k, g); }
+g.ids.add(mVal(r, c.uid) + "|" + mVal(r, c.date));
+g.lines++;
+g.qty += qtyOf(r);
+});
+const groups = [...map.values()].sort((a, b) => b.qty - a.qty || a.cu.localeCompare(b.cu));
+const table = $("o-table");
+table.innerHTML = "";
+const hr = table.createTHead().insertRow();
+["Customer_Name", "Part_No", "Description", "Times Ordered", "Total Qty"].forEach((h) => addHeader(hr, h));
+const body = table.createTBody();
+groups.forEach((g) => {
+const tr = body.insertRow();
+tr.className = "m-sum-row";
+tr.title = "Click: is customer + part ki saari lines dekho";
+const times = (c.uid < 0 && c.date < 0) ? g.lines : g.ids.size;
+[g.cu, g.pn, g.desc, times, g.qty.toLocaleString()].forEach((v, i) => {
+const td = tr.insertCell();
+td.textContent = String(v);
+if (i === 1) td.className = "nowrap";
+if (i >= 3) td.className = "num";
+});
+tr.addEventListener("click", () => {
+$("m-cust").value = g.cu;
+$("m-part").value = g.pn;
+mView = "lines";
+renderMaster();
+});
+});
+if (!groups.length) {
+const td = body.insertRow().insertCell();
+td.colSpan = 5; td.className = "empty";
+td.textContent = filtered ? "Is filter me koi line nahi mili." : "Master sheet is empty.";
+}
+const custN = new Set(groups.map((g) => g.cu)).size;
+const partN = new Set(groups.map((g) => g.pn.toUpperCase())).size;
+const tq = groups.reduce((a, g) => a + g.qty, 0);
+setMsg($("o-count"), "Customers: " + custN + "  |  Parts: " + partN + "  |  Total Qty: " + tq.toLocaleString() +
+(mData.truncated ? "  |  latest only" : "") + "  |  Row par click = detail lines");
+}
+$("m-cust").addEventListener("change", renderMaster);
+$("m-part").addEventListener("input", renderMaster);
+$("m-reset").addEventListener("click", () => { $("m-cust").value = ""; $("m-part").value = ""; renderMaster(); });
+document.querySelectorAll(".mview button").forEach((b) => {
+b.addEventListener("click", () => { mView = b.dataset.mview; renderMaster(); });
+});
+function buildGrid() {
+if (gridBuilt) return;
+gridBuilt = true;
+const box = $("po-grid");
+box.innerHTML = "";
+const table = document.createElement("table");
+table.className = "og";
+const hr = table.createTHead().insertRow();
+["Unique_ID", "Date", "Sl_No", "Customer_Name", "Part_No", "Description", "Ord_Qnty", "Remark if any", "Branch", ""]
+.forEach((h) => addHeader(hr, h));
+const tb = table.createTBody();
+tb.id = "og-body";
+box.appendChild(table);
+for (let i = 0; i < 3; i++) addGridRow();
+updatePoState();
+}
+function updatePoState() {
+const ok = !!userBranch;
+$("po-save").disabled = !ok;
+if (!ok) setMsg($("po-msg"), "Aapki Branch set nahi hai. Admin se Users tab me Branch set karwao, tabhi order save hoga.", true);
+}
+function ogInput(td, key, type, width, placeholder, nav, readonly) {
+const el = document.createElement("input");
+el.type = type;
+el.autocomplete = "off";
+el.style.minWidth = width + "px";
+if (placeholder) el.placeholder = placeholder;
+if (readonly) { el.readOnly = true; el.tabIndex = -1; }
+if (type === "number") { el.min = "1"; el.step = "1"; el.inputMode = "numeric"; }
+td.appendChild(el);
+if (nav !== false && !readonly) ogNav(el, key);
+return el;
+}
+function ogNav(el, key) {
+el.addEventListener("keydown", (e) => {
+if (e.key !== "Enter" || e.defaultPrevented) return;
+e.preventDefault();
+const tr = el.closest("tr");
+let nxt = tr.nextElementSibling;
+if (!nxt) { addGridRow(); nxt = tr.nextElementSibling; }
+nxt._f[key].focus();
+});
+}
+function addGridRow() {
+const body = $("og-body");
+const tr = body.insertRow();
+const f = (tr._f = {});
+const cell = (cls) => { const td = tr.insertCell(); if (cls) td.className = cls; return td; };
+cell("og-auto").textContent = "Auto";                       // Unique_ID (server banata hai)
+cell("og-auto").textContent = todayText();                  // Date
+cell("og-auto").textContent = "Auto";                       // Sl_No (server banata hai)
+f.cust = ogInput(cell(), "cust", "text", 170, "", false, true);
+f.cust.value = userName || email || "";   // header me jo naam dikhta hai wahi
+const partTd = cell();
+const wrap = document.createElement("span");
+wrap.className = "ac-wrap";
+const list = document.createElement("ul");
+list.className = "ac-list";
+list.hidden = true;
+list.setAttribute("role", "listbox");
+f.part = ogInput(wrap, "part", "text", 170, "Part no", false);
+wrap.appendChild(list);
+partTd.appendChild(wrap);
+f.desc = ogInput(cell(), "desc", "text", 320, "Auto from Price List", false, true);
+const syncDesc = (v) => {
+const hit = findPart(v);
+f.desc.value = hit ? hit.desc : "";
+f.part.style.color = (!v.trim() || hit) ? "" : "#f87171";
+f.part.title = (!v.trim() || hit) ? "" : "Ye Part_No Price List me nahi mila";
+};
+attachSuggest(f.part, list, {
+getSuggestions: suggestParts,
+onPick: (it) => { f.desc.value = it.data.desc; f.part.style.color = ""; f.part.title = ""; },
+onType: syncDesc
+}, () => {});
+f.part.addEventListener("blur", () => syncDesc(f.part.value));
+ogNav(f.part, "part");   // attachSuggest ke baad, taaki suggestion pick wala Enter pehle chale
+const place = () => {
+const r = f.part.getBoundingClientRect();
+const w = 340;
+let left = r.right + 6;
+if (left + w > window.innerWidth - 8) left = Math.max(8, r.left - w - 6);   // jagah na ho to left side
+let top = Math.min(r.top, window.innerHeight - 240);
+Object.assign(list.style, { position: "fixed", left: left + "px", top: Math.max(8, top) + "px", width: w + "px", right: "auto", margin: "0" });
+};
+f.part.addEventListener("input", place);
+f.part.addEventListener("focus", place);
+f.qty = ogInput(cell(), "qty", "number", 90, "Qty");
+f.qty.classList.add("og-qty-input");
+f.remark = ogInput(cell(), "remark", "text", 220, "Remark");
+f.branch = ogInput(cell(), "branch", "text", 90, "", false, true);
+f.branch.value = userBranch || "—";
+const actTd = cell("og-act");
+const del = document.createElement("button");
+del.type = "button"; del.className = "small danger"; del.textContent = "✕"; del.tabIndex = -1;
+del.title = "Remove row";
+del.addEventListener("click", () => {
+tr.remove();
+if (!$("og-body").rows.length) addGridRow();
+});
+actTd.appendChild(del);
+}
+function clearGrid() {
+gridBuilt = false;
+buildGrid();
+}
+async function saveOrder() {
+const msg = $("po-msg");
+if (!userBranch) { updatePoState(); return; }
+const rows = [];
+let bad = "";
+[...$("og-body").rows].forEach((tr, i) => {
+const f = tr._f;
+const v = { partNo: f.part.value.trim(), qty: f.qty.value.trim(), remark: f.remark.value.trim() };
+if (!(v.partNo || v.qty || v.remark)) return;   // khali row
+const n = "Row " + (i + 1) + ": ";
+if (!bad) {
+if (!v.partNo) bad = n + "Part_No is required.";
+else if (!findPart(v.partNo)) bad = n + "Part_No \"" + v.partNo + "\" Price List me nahi mila. Suggestions me se chuno.";
+else if (!(Number(v.qty) > 0) || !Number.isInteger(Number(v.qty))) bad = n + "Ord_Qnty poora number hona chahiye (1 ya usse zyada).";
+}
+const hit = findPart(v.partNo);
+v.partNo = hit ? hit.pn : v.partNo;
+rows.push(v);
+});
+if (bad) { setMsg(msg, bad, true); return; }
+if (!rows.length) { setMsg(msg, "Kuch save karne ke liye nahi hai. Kam se kam ek row bharo.", true); return; }
+$("po-save").disabled = true;
+setMsg(msg, "Saving order...");
+const out = await api({ action: "order_save", token: token, rows: rows });
+$("po-save").disabled = false;
+if (out.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!out.ok) { if (!orderDenied(out)) setMsg(msg, out.error, true); return; }
+clearGrid();
+const done = "Saved " + out.count + " line(s). Unique_ID: " + out.ids.join(", ");
+setMsg(msg, done);
+loadOrderTab("purchase").then(() => setMsg(msg, done));
+}
+$("myorder-btn").addEventListener("click", () => setOrderMode(!orderMode));
+document.querySelectorAll(".otabs button").forEach((b) => {
+b.addEventListener("click", () => loadOrderTab(b.dataset.okey));
+});
+$("po-add-row").addEventListener("click", () => { addGridRow(); });
+$("po-clear").addEventListener("click", () => {
+if (confirm("Clear all unsaved rows?")) { clearGrid(); setMsg($("po-msg"), ""); }
+});
+$("po-save").addEventListener("click", saveOrder);
+function updateLiveDateTime() {
+const now = new Date();
+const dateText = new Intl.DateTimeFormat("en-IN", {
+weekday: "long",
+day: "2-digit",
+month: "long",
+year: "numeric"
+}).format(now);
+const timeText = new Intl.DateTimeFormat("en-IN", {
+hour: "2-digit",
+minute: "2-digit",
+second: "2-digit",
+hour12: true
+}).format(now);
+["login-date", "app-date"].forEach((id) => {
+const el = document.getElementById(id);
+if (el) el.textContent = dateText;
+});
+["login-time", "app-time"].forEach((id) => {
+const el = document.getElementById(id);
+if (el) el.textContent = timeText;
+});
+}
+window.addEventListener('DOMContentLoaded', () => {
+updateLiveDateTime();
+setInterval(updateLiveDateTime, 1000);
+lucide.createIcons();
+if (token) showApp(); else showLogin("");
+});
 </script>
 
 <script>
-  // Hide media widget once login view vanishes
-  (function () {
-    var login = document.getElementById('login');
-    var ad = document.getElementById('adBox');
-    if (!login || !ad) return;
-
-    function check() {
-      var hidden = login.hidden ||
-                   login.style.display === 'none' ||
-                   getComputedStyle(login).display === 'none' ||
-                   !document.body.contains(login);
-      if (hidden) {
-        ad.style.display = 'none';
-        observer.disconnect();
-      }
-    }
-
-    var observer = new MutationObserver(check);
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
-    check();
-  })();
+(function () {
+var login = document.getElementById('login');
+var ad = document.getElementById('adBox');
+if (!login || !ad) return;
+function check() {
+var hidden = login.hidden ||
+login.style.display === 'none' ||
+getComputedStyle(login).display === 'none' ||
+!document.body.contains(login);
+if (hidden) {
+ad.style.display = 'none';
+observer.disconnect();
+}
+}
+var observer = new MutationObserver(check);
+observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+check();
+})();
 </script>
 </body>
 </html>

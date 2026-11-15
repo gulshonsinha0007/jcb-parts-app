@@ -281,7 +281,7 @@ btn.textContent = currentKey === "users" ? "Add User"
 const PING_MS = 45000;           // user har 45 sec me "main online hoon" bhejta hai
 const ONLINE_WINDOW_MS = 120000; // 2 min se zyada ping nahi aaya => Offline
 let pingTimer = null, usersTimer = null, autoTimer = null, serverOffset = 0;
-const AUTO_REFRESH_MS = 60000;   // har 60 sec me data chup-chaap refresh
+const AUTO_REFRESH_MS = 30000;   // har 30 sec me data chup-chaap refresh
 const orderSig = {};             // MyOrder tabs ka last data signature
 let autoBusy = false, lastTypeAt = 0;
 function sendPing() {

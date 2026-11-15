@@ -1050,7 +1050,9 @@ clearTimeout(gtTimer); gtTimer = setTimeout(gtFetch, 350);
 $("gt-uid").addEventListener("change", () => {
 if ($("gt-uid").value.trim() === "") { gtManual = false; $("gt-uid").value = gtIds.length ? gtIds[gtIds.length - 1] : ""; gtFetch(); }
 });
+let poData = null;
 function renderOrderTable(out, key) {
+if (key === "purchase") poData = out;
 const table = $("o-table");
 table.innerHTML = "";
 const hr = table.createTHead().insertRow();
@@ -1291,6 +1293,13 @@ const msg = $("po-msg");
 if (!userBranch) { updatePoState(); return; }
 const rows = [];
 let bad = "";
+const seen = {}, todays = {};
+const dNorm = (s) => { const m = String(s || "").match(/(\d{1,2})\D+(\d{1,2})\D+(\d{4})/); return m ? m[1].padStart(2, "0") + "/" + m[2].padStart(2, "0") + "/" + m[3] : ""; };
+const todayIST = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date());
+if (poData && role !== "admin") {   // user ki apni aaj ki rows (admin ke liye server check karta hai)
+const c = mCols(poData.headers);
+poData.rows.forEach((r) => { if (c.part >= 0 && dNorm(mVal(r, c.date)) === todayIST) todays[mVal(r, c.part).toLowerCase()] = mVal(r, c.uid); });
+}
 [...$("og-body").rows].forEach((tr, i) => {
 const f = tr._f;
 const v = { partNo: f.part.value.trim(), qty: f.qty.value.trim(), remark: f.remark.value.trim() };
@@ -1303,6 +1312,12 @@ else if (!(Number(v.qty) > 0) || !Number.isInteger(Number(v.qty))) bad = n + "Or
 }
 const hit = findPart(v.partNo);
 v.partNo = hit ? hit.pn : v.partNo;
+if (!bad) {
+const k = v.partNo.toLowerCase();
+if (seen[k]) bad = n + "Part_No \"" + v.partNo + "\" Row " + seen[k] + " me bhi hai. Ek Part_No sirf ek baar.";
+else if (todays[k] !== undefined) bad = n + "Part_No \"" + v.partNo + "\" aaj pehle hi order ho chuka hai (" + todays[k] + ").";
+else seen[k] = i + 1;
+}
 rows.push(v);
 });
 if (bad) { setMsg(msg, bad, true); return; }

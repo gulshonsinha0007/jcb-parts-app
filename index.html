@@ -281,7 +281,7 @@ btn.textContent = currentKey === "users" ? "Add User"
 const PING_MS = 45000;           // user har 45 sec me "main online hoon" bhejta hai
 const ONLINE_WINDOW_MS = 120000; // 2 min se zyada ping nahi aaya => Offline
 let pingTimer = null, usersTimer = null, autoTimer = null, serverOffset = 0;
-const AUTO_REFRESH_MS = 30000;   // har 30 sec me data chup-chaap refresh
+const AUTO_REFRESH_MS = 30000;   // har 60 sec me data chup-chaap refresh
 const orderSig = {};             // MyOrder tabs ka last data signature
 let autoBusy = false, lastTypeAt = 0;
 function sendPing() {
@@ -1057,6 +1057,8 @@ const table = $("o-table");
 table.innerHTML = "";
 const hr = table.createTHead().insertRow();
 out.headers.forEach((h) => addHeader(hr, h));
+const canEdit = role === "admin" && !!out.editable && !!out.nums && out.nums.length === out.rows.length && key !== "outofstock";
+if (canEdit) addHeader(hr, "Actions");
 const body = table.createTBody();
 const hn = out.headers.map((h) => String(h).toLowerCase().replace(/[^a-z0-9]/g, ""));
 const uidIdx = hn.indexOf("uniqueid"), slIdx = hn.indexOf("slno");
@@ -1066,7 +1068,7 @@ const id = uidIdx >= 0 ? String(r[uidIdx] ?? "").trim() : "";
 slCount[id] = (slCount[id] || 0) + 1;
 return slCount[id];
 };
-out.rows.forEach((r) => {
+out.rows.forEach((r, ri) => {
 const tr = body.insertRow();
 const slNow = (key === "purchase" && slIdx >= 0) ? slFor(r) : null;
 out.headers.forEach((h, i) => {
@@ -1079,10 +1081,15 @@ if (hl === "avail" && r[i]) td.style.color = "#34d399";
 if (hl === "out_of-stock" && r[i]) td.style.color = "#f87171";
 fillCell(td, r[i]);
 });
+if (canEdit) {
+const atd = tr.insertCell(); atd.className = "actions";
+atd.appendChild(smallButton("Edit", "ghost", () => openOrderForm(key, out, ri)));
+if (key === "purchase" || key === "master") atd.appendChild(smallButton("Delete", "danger", () => deleteOrderRow(key, out, ri)));
+}
 });
 if (!out.rows.length) {
 const td = body.insertRow().insertCell();
-td.colSpan = out.headers.length;
+td.colSpan = out.headers.length + (canEdit ? 1 : 0);
 td.className = "empty";
 td.textContent = out.emptyText ? out.emptyText : key === "purchase" ? "No orders saved yet."
 : key === "master" ? "Master sheet is empty."
@@ -1091,9 +1098,36 @@ td.textContent = out.emptyText ? out.emptyText : key === "purchase" ? "No orders
 }
 const label = key === "purchase" ? "Submitted order lines: "
 : key === "master" ? "Master lines: " : "Lines: ";
-setMsg($("o-count"), label + out.rows.length.toLocaleString() + (out.truncated ? " (latest only)" : "") + (key === "available" || key === "outofstock" ? "  |  View only" : key === "master" ? "  |  View only (Avail se aage ka data admin Google Sheet me bharta hai)" : ""));
+setMsg($("o-count"), label + out.rows.length.toLocaleString() + (out.truncated ? " (latest only)" : "") + (canEdit ? "  |  Admin: Edit / Delete" : (key === "available" || key === "outofstock" ? "  |  View only" : key === "master" ? "  |  View only (Avail se aage ka data admin Google Sheet me bharta hai)" : "")));
 gtUpdate(out, key);
 lucide.createIcons();
+}
+function openOrderForm(key, out, ri) {
+const r = out.rows[ri], num = out.nums[ri];
+const only = key === "available" ? ["avail", "printmrp"] : null;   // Available me sirf Avail aur Print_Mrp edit hote hain
+openForm({
+title: "Edit " + (key === "purchase" ? "PurchaseOrder" : key === "master" ? "CustOrder (Master)" : "Available") + " - Row " + num,
+saveLabel: "Save Changes",
+fields: out.headers.map((h, i) => ({ name: h, label: h, value: String(r[i] ?? ""), readonly: !!only && only.indexOf(String(h).toLowerCase().replace(/[^a-z0-9]/g, "")) < 0, wide: /desc|remark/i.test(h) })),
+onSubmit: async (values) => {
+const changed = {};
+let any = false;
+out.headers.forEach((h, i) => { if (values[h] !== String(r[i] ?? "").trim()) { changed[h] = values[h]; any = true; } });
+if (!any) return { ok: true };
+const res = await api({ action: "order_row_update", token: token, sheet: key, row: num, check: String(r[0] ?? ""), values: changed });
+if (res.ok) loadOrderTab(key);
+return res;
+}
+});
+}
+async function deleteOrderRow(key, out, ri) {
+const r = out.rows[ri], num = out.nums[ri];
+if (!confirm("Delete this row (" + String(r[0] ?? "") + ", sheet row " + num + ")?\nIt will be removed from the Google Sheet.")) return;
+setMsg($("o-msg"), "Deleting row...");
+const res = await api({ action: "order_row_delete", token: token, sheet: key, row: num, check: String(r[0] ?? "") });
+if (res.error === "auth") { logout("Your session ended. Sign in again."); return; }
+if (!res.ok) { setMsg($("o-msg"), res.error, true); return; }
+loadOrderTab(key);
 }
 let mData = null;
 let mView = "lines";
@@ -1119,16 +1153,18 @@ const c = mCols(mData.headers);
 document.querySelectorAll(".mview button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mview === mView)));
 const cf = $("m-cust").value;
 const pf = $("m-part").value.trim().toLowerCase();
-const rows = mData.rows.filter((r) =>
-(!cf || mVal(r, c.cust) === cf) && (!pf || mVal(r, c.part).toLowerCase().includes(pf)));
+const idx = [];
+mData.rows.forEach((r, i) => { if ((!cf || mVal(r, c.cust) === cf) && (!pf || mVal(r, c.part).toLowerCase().includes(pf))) idx.push(i); });
+const rows = idx.map((i) => mData.rows[i]);
+const nums = mData.nums ? idx.map((i) => mData.nums[i]) : undefined;
 const filtered = !!(cf || pf);
 const qtyOf = (r) => { const q = parseFloat(String(r[c.qty] ?? "").replace(/,/g, "")); return isFinite(q) ? q : 0; };
 if (mView === "lines") {
-renderOrderTable({ headers: mData.headers, rows: rows, truncated: mData.truncated,
+renderOrderTable({ headers: mData.headers, rows: rows, nums: nums, editable: mData.editable, truncated: mData.truncated,
 emptyText: filtered ? "Is filter me koi line nahi mili." : "" }, "master");
 const tq = rows.reduce((a, r) => a + qtyOf(r), 0);
 setMsg($("o-count"), "Lines: " + rows.length.toLocaleString() + (filtered ? " (filtered)" : "") +
-"  |  Total Qty: " + tq.toLocaleString() + (mData.truncated ? "  |  latest only" : "") + "  |  View only");
+"  |  Total Qty: " + tq.toLocaleString() + (mData.truncated ? "  |  latest only" : "") + (role === "admin" && mData.editable ? "  |  Admin: Edit / Delete" : "  |  View only"));
 return;
 }
 const map = new Map();
